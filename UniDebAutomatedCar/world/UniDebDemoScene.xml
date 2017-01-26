@@ -1,0 +1,33 @@
+<!DOCTYPE test>
+<Scene width="1000" height="1000" measureType="0" color="#ffffff">
+ <Objects>
+  <Object type="road" id="0" name="data/road_tiles/2_lane_simple/2_simple_s.tile">
+   <Position x="200" y="200"/>
+   <Transform m21="0" m11="1" m22="1" m12="0"/>
+  </Object>
+  <Object type="road" id="1" name="data/road_tiles/2_lane_simple/2_simple_s.tile">
+   <Position x="200" y="280"/>
+   <Transform m21="0" m11="1" m22="1" m12="0"/>
+  </Object>
+  <Object type="road" id="2" name="data/road_tiles/2_lane_simple/2_simple_s.tile">
+   <Position x="200" y="360"/>
+   <Transform m21="0" m11="1" m22="1" m12="0"/>
+  </Object>
+  <Object type="road" id="3" name="data/road_tiles/2_lane_simple/2_simple_s.tile">
+   <Position x="200" y="440"/>
+   <Transform m21="0" m11="1" m22="1" m12="0"/>
+  </Object>
+  <Object type="road" id="4" name="data/road_tiles/2_lane_simple/2_simple_90l.tile">
+   <Position x="200" y="120"/>
+   <Transform m21="0" m11="1" m22="1" m12="0"/>
+  </Object>
+  <Object type="road" id="5" name="data/road_tiles/2_lane_simple/2_simple_s.tile">
+   <Position x="120" y="120"/>
+   <Transform m21="1" m11="0" m22="0" m12="-1"/>
+  </Object>
+  <Object type="road" id="6" name="data/road_tiles/2_lane_simple/2_simple_s.tile">
+   <Position x="40" y="120"/>
+   <Transform m21="1" m11="0" m22="0" m12="-1"/>
+  </Object>
+ </Objects>
+</Scene>

@@ -9,9 +9,8 @@ import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 import com.unideb.bosch.automatedcar.vehicleparts.Driver;
 import com.unideb.bosch.automatedcar.vehicleparts.PowertrainSystem;
 
-public final class AutomatedCar extends JPanel{
+public final class AutomatedCar {
 
-	private static final long serialVersionUID = 1L;
 	private int x = 100;
 	private int y = 100;
 	private int angle = 0;
@@ -29,13 +28,19 @@ public final class AutomatedCar extends JPanel{
 		angle = ang;
 	}
 	
-	public void paintComponent(Graphics g) {
-	    g.setColor(Color.black);
-	    g.drawRect(x, y, 8, 8);
-	  }
-	
-	
 	public void drive() {	
 		VirtualFunctionBus.cyclic();
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
+	
+	public int getAngle() {
+		return angle;
 	}
 }
