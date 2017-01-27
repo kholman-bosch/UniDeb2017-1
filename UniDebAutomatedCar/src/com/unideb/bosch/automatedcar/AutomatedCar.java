@@ -1,10 +1,5 @@
 package com.unideb.bosch.automatedcar;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
-import javax.swing.JPanel;
-
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 import com.unideb.bosch.automatedcar.vehicleparts.Driver;
 import com.unideb.bosch.automatedcar.vehicleparts.PowertrainSystem;
@@ -14,22 +9,26 @@ public final class AutomatedCar {
 	private int x = 100;
 	private int y = 100;
 	private int angle = 0;
+	private PowertrainSystem powertrainSystem;
 	
 	public AutomatedCar() {
 		// Compose our car from brand new system components
-		new PowertrainSystem(this);
+		// The car has to know its PowertrainSystem, to get its coordinates
+		powertrainSystem = new PowertrainSystem();
+		// The rest of the components use the VirtualFunctionBus to communicate,
+		// they do not communicate with the car itself
+		
 		// Place a driver into our car
 		new Driver();
 	}
 
-	public void setPosition(int positionX, int positionY, int ang) {
-		x = positionX;
-		y = positionY;
-		angle = ang;
-	}
-	
 	public void drive() {	
+		// Call components
 		VirtualFunctionBus.cyclic();
+		// Update the position and orientation of the car
+		x = powertrainSystem.getPositionX();
+		y = powertrainSystem.getPositionY();
+		angle = (int)powertrainSystem.getAngle();	
 	}
 	
 	public int getX() {

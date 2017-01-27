@@ -8,7 +8,7 @@ import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
 
-public class World {
+public class WorldObjectParser {
 	
 	private static final String dataBaseRoot = "./world";
 	private static final File world = new File(dataBaseRoot+"/UniDebDemoScene.xml");
@@ -18,8 +18,8 @@ public class World {
 	ArrayList<WorldObject> worldObjects = new ArrayList<WorldObject>();
 	
     // Implement the singleton pattern
-	private static World instance = new World();
-	private World() {
+	private static WorldObjectParser instance = new WorldObjectParser();
+	private WorldObjectParser() {
 		
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -52,7 +52,7 @@ public class World {
 		}
 	};
 	
-	public static World getInstance() {
+	public static WorldObjectParser getInstance() {
 		return instance;
 	}
 	

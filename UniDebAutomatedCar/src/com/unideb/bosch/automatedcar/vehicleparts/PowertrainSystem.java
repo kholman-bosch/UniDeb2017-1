@@ -1,5 +1,5 @@
 package com.unideb.bosch.automatedcar.vehicleparts;
-import com.unideb.bosch.automatedcar.AutomatedCar;
+
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
 
@@ -8,8 +8,6 @@ import com.unideb.bosch.automatedcar.framework.SystemComponent;
  * The responsible for this file is TeamA
  */
 public class PowertrainSystem extends SystemComponent{
-	
-	private AutomatedCar car;
 	
 	// Signal ID table for Powertrain System
 	private static final int GAS_ID = 0;
@@ -24,9 +22,8 @@ public class PowertrainSystem extends SystemComponent{
 	private int positionY = 0;
 	private double angle = 0;
 	
-	public PowertrainSystem(AutomatedCar c) {
+	public PowertrainSystem() {
 		super();
-		this.car = c;
 	}
 	
 	@Override
@@ -37,9 +34,6 @@ public class PowertrainSystem extends SystemComponent{
 		    positionX += (int)8*Math.cos(angle);
 		    positionY += (int)8*Math.sin(angle);
 		}
-		
-		// Update the position and orientation of the car
-		car.setPosition(positionX, positionY, (int)angle);			
 	}
 
 	@Override
@@ -77,6 +71,18 @@ public class PowertrainSystem extends SystemComponent{
 		// Ignore other signals
 				
 		}
+	}
+	
+	public int getPositionX() {
+		return positionX;
+	}
+	
+	public int getPositionY() {
+		return positionY;
+	}
+	
+	public double getAngle() {
+		return angle;
 	}
  
 }

@@ -1,12 +1,8 @@
 package com.unideb.bosch.automatedcar;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 
@@ -21,7 +17,7 @@ public final class VirtualWorld {
 	
 	private static final int cyclePeriod = 100;
 	
-	private static World world = World.getInstance();
+	private static WorldObjectParser world = WorldObjectParser.getInstance();
 	private static AutomatedCar car = new AutomatedCar();
 	
     private static JFrame frame = new JFrame("UniDeb Automated Car Project");
