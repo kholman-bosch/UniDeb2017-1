@@ -1,6 +1,5 @@
 package com.unideb.bosch.automatedcar;
 
-import com.unideb.bosch.automatedcar.framework.ObjectOrientation;
 import com.unideb.bosch.automatedcar.framework.WorldObject;
 
 import java.util.ArrayList;
@@ -10,8 +9,7 @@ import java.io.*;
 
 public class WorldObjectParser {
 	
-	private static final String dataBaseRoot = "./world";
-	private static final File world = new File(dataBaseRoot+"/UniDebDemoScene.xml");
+	private static final File world = new File("./world/road_1_simplified.xml");
 	private int width = 0;
 	private int height = 0;
 	
@@ -40,8 +38,8 @@ public class WorldObjectParser {
 						Integer.parseInt(e.getElementsByTagName("Position").item(0).getAttributes().getNamedItem("x").getTextContent().toString()),
 						Integer.parseInt(e.getElementsByTagName("Position").item(0).getAttributes().getNamedItem("y").getTextContent().toString()),
 						// TODO determine orientation based on the rotation matrix
-						ObjectOrientation.NORTH,
-						e.getAttributes().getNamedItem("name").getTextContent().toString()
+						0,
+						e.getAttributes().getNamedItem("type").getTextContent().toString()
 						);
 				worldObjects.add(object);			
 			}	
@@ -55,11 +53,7 @@ public class WorldObjectParser {
 	public static WorldObjectParser getInstance() {
 		return instance;
 	}
-	
-	public static String getDataBaseRoot() {
-		return dataBaseRoot;
-	}
-	
+
 	public int getWidth() {
 		return width;
 	}

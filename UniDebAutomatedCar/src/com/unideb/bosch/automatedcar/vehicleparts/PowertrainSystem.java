@@ -18,8 +18,8 @@ public class PowertrainSystem extends SystemComponent{
 
 	// Output signals
 	// Only these are available trough getters
-	private int positionX = 0;
-	private int positionY = 0;
+	private int positionX = 200;
+	private int positionY = 200;
 	private double angle = 0;
 	
 	public PowertrainSystem() {
@@ -30,9 +30,7 @@ public class PowertrainSystem extends SystemComponent{
 	public void cyclic() {
 		if(gas != 0)
 		{
-			angle++;
-		    positionX += (int)8*Math.cos(angle);
-		    positionY += (int)8*Math.sin(angle);
+		    positionY++;
 		}
 	}
 

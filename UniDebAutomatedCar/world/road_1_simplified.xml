@@ -1,0 +1,304 @@
+<Scene width="5000" height="4000" measureType="0" color="#ffffff">
+ <Objects>
+  <Object type="road_2_lane_straight">
+   <Position x="3050" y="3950"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="3050" y="3600"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="3050" y="3250"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="3050" y="2900"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="4975" y="2375"/>
+   <Transform m11="0" m12="-1" m21="1" m22="0"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="4625" y="2375"/>
+   <Transform m11="0" m12="-1" m21="1" m22="0"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="4275" y="2375"/>
+   <Transform m11="0" m12="-1" m21="1" m22="0"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="3925" y="2375"/>
+   <Transform m11="0" m12="-1" m21="1" m22="0"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_90_left">
+   <Position x="3050" y="800"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="3050" y="800"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="3050" y="1150"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="-172" y="4022"/>
+   <Transform m11="1.938755076480447e-006" m12="-1" m21="1" m22="1.938755076480447e-006"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="178" y="4022"/>
+   <Transform m11="1.938755076480447e-006" m12="-1" m21="1" m22="1.938755076480447e-006"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="528" y="4022"/>
+   <Transform m11="1.938755076480447e-006" m12="-1" m21="1" m22="1.938755076480447e-006"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_45_right">
+   <Position x="1000" y="3620"/>
+   <Transform m11="-0.7071061134338379" m12="-0.7071074843406677" m21="0.7071074843406677" m22="-0.7071061134338379"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="1250" y="3869"/>
+   <Transform m11="-0.7071061134338379" m12="-0.7071074843406677" m22="-0.7071061134338379" m21="0.7071074843406677"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_45_right">
+   <Position x="1300" y="3250"/>
+   <Transform m11="-1" m12="0" m21="0" m22="-1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="2875" y="275"/>
+   <Transform m11="0" m12="1" m21="-1" m22="0"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="2525" y="275"/>
+   <Transform m11="0" m12="1" m21="-1" m22="0"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_" id="19" name="data/road_tiles/2_lane_advanced/2_rotary.tile">
+   <Position x="2525" y="2375"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="2175" y="2375"/>
+   <Transform m11="0" m12="-1" m21="1" m22="0"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="1650" y="3250"/>
+   <Transform m11="-1" m12="0" m21="0" m22="-1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_tjunction_left.tile">
+   <Position x="775" y="2025"/>
+   <Transform m11="0" m12="-1" m21="1" m22="0"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_90_right">
+   <Position x="775" y="2025"/>
+   <Transform m11="0" m12="-1" m21="1" m22="0"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="250" y="1500"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="250" y="1150"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="250" y="800"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="2175" y="275"/>
+   <Transform m11="0" m12="1" m21="-1" m22="0"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="1825" y="275"/>
+   <Transform m11="0" m12="1" m21="-1" m22="0"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="1475" y="275"/>
+   <Transform m11="0" m12="1" m21="-1" m22="0"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_straight">
+   <Position x="1125" y="275"/>
+   <Transform m11="0" m12="1" m21="-1" m22="0"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="road_2_lane_90_right">
+   <Position x="600" y="800"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+   <Parameter name="roadpainting" value="1"/>
+  </Object>
+  <Object type="crosswalk">
+   <Position x="1550" y="610"/>
+   <Transform m11="0" m12="-1" m21="1" m22="0"/>
+  </Object>
+  <Object type="road_sign_priority_stop">
+   <Position x="1635" y="2500"/>
+   <Transform m11="1" m12="0" m21="0" m22="1" />
+  </Object>
+  <Object type="road_sign_priority_mainroad">
+   <Position x="2770" y="1946"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="road_sign_direction_roundabout">
+   <Position x="2785" y="2357"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="road_sign_direction_roundabout">
+   <Position x="3371" y="2538"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="road_sign_direction_roundabout">
+   <Position x="3557" y="1957"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="road_sign_direction_roundabout">
+   <Position x="2999" y="1789"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="parking_space_parallel">
+   <Position x="3403" y="882"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="road_sign_parking_right">
+   <Position x="3399" y="1533"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="tree">
+   <Position x="3398" y="742"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="parking_space_perpendicular">
+   <Position x="4060" y="2030"/>
+   <Transform m11="0" m12="-1" m21="1"  m22="0"/>
+  </Object>
+  <Object type="parking_space_parallel">
+   <Position x="4546" y="2017"/>
+   <Transform m11="0" m12="-1" m21="1" m22="0"/>
+  </Object>
+  <Object type="parking_bollard">
+   <Position x="4091" y="1839"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="man">
+   <Position x="1607" y="420"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="tree">
+   <Position x="591" y="871"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="tree">
+   <Position x="591" y="1063"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="tree">
+   <Position x="586" y="1267"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="tree">
+   <Position x="591" y="1465"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="tree">
+   <Position x="586" y="1679"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="tree">
+   <Position x="104" y="871"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="tree">
+   <Position x="104" y="1074"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="tree">
+   <Position x="104" y="1272"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="tree">
+   <Position x="104" y="1481"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="tree">
+   <Position x="104" y="1673"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="road_sign_priority_mainroad">
+   <Position x="3369" y="1753"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="road_sign_speed_50">
+   <Position x="234" y="4020"/>
+   <Transform m11="0" m12="1" m21="-1" m22="0" />
+  </Object>
+  <Object type="road_sign_speed_90">
+   <Position x="2701" y="2032"/>
+   <Transform m11="0"  m12="-1" m21="1" m22="-0"/>
+  </Object>
+  <Object type="road_sign_speed_40">
+   <Position x="3068" y="2621"/>
+   <Transform m11="-1" m12="0" m21="0" m22="-1"/>
+  </Object>
+  <Object type="road_sign_speed_40">
+   <Position x="3400" y="3972"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="road_sign_speed_90">
+   <Position x="3369" y="1671"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="road_sign_speed_50">
+   <Position x="1302" y="2596"/>
+   <Transform m11="-0.9981839060783386" m12="0.06023989617824554" m21="-0.06023989617824554" m22="-0.9981839060783386" />
+  </Object>
+  <Object type="road_sign_direction_rightonly">
+   <Position x="1628" y="2416"/>
+   <Transform m11="1" m12="0" m21="0" m22="1"/>
+  </Object>
+  <Object type="road_sign_speed_90">
+   <Position x="1908" y="2341"/>
+   <Transform m11="0.02977133914828301" m12="0.9995567202568054" m21="-0.9995567202568054" m22="0.02977133914828301"/>
+  </Object>
+  <Object type="road_sign_speed_40">
+   <Position x="4980" y="2030"/>
+   <Transform m11="0.007176758054660694" m12="-0.9999742467402972" m21="0.9999742467402972" m22="0.007176758054660694" />
+  </Object>
+  <Object type="road_sign_speed_60">
+   <Position x="3672" y="2361"/>
+   <Transform m11="-0.05269591769233909" m12="0.9986106049199368" m21="-0.9986106049199368" m22="-0.05269591769233909"/>
+  </Object>
+ </Objects>
+</Scene>

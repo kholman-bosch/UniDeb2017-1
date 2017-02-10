@@ -8,7 +8,7 @@ public final class AutomatedCar {
 
 	private int x = 100;
 	private int y = 100;
-	private int angle = 0;
+	private double angle = 0;
 	private PowertrainSystem powertrainSystem;
 	
 	public AutomatedCar() {
@@ -28,7 +28,7 @@ public final class AutomatedCar {
 		// Update the position and orientation of the car
 		x = powertrainSystem.getPositionX();
 		y = powertrainSystem.getPositionY();
-		angle = (int)powertrainSystem.getAngle();	
+		angle = powertrainSystem.getAngle();	
 	}
 	
 	public int getX() {
@@ -39,7 +39,7 @@ public final class AutomatedCar {
 		return y;
 	}
 	
-	public int getAngle() {
+	public double getAngle() {
 		return angle;
 	}
 }

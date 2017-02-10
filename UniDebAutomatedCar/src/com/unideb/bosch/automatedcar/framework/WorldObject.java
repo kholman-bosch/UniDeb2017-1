@@ -1,31 +1,28 @@
 package com.unideb.bosch.automatedcar.framework;
 
+/**
+ * This class represents objects in the virtual world
+ * An object has its coordinates, orientation and type
+ *
+ * Students must not modify this class!
+ */
+
 public class WorldObject {
 	private int x;
 	private int y;
-	private ObjectOrientation orientation;
+	private int rotation;
 	private String type;
-	private String directoryPath;
 	
-	
-	public WorldObject(int x, int y, ObjectOrientation o, String name)
+	public WorldObject(int x, int y, int rotation, String type)
 	{
 		this.x = x;
 		this.y = y;
-		this.orientation = o;	
-		try {
-			String[] parts = name.split("\\.");
-			this.type = "";
-			this.directoryPath = parts[0];
-		} catch (Exception e) {
-			System.out.println("Invalid name for WorldObject type: " + name + " " + e.toString());
-			this.type="";
-			this.directoryPath="";
-		}
+		this.rotation =rotation;	
+		this.type = type;
 	}
 	
 	public int getX() { return x; }
 	public int getY() { return y; }
-	public ObjectOrientation getOrientation() { return orientation; }
-	public String getImageFile() { return directoryPath + type + ".png"; }
+	public int getOrientation() { return rotation; }
+	public String getType() { return type; }
 }
