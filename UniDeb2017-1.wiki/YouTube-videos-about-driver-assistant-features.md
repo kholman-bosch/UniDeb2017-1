@@ -1,5 +1,0 @@
-- [Adaptive Cruise Control](https://www.youtube.com/watch?v=own_VaRZ9M8)
-- [Automatic Emergency Brake](https://www.youtube.com/watch?v=VHR8AeZrlVc)
-- [Lane Keeping Assistant](https://www.youtube.com/watch?v=GdtVe1Pnayg)
-- [Parking Pilot](https://www.youtube.com/watch?v=HWMzP9HYNCQ)
-- [Traffic Sign Recognition]( https://www.youtube.com/watch?v=_n9FkLZWBXo)
