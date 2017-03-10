@@ -1,6 +1,8 @@
 package com.unideb.bosch.automatedcar;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -27,13 +29,40 @@ public final class VirtualWorld {
     private static BufferedImage backgroundImage;
     private static BufferedImage carImage;
 	
-	
+    public static Image resizeImage(Image image, int width, int height, boolean max) {
+      if (width < 0 && height > 0) {
+        return resizeImageBy(image, height, false);
+      } else if (width > 0 && height < 0) {
+        return resizeImageBy(image, width, true);
+      } else if (width < 0 && height < 0) {
+        return image;
+      }
+      int currentHeight = image.getHeight(null);
+      int currentWidth = image.getWidth(null);
+      int expectedWidth = (height * currentWidth) / currentHeight;
+      int size = height;
+      if (max && expectedWidth > width) {
+        size = width;
+      } else if (!max && expectedWidth < width) {
+        size = width;
+      }
+      return resizeImageBy(image, size, (size == width));
+    }
+
+    public static Image resizeImageBy(Image image, int size, boolean setWidth) {
+      if (setWidth) {
+        return image.getScaledInstance(size, -1, Image.SCALE_FAST);
+      } else {
+        return image.getScaledInstance(-1, size, Image.SCALE_FAST);
+      }
+    }
+    
 	private static void refreshFrame() {
 	    frame.invalidate();
 	    frame.validate();
 	    frame.repaint();
 	}
-
+	
 	public static void main(String[] args) {
 
 		try {
@@ -50,20 +79,24 @@ public final class VirtualWorld {
 		{
 			private static final long serialVersionUID = 1L;
 			public void paintComponent(Graphics g) {
-				
-				// Display map	
-				// The image has a constant offset compared to the input XML
-				g.drawImage(backgroundImage, -100, -100, null);
-			
-			    // Display car
+				// Use a buffered image as our canvas
+				BufferedImage worldImage = new BufferedImage(world.getWidth(), world.getHeight(), BufferedImage.TYPE_INT_RGB);
+				Graphics2D worldDisplay = worldImage.createGraphics();
+				// Draw the background
+				worldDisplay.drawImage(backgroundImage, 0, 0, null);
+				// Draw the car
 				AffineTransformOp scale = new AffineTransformOp(AffineTransform.getScaleInstance(2, 2), AffineTransformOp.TYPE_BILINEAR);
-			    g.drawImage(scale.filter(carImage, null), car.getX(), car.getY(), null);
+				worldDisplay.drawImage(scale.filter(carImage, null), car.getX(), car.getY(), null);
+				
+				// Resize the display to fit the window
+				g.drawImage(resizeImage(worldImage, frame.getWidth(), frame.getHeight(), true), 0, 0, this);
 			}
 		}
 		);
 	    
 	    frame.validate();
-	    frame.setSize(world.getWidth(), world.getHeight());
+	    frame.setSize(800, 600);
+	    frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 	    frame.setVisible(true);
 	        
 	    while(true)
