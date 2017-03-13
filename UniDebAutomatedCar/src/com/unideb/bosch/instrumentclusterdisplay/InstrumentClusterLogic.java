@@ -11,15 +11,12 @@ public class InstrumentClusterLogic extends SystemComponent {
 
 	// Signal ID table for InstrumentClusterLogic System
 	private static final int INDICATOR = 3;
-	// private static final int GAS_PEDAL_POSITION = 4;
-	// 0 100 1 % -
-	// private static final int BRAKE_PEDAL_POSITION = 5;
-	// 0 100 1 % -
 	private static final int STEERING_WHEEL_ANGLE = 6;
 	private static final int GEAR_POSITION = 7;
 	private static final int VEHICLE_SPEED = 8;
 	private static final int MOTOR_RPM = 9;
 	private static final int HEADLIGHT = 10;
+	//
 	// Turn Signal values
 	private int turn_signal_tick = 0;
 	private int data_turn_signal = 0;
@@ -112,8 +109,8 @@ public class InstrumentClusterLogic extends SystemComponent {
 			break;
 		}
 	}
-
-	// Write in the Terminal the actual status about the Headlight
+	//Set the actual status and
+	//write in the Terminal the actual status about the Headlight
 	private void logicHeadlight() {
 		switch (this.data_headlight) {
 		case 0:
@@ -127,8 +124,8 @@ public class InstrumentClusterLogic extends SystemComponent {
 		}
 	}
 
-	// Blinking the Turn Signals on the Instrument Cluster and
-	// write in the Terminal the actual status about the turn signals
+	//Blinking the Turn Signals on the Instrument Cluster and
+	//write in the Terminal the actual status about the turn signals
 	private void logicTurnSignals() {
 		if (this.data_turn_signal != 0) {
 			this.turn_signal_tick++;
@@ -158,6 +155,8 @@ public class InstrumentClusterLogic extends SystemComponent {
 		System.out.println("Left/Right Turn Signals: " + this.turn_signal_left + " " + this.turn_signal_right
 				+ " data: " + this.data_turn_signal);
 	}
+	
+	//get Values for the Instrument Cluster
 	
 	public int getVehicleSpeed() {
 		return this.data_vehicle_speed;
