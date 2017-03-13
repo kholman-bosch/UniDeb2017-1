@@ -85,11 +85,11 @@ public final class VirtualWorld {
 				// Draw the background
 				worldDisplay.drawImage(backgroundImage, 0, 0, null);
 				// Draw the car
-				AffineTransformOp scale = new AffineTransformOp(AffineTransform.getScaleInstance(2, 2), AffineTransformOp.TYPE_BILINEAR);
-				worldDisplay.drawImage(scale.filter(carImage, null), car.getX(), car.getY(), null);
-				
-				// Resize the display to fit the window
+				//AffineTransformOp scale = new AffineTransformOp(AffineTransform.getScaleInstance(2, 2), AffineTransformOp.TYPE_BILINEAR);
+				car.drawCar(worldDisplay);
+				//worldDisplay.drawImage(scale.filter(carImage, null), car.getX(), car.getY(), null);
 				g.drawImage(resizeImage(worldImage, frame.getWidth(), frame.getHeight(), true), 0, 0, this);
+				// Resize the display to fit the window
 			}
 		}
 		);
