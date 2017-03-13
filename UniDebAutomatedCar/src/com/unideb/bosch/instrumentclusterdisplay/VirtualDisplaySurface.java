@@ -8,10 +8,10 @@ import java.awt.TexturePaint;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+
 import com.unideb.bosch.automatedcar.AutomatedCar;
 
 public class VirtualDisplaySurface extends JPanel {
@@ -23,8 +23,8 @@ public class VirtualDisplaySurface extends JPanel {
 	private Rectangle backgroundRectangle, needleRectangle_KMH, needleRectangle_RPM;
 	private Rectangle r_Rectangle, n_Rectangle, d_Rectangle, p_Rectangle;
 	private Rectangle rightIndex_Rectangle, leftIndex_Rectangle, headlight_Rectangle;
-	public boolean show_R = true, show_N = true, show_D = true, show_P = true, show_RIndex = true,
-			show_LIndex = true, show_Headlight = true;
+	public boolean show_R = true, show_N = true, show_D = true, show_P = true, show_RIndex = true, show_LIndex = true,
+			show_Headlight = true;
 
 	public VirtualDisplaySurface(AutomatedCar car) {
 		try {
@@ -49,7 +49,7 @@ public class VirtualDisplaySurface extends JPanel {
 		p_Rectangle = new Rectangle(0, 0, p.getWidth(), p.getHeight());
 		rightIndex_Rectangle = new Rectangle(0, 0, rightindex.getWidth(), rightindex.getHeight());
 		leftIndex_Rectangle = new Rectangle(0, 0, leftindex.getWidth(), leftindex.getHeight());
-		headlight_Rectangle  = new Rectangle(0, 0, headlight.getWidth(), headlight.getHeight());
+		headlight_Rectangle = new Rectangle(0, 0, headlight.getWidth(), headlight.getHeight());
 		this.setVisible(true);
 	}
 
@@ -89,8 +89,7 @@ public class VirtualDisplaySurface extends JPanel {
 		gMatrix_RPM.rotate(Math.toRadians(actual_RPM_Needle_Angle), needleMidPoint_RPM_X, needleMidPoint_RPM_Y);
 		gMatrix_RPM.fillRect(needleLocationX_RPM, needleLocationY_RPM, needle.getWidth(), needle.getHeight());
 		//
-		Random rr = new Random();
-		if (rr.nextBoolean()) {
+		if (this.show_R) {
 			int iconLoc_X = 39;
 			int iconLoc_Y = 89;
 			r_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
@@ -98,7 +97,7 @@ public class VirtualDisplaySurface extends JPanel {
 			gMatrix_Icons.setPaint(r_Paint);
 			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, r.getWidth(), r.getHeight());
 		}
-		if (rr.nextBoolean()) {
+		if (this.show_N) {
 			int iconLoc_X = 39;
 			int iconLoc_Y = 139;
 			n_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
@@ -106,7 +105,7 @@ public class VirtualDisplaySurface extends JPanel {
 			gMatrix_Icons.setPaint(n_Paint);
 			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, n.getWidth(), n.getHeight());
 		}
-		if (rr.nextBoolean()) {
+		if (this.show_D) {
 			int iconLoc_X = 39;
 			int iconLoc_Y = 189;
 			d_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
@@ -114,7 +113,7 @@ public class VirtualDisplaySurface extends JPanel {
 			gMatrix_Icons.setPaint(d_Paint);
 			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, d.getWidth(), d.getHeight());
 		}
-		if (rr.nextBoolean()) {
+		if (this.show_P) {
 			int iconLoc_X = 39;
 			int iconLoc_Y = 39;
 			p_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
@@ -122,7 +121,7 @@ public class VirtualDisplaySurface extends JPanel {
 			gMatrix_Icons.setPaint(p_Paint);
 			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, p.getWidth(), p.getHeight());
 		}
-		if (rr.nextBoolean()) {
+		if (this.show_RIndex) {
 			int iconLoc_X = 352;
 			int iconLoc_Y = 198;
 			rightIndex_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
@@ -130,7 +129,7 @@ public class VirtualDisplaySurface extends JPanel {
 			gMatrix_Icons.setPaint(rightIndex_Paint);
 			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, rightindex.getWidth(), rightindex.getHeight());
 		}
-		if (rr.nextBoolean()) {
+		if (this.show_LIndex) {
 			int iconLoc_X = 292;
 			int iconLoc_Y = 198;
 			leftIndex_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
@@ -138,7 +137,7 @@ public class VirtualDisplaySurface extends JPanel {
 			gMatrix_Icons.setPaint(leftIndex_Paint);
 			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, leftindex.getWidth(), leftindex.getHeight());
 		}
-		if (rr.nextBoolean()) {
+		if (this.show_Headlight) {
 			int iconLoc_X = 205;
 			int iconLoc_Y = 200;
 			headlight_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
@@ -167,6 +166,34 @@ public class VirtualDisplaySurface extends JPanel {
 	public void set_Actual_RPM_Needle_Angle(int angle) {
 		angle = truncateAngle(angle, 255);
 		this.actual_RPM_Needle_Angle = angle;
+	}
+
+	public void set_Actual_R(boolean state) {
+		this.show_R = state;
+	}
+
+	public void set_Actual_N(boolean state) {
+		this.show_N = state;
+	}
+
+	public void set_Actual_D(boolean state) {
+		this.show_D = state;
+	}
+
+	public void set_Actual_P(boolean state) {
+		this.show_P = state;
+	}
+	
+	public void set_Actual_RightIndex(boolean state) {
+		this.show_RIndex = state;
+	}
+	
+	public void set_Actual_LeftIndex(boolean state) {
+		this.show_LIndex = state;
+	}
+	
+	public void set_Actual_Headlights(boolean state) {
+		this.show_Headlight = state;
 	}
 
 	private int truncateAngle(int angle, int max) {

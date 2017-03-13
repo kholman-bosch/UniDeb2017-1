@@ -3,6 +3,7 @@ package com.unideb.bosch.automatedcar;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 import com.unideb.bosch.automatedcar.vehicleparts.Driver;
 import com.unideb.bosch.automatedcar.vehicleparts.PowertrainSystem;
+import com.unideb.bosch.instrumentclusterdisplay.InstrumentClusterLogic;
 import com.unideb.bosch.instrumentclusterdisplay.VirtualDisplay_Invoker;
 
 public final class AutomatedCar {
@@ -21,7 +22,7 @@ public final class AutomatedCar {
 		
 		// Place a driver into our car
 		new Driver();
-		new VirtualDisplay_Invoker(this);
+		new VirtualDisplay_Invoker(this, new InstrumentClusterLogic());
 	}
 
 	public void drive() {	

@@ -42,4 +42,32 @@ public class VirtualDisplay extends JFrame {
 	public void set_Actual_RPM_Needle_Angle(int angle) {
 		this.surface.set_Actual_RPM_Needle_Angle(angle);
 	}
+
+	public void set_Actual_R(boolean state) {
+		this.surface.set_Actual_R(state);
+	}
+
+	public void set_Actual_N(boolean state) {
+		this.surface.set_Actual_N(state);
+	}
+
+	public void set_Actual_D(boolean state) {
+		this.surface.set_Actual_D(state);
+	}
+
+	public void set_Actual_P(boolean state) {
+		this.surface.set_Actual_P(state);
+	}
+
+	public void set_Actual_RightIndex(boolean state) {
+		this.surface.set_Actual_RightIndex(state);
+	}
+
+	public void set_Actual_LeftIndex(boolean state) {
+		this.surface.set_Actual_LeftIndex(state);
+	}
+
+	public void set_Actual_Headlights(boolean state) {
+		this.surface.set_Actual_Headlights(state);
+	}
 }
