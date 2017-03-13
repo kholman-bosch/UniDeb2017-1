@@ -27,7 +27,9 @@ public class InstrumentClusterLogic extends SystemComponent {
 	private int data_gear_position = 3;
 	private int data_vehicle_speed = 0;
 	private int data_motor_rpm = 0;
+	//
 	private int data_headlight = 0;
+	private boolean headlight_on_off = false;
 
 	public InstrumentClusterLogic() {
 		super();
@@ -79,8 +81,8 @@ public class InstrumentClusterLogic extends SystemComponent {
 			break;
 		}
 	}
-	
-	//Check signal boundaries and limit according to the CommMatrix
+
+	// Check signal boundaries and limit according to the CommMatrix
 	private int limit(int localData, int actData, int limit1, int limit2) {
 		if (localData != actData) {
 			localData = actData;
@@ -115,9 +117,11 @@ public class InstrumentClusterLogic extends SystemComponent {
 	private void logicHeadlight() {
 		switch (this.data_headlight) {
 		case 0:
+			this.headlight_on_off = false;
 			System.out.println("Headlight: OFF data: " + this.data_headlight);
 			break;
 		case 1:
+			this.headlight_on_off = true;
 			System.out.println("Headlight: ON data: " + this.data_headlight);
 			break;
 		}
@@ -153,6 +157,34 @@ public class InstrumentClusterLogic extends SystemComponent {
 		}
 		System.out.println("Left/Right Turn Signals: " + this.turn_signal_left + " " + this.turn_signal_right
 				+ " data: " + this.data_turn_signal);
+	}
+	
+	public int getVehicleSpeed() {
+		return this.data_vehicle_speed;
+	}
+	
+	public int getMotorRPM() {
+		return this.data_motor_rpm;
+	}
+
+	public boolean getGearPos_D_Status() {
+		return this.data_gear_position == 0;
+	}
+
+	public boolean getGearPos_N_Status() {
+		return this.data_gear_position == 1;
+	}
+
+	public boolean getGearPos_R_Status() {
+		return this.data_gear_position == 2;
+	}
+
+	public boolean getGearPos_P_Status() {
+		return this.data_gear_position == 3;
+	}
+
+	public boolean getHeadlightStatus() {
+		return this.headlight_on_off;
 	}
 
 	public boolean getLeftTurnSignalStatus() {
