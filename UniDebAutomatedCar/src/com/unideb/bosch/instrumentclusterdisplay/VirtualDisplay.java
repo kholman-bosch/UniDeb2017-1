@@ -71,7 +71,7 @@ public class VirtualDisplay extends JFrame {
 		this.surface.set_Actual_Headlights(state);
 	}
 
-	public void set_Actual_WteeringWheel_Angle(int angle) {
+	public void set_Actual_SteeringWheel_Angle(int angle) {
 		this.surface.set_Actual_SteeringWHeel_Angle(angle);
 	}
 }

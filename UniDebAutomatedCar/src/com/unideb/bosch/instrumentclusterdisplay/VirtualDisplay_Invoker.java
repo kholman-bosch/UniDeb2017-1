@@ -25,6 +25,7 @@ public class VirtualDisplay_Invoker extends SystemComponent {
 		this.vd.set_Actual_RightIndex(this.icl.getRightTurnSignalStatus());
 		this.vd.set_Actual_LeftIndex(this.icl.getLeftTurnSignalStatus());
 		this.vd.set_Actual_Headlights(this.icl.getHeadlightStatus());
+		this.vd.set_Actual_SteeringWheel_Angle(this.icl.getSteeringWheelAngle());
 		this.vd.invalidate();
 		this.vd.validate();
 		this.vd.repaint();
