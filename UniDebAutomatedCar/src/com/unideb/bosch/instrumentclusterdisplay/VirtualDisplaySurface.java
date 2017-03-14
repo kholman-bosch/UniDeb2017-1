@@ -1,5 +1,6 @@
 package com.unideb.bosch.instrumentclusterdisplay;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -17,13 +18,14 @@ import com.unideb.bosch.automatedcar.AutomatedCar;
 public class VirtualDisplaySurface extends JPanel {
 
 	private static final long serialVersionUID = 1;
-	private BufferedImage background, needle, r, n, d, p, rightindex, leftindex, headlight;
+	private BufferedImage background, needle, r, n, d, p, rightindex, leftindex, headlight, steeringWheel;
 	private int actual_KMH_Needle_Angle = 0;
 	private int actual_RPM_Needle_Angle = 0;
+	private int steeringWheel_Angle = 0;
 	private Rectangle backgroundRectangle, needleRectangle_KMH, needleRectangle_RPM;
 	private Rectangle r_Rectangle, n_Rectangle, d_Rectangle, p_Rectangle;
-	private Rectangle rightIndex_Rectangle, leftIndex_Rectangle, headlight_Rectangle;
-	public boolean show_R = true, show_N = true, show_D = true, show_P = true, show_RIndex = true, show_LIndex = true,
+	private Rectangle rightIndex_Rectangle, leftIndex_Rectangle, headlight_Rectangle, steeringWheel_Rectangle;
+	private boolean show_R = true, show_N = true, show_D = true, show_P = true, show_RIndex = true, show_LIndex = true,
 			show_Headlight = true;
 
 	public VirtualDisplaySurface(AutomatedCar car) {
@@ -37,6 +39,7 @@ public class VirtualDisplaySurface extends JPanel {
 			rightindex = ImageIO.read(new File("./ic_res/rightindex.png"));
 			leftindex = ImageIO.read(new File("./ic_res/leftindex.png"));
 			headlight = ImageIO.read(new File("./ic_res/headl.png"));
+			steeringWheel = ImageIO.read(new File("./ic_res/steeringwheel.png"));
 		} catch (IOException ex) {
 			System.err.println(ex.getMessage() + " Error in virtual display! ImageIO.read");
 		}
@@ -50,15 +53,12 @@ public class VirtualDisplaySurface extends JPanel {
 		rightIndex_Rectangle = new Rectangle(0, 0, rightindex.getWidth(), rightindex.getHeight());
 		leftIndex_Rectangle = new Rectangle(0, 0, leftindex.getWidth(), leftindex.getHeight());
 		headlight_Rectangle = new Rectangle(0, 0, headlight.getWidth(), headlight.getHeight());
+		steeringWheel_Rectangle = new Rectangle(0, 0, steeringWheel.getWidth(), steeringWheel.getHeight());
+		this.setBackground(Color.black);
 		this.setVisible(true);
 	}
 
 	private void doDrawing(Graphics g) {
-		if (actual_KMH_Needle_Angle > 200) {
-			actual_KMH_Needle_Angle = 0;
-		}
-		set_Actual_KMH_Needle_Angle(++actual_KMH_Needle_Angle);
-		set_Actual_RPM_Needle_Angle(actual_KMH_Needle_Angle);
 		Graphics2D gMatrix_KMH = (Graphics2D) g.create();
 		Graphics2D gMatrix_RPM = (Graphics2D) g.create();
 		Graphics2D gMatrix_Icons = (Graphics2D) g.create();
@@ -145,6 +145,15 @@ public class VirtualDisplaySurface extends JPanel {
 			gMatrix_Icons.setPaint(headLight_Paint);
 			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, headlight.getWidth(), headlight.getHeight());
 		}
+		int iconLoc_X = 528;
+		int iconLoc_Y = 20;
+		steeringWheel_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
+		TexturePaint steeringWheel_Paint = new TexturePaint(steeringWheel, steeringWheel_Rectangle);
+		gMatrix_Icons.setPaint(steeringWheel_Paint);
+		int wheelMidPoint_X = 640;
+		int wheelMidPoint_Y = 128;
+		gMatrix_Icons.rotate(Math.toRadians(steeringWheel_Angle), wheelMidPoint_X, wheelMidPoint_Y);
+		gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, steeringWheel.getWidth(), steeringWheel.getHeight());
 		//
 		gMatrix_KMH.dispose();
 		gMatrix_RPM.dispose();
@@ -183,17 +192,21 @@ public class VirtualDisplaySurface extends JPanel {
 	public void set_Actual_P(boolean state) {
 		this.show_P = state;
 	}
-	
+
 	public void set_Actual_RightIndex(boolean state) {
 		this.show_RIndex = state;
 	}
-	
+
 	public void set_Actual_LeftIndex(boolean state) {
 		this.show_LIndex = state;
 	}
-	
+
 	public void set_Actual_Headlights(boolean state) {
 		this.show_Headlight = state;
+	}
+
+	public void set_Actual_SteeringWHeel_Angle(int angle) {
+		this.steeringWheel_Angle = angle;
 	}
 
 	private int truncateAngle(int angle, int max) {

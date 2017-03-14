@@ -20,8 +20,8 @@ public class PowertrainSystem extends SystemComponent {
 	private int data_steering_wheel_angle = 0;
 	private int data_gear_position = 3;
 	// Only these are available trough getters
-	private int positionX = 200;
-	private int positionY = 200;
+	public int positionX = 200;
+	public int positionY = 200;
 	private double angle = 0;
 	
 

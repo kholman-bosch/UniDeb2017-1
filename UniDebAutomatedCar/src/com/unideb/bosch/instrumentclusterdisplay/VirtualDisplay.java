@@ -32,7 +32,7 @@ public class VirtualDisplay extends JFrame {
 	@Override
 	public Dimension getPreferredSize() {
 		windowDecorationDims = getInsets();
-		return new Dimension(512, 256 + windowDecorationDims.top);
+		return new Dimension(768, 256 + windowDecorationDims.top);
 	}
 
 	public void set_Actual_KMH_Needle_Angle(int angle) {
@@ -69,5 +69,9 @@ public class VirtualDisplay extends JFrame {
 
 	public void set_Actual_Headlights(boolean state) {
 		this.surface.set_Actual_Headlights(state);
+	}
+
+	public void set_Actual_WteeringWheel_Angle(int angle) {
+		this.surface.set_Actual_SteeringWHeel_Angle(angle);
 	}
 }
