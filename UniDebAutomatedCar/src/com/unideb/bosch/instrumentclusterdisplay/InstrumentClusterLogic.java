@@ -21,10 +21,10 @@ public class InstrumentClusterLogic extends SystemComponent {
 	private int turn_signal_tick = 0;
 	private int data_turn_signal = 0;
 	private boolean turn_signal_left = false, turn_signal_right = false;
+	private int data_steering_wheel_angle = 0;
 	private int data_gear_position = 3;
 	private int data_vehicle_speed = 0;
 	private int data_motor_rpm = 0;
-	//
 	private int data_headlight = 0;
 	private boolean headlight_on_off = false;
 
@@ -34,12 +34,9 @@ public class InstrumentClusterLogic extends SystemComponent {
 
 	@Override
 	public void cyclic() {
-		System.out.println("---INSTRUMENT CLUSTER CYCLE---");
 		this.logicTurnSignals();
 		this.logicHeadlight();
-		this.logicGearPosition();
-		System.out.println("------------------------------");
-		// TODO Auto-generated method stub
+		this.writeInTerminalInfos();
 	}
 
 	@Override
@@ -55,6 +52,7 @@ public class InstrumentClusterLogic extends SystemComponent {
 			break;
 		case STEERING_WHEEL_ANGLE:
 			// -720 720 1 ° -
+			this.data_steering_wheel_angle += this.limit(this.data_steering_wheel_angle, actValue, -720, 720);
 			break;
 		case GEAR_POSITION:
 			// D: 0
@@ -65,7 +63,7 @@ public class InstrumentClusterLogic extends SystemComponent {
 			break;
 		case VEHICLE_SPEED:
 			// 0 120 1 KM/H -
-			this.data_motor_rpm = this.limit(this.data_motor_rpm, actValue, 0, 120);
+			this.data_vehicle_speed = this.limit(this.data_vehicle_speed, actValue, 0, 120);
 			break;
 		case MOTOR_RPM:
 			// 0 9000 1 RPM -
@@ -92,40 +90,19 @@ public class InstrumentClusterLogic extends SystemComponent {
 		return localData;
 	}
 
-	// Write in the Terminal the actual status about the Gear Position
-	private void logicGearPosition() {
-		switch (this.data_gear_position) {
-		case 0:
-			System.out.println("Gear Position: D data: " + this.data_gear_position);
-			break;
-		case 1:
-			System.out.println("Gear Position: N data: " + this.data_gear_position);
-			break;
-		case 2:
-			System.out.println("Gear Position: R data: " + this.data_gear_position);
-			break;
-		case 3:
-			System.out.println("Gear Position: P data: " + this.data_gear_position);
-			break;
-		}
-	}
-	//Set the actual status and
-	//write in the Terminal the actual status about the Headlight
+	// Set the actual status and
 	private void logicHeadlight() {
 		switch (this.data_headlight) {
 		case 0:
 			this.headlight_on_off = false;
-			System.out.println("Headlight: OFF data: " + this.data_headlight);
 			break;
 		case 1:
 			this.headlight_on_off = true;
-			System.out.println("Headlight: ON data: " + this.data_headlight);
 			break;
 		}
 	}
 
-	//Blinking the Turn Signals on the Instrument Cluster and
-	//write in the Terminal the actual status about the turn signals
+	// Blinking the Turn Signals on the Instrument Cluster and
 	private void logicTurnSignals() {
 		if (this.data_turn_signal != 0) {
 			this.turn_signal_tick++;
@@ -152,18 +129,19 @@ public class InstrumentClusterLogic extends SystemComponent {
 				}
 			}
 		}
-		System.out.println("Left/Right Turn Signals: " + this.turn_signal_left + " " + this.turn_signal_right
-				+ " data: " + this.data_turn_signal);
 	}
-	
-	//get Values for the Instrument Cluster
-	
+
+	// get Values for the Instrument Cluster
 	public int getVehicleSpeed() {
 		return this.data_vehicle_speed;
 	}
-	
+
 	public int getMotorRPM() {
 		return this.data_motor_rpm;
+	}
+
+	public int getSteeringWheelAngle() {
+		return this.data_steering_wheel_angle;
 	}
 
 	public boolean getGearPos_D_Status() {
@@ -192,5 +170,36 @@ public class InstrumentClusterLogic extends SystemComponent {
 
 	public boolean getRightTurnSignalStatus() {
 		return this.turn_signal_right;
+	}
+	
+	// Write in the Terminal the actual status about the Signals
+	private void writeInTerminalInfos() {
+		System.out.println("---INSTRUMENT CLUSTER CYCLE---");
+		switch (this.data_gear_position) {
+		case 0:
+			System.out.println("Gear Position: D data: " + this.data_gear_position);
+			break;
+		case 1:
+			System.out.println("Gear Position: N data: " + this.data_gear_position);
+			break;
+		case 2:
+			System.out.println("Gear Position: R data: " + this.data_gear_position);
+			break;
+		case 3:
+			System.out.println("Gear Position: P data: " + this.data_gear_position);
+			break;
+		}
+		switch (this.data_headlight) {
+		case 0:
+			System.out.println("Headlight: OFF data: " + this.data_headlight);
+			break;
+		case 1:
+			System.out.println("Headlight: ON data: " + this.data_headlight);
+			break;
+		}
+		System.out.println("Left/Right Turn Signals: " + this.turn_signal_left + " " + this.turn_signal_right
+				+ " data: " + this.data_turn_signal);
+		System.out.println("Steering Wheel Angle data: " + this.data_steering_wheel_angle);
+		System.out.println("----------------------");
 	}
 }
