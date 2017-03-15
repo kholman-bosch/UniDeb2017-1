@@ -3,8 +3,8 @@ package com.unideb.bosch.automatedcar;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,8 +12,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import com.unideb.bosch.automatedcar.AutomatedCar;
 
 public final class VirtualWorld {
 	
@@ -23,11 +21,17 @@ public final class VirtualWorld {
 	private static final String carImagePath = "./world/bosch1.png";
 	
 	private static WorldObjectParser world = WorldObjectParser.getInstance();
-	private static AutomatedCar car = new AutomatedCar();
+	private static AutomatedCar car;
 	
-    private static JFrame frame = new JFrame("UniDeb Automated Car Project");
+    private static JFrame frame;
     private static BufferedImage backgroundImage;
     private static BufferedImage carImage;
+    
+    static {
+    	// Order matters because the frame should exist when the HMI set the KeyListener.
+    	frame = new JFrame("UniDeb Automated Car Project");
+    	car = new AutomatedCar();
+    }
 	
     public static Image resizeImage(Image image, int width, int height, boolean max) {
       if (width < 0 && height > 0) {
@@ -47,6 +51,10 @@ public final class VirtualWorld {
         size = width;
       }
       return resizeImageBy(image, size, (size == width));
+    }
+    
+    public static void addKeyListenerToFrame(KeyListener keyListener) {
+    	frame.addKeyListener(keyListener);
     }
 
     public static Image resizeImageBy(Image image, int size, boolean setWidth) {
@@ -98,7 +106,7 @@ public final class VirtualWorld {
 	    frame.setSize(800, 600);
 	    frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 	    frame.setVisible(true);
-	        
+
 	    while(true)
 	    {   	
 	    	try {
