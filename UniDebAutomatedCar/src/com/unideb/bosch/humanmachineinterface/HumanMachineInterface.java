@@ -10,6 +10,7 @@ import com.unideb.bosch.automatedcar.VirtualWorld;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
+import com.unideb.bosch.instrumentclusterdisplay.SignalDatabase;
 
 public class HumanMachineInterface extends SystemComponent {
 	
@@ -82,54 +83,54 @@ public class HumanMachineInterface extends SystemComponent {
 			
 			char character = keyEvent.getKeyChar();
 			if (character == 'p' || character == 'P') {
-				VirtualFunctionBus.sendSignal(new Signal(7, 3));
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 3));
 			}
 			else if (character == 'r' || character == 'R') {
-				VirtualFunctionBus.sendSignal(new Signal(7, 2));
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 2));
 			}
 			else if (character == 'n' || character == 'N') {
-				VirtualFunctionBus.sendSignal(new Signal(7, 1));
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 1));
 			}
 			else if (character == 'd' || character == 'D') {
-				VirtualFunctionBus.sendSignal(new Signal(7, 0));
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 0));
 			}
 			else if (character == 'q' || character == 'Q') {
 				if (lastIndicatorSignal == 2) {
-					VirtualFunctionBus.sendSignal(new Signal(3, 0));
+					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.INDICATOR, 0));
 					lastIndicatorSignal = 0;
 				}
 				else {
-					VirtualFunctionBus.sendSignal(new Signal(3, 2));
+					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.INDICATOR, 2));
 					lastIndicatorSignal = 2;
 				}
 			}
 			else if (character == 'w' || character == 'W') {
 				if (lastIndicatorSignal == 3) {
-					VirtualFunctionBus.sendSignal(new Signal(3, 0));
+					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.INDICATOR, 0));
 					lastIndicatorSignal = 0;
 				}
 				else {
-					VirtualFunctionBus.sendSignal(new Signal(3, 3));
+					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.INDICATOR, 3));
 					lastIndicatorSignal = 3;
 				}
 			}
 			else if (character == 'e' || character == 'E') {
 				if (lastIndicatorSignal == 1) {
-					VirtualFunctionBus.sendSignal(new Signal(3, 0));
+					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.INDICATOR, 0));
 					lastIndicatorSignal = 0;
 				}
 				else {
-					VirtualFunctionBus.sendSignal(new Signal(3, 1));
+					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.INDICATOR, 1));
 					lastIndicatorSignal = 1;
 				}
 			}
 			else if (character == 'l' || character == 'L') {
 				if (isHeadLightOn) {
-					VirtualFunctionBus.sendSignal(new Signal(10, 0));
+					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.HEADLIGHT, 0));
 					isHeadLightOn = false;
 				}
 				else {
-					VirtualFunctionBus.sendSignal(new Signal(10, 1));
+					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.HEADLIGHT, 1));
 					isHeadLightOn = true;;
 				}
 			}
@@ -170,9 +171,9 @@ public class HumanMachineInterface extends SystemComponent {
 			steeringWheelAngle++;
 		}
 		
-		VirtualFunctionBus.sendSignal(new Signal(4, gasPedalPosition));
-		VirtualFunctionBus.sendSignal(new Signal(5, breakPedalPosition));
-		VirtualFunctionBus.sendSignal(new Signal(6, steeringWheelAngle));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GAS_PEDAL_POSITION, gasPedalPosition));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.BRAKE_PEDAL_POSITION, breakPedalPosition));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.STEERING_WHEEL_ANGLE, steeringWheelAngle));
 		
 		// TODO Auto-generated method stub
 		LOGGER.debug("HMI cyclic()");
