@@ -45,7 +45,7 @@ public final class AutomatedCar {
 
 		// Place a driver into our car
 		new Driver();
-		new VirtualDisplay_Invoker(this, new InstrumentClusterLogic());
+		new VirtualDisplay_Invoker(this, new InstrumentClusterLogic(this.powertrainSystem));
 	}
 
 	public void drawCar(Graphics g) {
