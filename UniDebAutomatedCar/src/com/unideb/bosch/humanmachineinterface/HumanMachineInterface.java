@@ -24,18 +24,30 @@ public class HumanMachineInterface extends SystemComponent {
 		VirtualWorld.addKeyListenerToFrame(keyListener);
 	}
 	
+	int gasPedalPosition = 0;
+	int breakPedalPosition = 0;
+	int steeringWheelAngle = 0;
+	boolean gasPressed = false;
+	boolean breakPressed = false;
+	boolean left = false;
+	boolean right = false;
+	
 	private class HMIKeyHandler implements KeyListener {
-		int acceleration = 0;
 		
 		@Override
 		public void keyPressed(KeyEvent keyEvent) {
-			// TODO Auto-generated method stub
-			switch(keyEvent.getKeyChar()){
+			switch(keyEvent.getKeyCode()){
 				case KeyEvent.VK_UP:
-					if(acceleration == 10)
-						VirtualFunctionBus.sendSignal(new Signal(4, 10));
-					else
-						VirtualFunctionBus.sendSignal(new Signal(4, acceleration++));
+					gasPressed = true;
+					break;
+				case KeyEvent.VK_DOWN:
+					breakPressed = true;
+					break;
+				case KeyEvent.VK_LEFT:
+					left = true;
+					break;
+				case KeyEvent.VK_RIGHT:
+					right = true;
 					break;
 			}
 			
@@ -44,6 +56,21 @@ public class HumanMachineInterface extends SystemComponent {
 
 		@Override
 		public void keyReleased(KeyEvent keyEvent) {
+			switch(keyEvent.getKeyCode()){
+				case KeyEvent.VK_UP:
+					gasPressed = false;
+					break;
+				case KeyEvent.VK_DOWN:
+					breakPressed = false;
+					break;
+				case KeyEvent.VK_LEFT:
+					left = false;
+					break;
+				case KeyEvent.VK_RIGHT:
+					right = false;
+					break;
+			}	
+		
 			LOGGER.debug(keyEvent.getKeyCode() + " key were released!");
 		}
 
@@ -52,6 +79,7 @@ public class HumanMachineInterface extends SystemComponent {
 		
 		@Override
 		public void keyTyped(KeyEvent keyEvent) {
+			
 			char character = keyEvent.getKeyChar();
 			if (character == 'p' || character == 'P') {
 				VirtualFunctionBus.sendSignal(new Signal(7, 3));
@@ -113,6 +141,39 @@ public class HumanMachineInterface extends SystemComponent {
 	
 	@Override
 	public void cyclic() {
+		if (gasPressed) {
+			if (gasPedalPosition < 100) {
+				gasPedalPosition++;
+			}
+		}
+		else {
+			if (gasPedalPosition > 0) {
+				gasPedalPosition--;
+			}
+		}
+		
+		if (breakPressed) {
+			if (breakPedalPosition < 100) {
+				breakPedalPosition++;
+			}
+		}
+		else {
+			if (breakPedalPosition > 0) {
+				breakPedalPosition--;
+			}
+		}
+		
+		if (left && steeringWheelAngle > -720) {
+			steeringWheelAngle--;
+		}
+		if (right && steeringWheelAngle < 720) {
+			steeringWheelAngle++;
+		}
+		
+		VirtualFunctionBus.sendSignal(new Signal(4, gasPedalPosition));
+		VirtualFunctionBus.sendSignal(new Signal(5, breakPedalPosition));
+		VirtualFunctionBus.sendSignal(new Signal(6, steeringWheelAngle));
+		
 		// TODO Auto-generated method stub
 		LOGGER.debug("HMI cyclic()");
 		
