@@ -27,7 +27,7 @@ public class InstrumentClusterLogic extends SystemComponent {
 	@Override
 	public void cyclic() {
 		this.blinkingTurnSignals();
-		this.writeInTerminalInfos();
+		//this.writeInTerminalInfos();
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class InstrumentClusterLogic extends SystemComponent {
 			break;
 		case SignalDatabase.VEHICLE_SPEED:
 			// 0 120 1 KM/H -
-			this.data_vehicle_speed = actValue;
+			this.data_vehicle_speed =Math.abs(actValue);
 			break;
 		case SignalDatabase.MOTOR_RPM:
 			// 0 9000 1 RPM -

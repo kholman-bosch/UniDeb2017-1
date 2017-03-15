@@ -7,7 +7,6 @@ import java.awt.TexturePaint;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -19,16 +18,15 @@ import com.unideb.bosch.instrumentclusterdisplay.VirtualDisplay_Invoker;
 
 public final class AutomatedCar {
 
-	private int x = 100;
-	private int y = 100;
-	private double angle = 0;
+	private float carPos_X = 2500f;
+	private float carPos_Y = 2000f;
 	private PowertrainSystem powertrainSystem;
 	private BufferedImage carImage;
 	private Rectangle carImageRectange;
-	private float carHeading = 0f;
-	private float carSpeed = 2f;
-	private float steerAngle = 33f;
-	private float wheelBase = 160f; // the distance between the front and back
+	public float carSpeed = 0f;
+	private float steerAngle = 0f;
+	public float carHeading_Angle = 0f;
+	public final float wheelBase = 160f;
 
 	public AutomatedCar() {
 		try {
@@ -42,7 +40,6 @@ public final class AutomatedCar {
 		this.powertrainSystem = new PowertrainSystem();
 		// The rest of the components use the VirtualFunctionBus to communicate,
 		// they do not communicate with the car itself
-
 		// Place a driver into our car
 		new Driver();
 		new VirtualDisplay_Invoker(this, new InstrumentClusterLogic(this.powertrainSystem));
@@ -50,48 +47,67 @@ public final class AutomatedCar {
 
 	public void drawCar(Graphics g) {
 		Graphics2D gMatrix_Car = (Graphics2D) g.create();
-		int carMidPoint_X = this.x + this.carImage.getWidth();
-		// only width and height since the car is scaled by a factor of 2
-		int carMidPoint_Y = this.y + this.carImage.getHeight();
-		this.carImageRectange.setLocation(this.x, this.y);
+		float carMidPoint_X = this.carPos_X;
+		float carMidPoint_Y = this.carPos_Y;
+		int carImageWidth_Half = this.carImage.getWidth();
+		// because the car is scaled by 2 so the half of it is the original
+		int carImageHeight_Half = this.carImage.getHeight();
+		this.carImageRectange.setLocation((int) this.carPos_X - carImageWidth_Half, (int) this.carPos_Y - carImageHeight_Half);
 		TexturePaint carPaint = new TexturePaint(this.carImage, this.carImageRectange);
 		gMatrix_Car.setPaint(carPaint);
-		gMatrix_Car.rotate(this.carHeading, carMidPoint_X, carMidPoint_Y);
-		gMatrix_Car.fillRect(this.x, this.y, this.carImage.getWidth() * 2, this.carImage.getHeight() * 2);
+		gMatrix_Car.rotate(-this.carHeading_Angle, carMidPoint_X, carMidPoint_Y);
+		gMatrix_Car.fillRect((int) this.carPos_X - carImageWidth_Half, (int) this.carPos_Y - carImageHeight_Half,
+				carImageWidth_Half * 2, carImageHeight_Half * 2);
 	}
 
 	public void drive() {
 		// Call components
 		VirtualFunctionBus.cyclic();
 		// Update the position and orientation of the car
-		//this.x = powertrainSystem.getPositionX();
-		//this.y = powertrainSystem.getPositionY();
-		//this.angle = powertrainSystem.getAngle();
-		//
-		float frontWheel_X = (this.x + this.carImage.getWidth()) + ((wheelBase / 2f) * (float) (Math.cos(carHeading)));
-		float frontWheel_Y = (this.y + this.carImage.getHeight()) + ((wheelBase / 2f) * (float) (Math.sin(carHeading)));
-		float backWheel_X = (this.x + this.carImage.getWidth()) - ((wheelBase / 2f) * (float) (Math.cos(carHeading)));
-		float backWheel_Y = (this.y + this.carImage.getHeight()) - ((wheelBase / 2f) * (float) (Math.sin(carHeading)));
-		backWheel_X += (carSpeed * Math.cos(carHeading));
-		backWheel_Y += (carSpeed * Math.sin(carHeading));
-		frontWheel_X += (carSpeed * Math.cos(carHeading + steerAngle));
-		frontWheel_Y += (carSpeed * Math.sin(carHeading + steerAngle));
-		float newLocation_X = (frontWheel_X + backWheel_X) / 2f;
-		float newLocation_Y = (frontWheel_Y + backWheel_Y) / 2f;
-		this.powertrainSystem.positionX = (int) newLocation_X;
-		this.powertrainSystem.positionY = (int) newLocation_Y;
-		this.carHeading = (float) Math.atan2(frontWheel_Y - backWheel_Y, frontWheel_X - backWheel_X);
+		this.steerAngle = this.powertrainSystem.getSteeringWheelAngle();
+		this.carSpeed = this.powertrainSystem.getCarSpeed();
+		this.carPhysics();
+		this.teleportCarIntoBounds();
 	}
 
-	public int getX() {
-		return x;
+	private void carPhysics() {
+		float frontWheel_X = this.carPos_X + (this.wheelBase / 2f) * (float) Math.sin(this.carHeading_Angle);
+		float frontWheel_Y = this.carPos_Y + (this.wheelBase / 2f) * (float) Math.cos(this.carHeading_Angle);
+		float backWheel_X = this.carPos_X - (this.wheelBase / 2f) * (float) Math.sin(this.carHeading_Angle);
+		float backWheel_Y = this.carPos_Y - (this.wheelBase / 2f) * (float) Math.cos(this.carHeading_Angle);
+		frontWheel_X += this.carSpeed * (float) Math.sin(this.carHeading_Angle + Math.toRadians(this.steerAngle));
+		frontWheel_Y += this.carSpeed * (float) Math.cos(this.carHeading_Angle + Math.toRadians(this.steerAngle));
+		backWheel_X += this.carSpeed * (float) Math.sin(this.carHeading_Angle);
+		backWheel_Y += this.carSpeed * (float) Math.cos(this.carHeading_Angle);
+		this.carPos_X = (frontWheel_X + backWheel_X) / 2f;
+		this.carPos_Y = (frontWheel_Y + backWheel_Y) / 2f;
+		this.carHeading_Angle = (float) Math.atan2(frontWheel_X - backWheel_X, frontWheel_Y - backWheel_Y);
+	}
+	
+	private void teleportCarIntoBounds() {
+		if(this.carPos_X < 0){
+			this.carPos_X = 5000;
+		}
+		if(this.carPos_X > 5000){
+			this.carPos_X = 0;
+		}
+		if(this.carPos_Y < 0){
+			this.carPos_Y = 4000;
+		}
+		if(this.carPos_Y > 4000){
+			this.carPos_Y = 0;
+		}
 	}
 
-	public int getY() {
-		return y;
+	public float getX() {
+		return this.carPos_X;
 	}
 
-	public double getAngle() {
-		return angle;
+	public float getY() {
+		return this.carPos_Y;
+	}
+
+	public float getAngle() {
+		return this.steerAngle;
 	}
 }

@@ -152,7 +152,7 @@ public class VirtualDisplaySurface extends JPanel {
 		gMatrix_Icons.setPaint(steeringWheel_Paint);
 		int wheelMidPoint_X = 640;
 		int wheelMidPoint_Y = 128;
-		gMatrix_Icons.rotate(Math.toRadians(steeringWheel_Angle), wheelMidPoint_X, wheelMidPoint_Y);
+		gMatrix_Icons.rotate(-Math.toRadians(steeringWheel_Angle), wheelMidPoint_X, wheelMidPoint_Y);
 		gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, steeringWheel.getWidth(), steeringWheel.getHeight());
 		//
 		gMatrix_KMH.dispose();
@@ -167,14 +167,14 @@ public class VirtualDisplaySurface extends JPanel {
 		doDrawing(g);
 	}
 
-	public void set_Actual_KMH_Needle_Angle(int angle) {
-		angle = truncateAngle(angle, 245);
-		this.actual_KMH_Needle_Angle = angle;
+	public void set_Actual_KMH_Needle_Angle(int kmh) {
+		float actKMH_needleIndicator_Angle = (kmh / 120f) * 245;
+		this.actual_KMH_Needle_Angle = (int) actKMH_needleIndicator_Angle;
 	}
 
-	public void set_Actual_RPM_Needle_Angle(int angle) {
-		angle = truncateAngle(angle, 255);
-		this.actual_RPM_Needle_Angle = angle;
+	public void set_Actual_RPM_Needle_Angle(int rpm) {
+		float actRPM_needleIndicator_Angle = (rpm / 9000f) * 255;
+		this.actual_RPM_Needle_Angle = (int) actRPM_needleIndicator_Angle;
 	}
 
 	public void set_Actual_R(boolean state) {

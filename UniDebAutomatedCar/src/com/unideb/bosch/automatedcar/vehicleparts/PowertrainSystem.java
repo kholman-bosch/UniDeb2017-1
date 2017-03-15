@@ -11,11 +11,6 @@ import com.unideb.bosch.instrumentclusterdisplay.SignalDatabase;
  */
 public class PowertrainSystem extends SystemComponent {
 
-	// Only these are available trough getters
-	public int positionX = 200;
-	public int positionY = 200;
-	private double angle = 0;
-	//
 	private int data_gas_pedal_position = 3;
 	private int data_brake_pedal_position = 0;
 	private int data_steering_wheel_angle = 0;
@@ -48,7 +43,7 @@ public class PowertrainSystem extends SystemComponent {
 			break;
 		case SignalDatabase.STEERING_WHEEL_ANGLE:
 			// -720 720 1 ° -
-			this.data_steering_wheel_angle = actValue;
+			this.data_steering_wheel_angle = -actValue;
 			break;
 		case SignalDatabase.GEAR_POSITION:
 			// D: 0
@@ -63,18 +58,6 @@ public class PowertrainSystem extends SystemComponent {
 			this.data_headlight = actValue;
 			break;
 		}
-	}
-
-	public int getPositionX() {
-		return positionX;
-	}
-
-	public int getPositionY() {
-		return positionY;
-	}
-
-	public double getAngle() {
-		return angle;
 	}
 
 	public boolean getGearPos_D_Status() {
@@ -99,6 +82,14 @@ public class PowertrainSystem extends SystemComponent {
 
 	public int getSteeringWheelAngle() {
 		return this.data_steering_wheel_angle;
+	}
+
+	public int getCarSpeed() {
+		float brakeSlowdown = 1f - this.data_brake_pedal_position / 100f;
+		if (brakeSlowdown == 0) {
+			return this.data_vehicle_speed;
+		}
+		return (int) (this.data_vehicle_speed * brakeSlowdown);
 	}
 
 	private void checkAndSetValidGearStatus(int value) {
@@ -127,8 +118,27 @@ public class PowertrainSystem extends SystemComponent {
 	}
 
 	private void calcSpeedandMotorRPM() {
-		this.data_vehicle_speed = SignalDatabase.limit(this.data_vehicle_speed,(int) (this.data_gas_pedal_position*1.2), 0, 120);
-		this.data_motor_rpm = SignalDatabase.limit(this.data_motor_rpm, (this.data_gas_pedal_position * 9000) / 100, 0, 9000);
+		switch (this.data_gear_position) {
+		case 0: // drive
+			this.data_vehicle_speed = SignalDatabase.limit(this.data_vehicle_speed,
+					(int) (this.data_gas_pedal_position * 1.2f), 0, 120);
+			break;
+		case 1: // neutral
+			this.data_vehicle_speed--;
+			if (this.data_vehicle_speed < 0) {
+				this.data_vehicle_speed = 0;
+			}
+			break;
+		case 2: // reverse
+			this.data_vehicle_speed = -SignalDatabase.limit(this.data_vehicle_speed,
+					(int) (this.data_gas_pedal_position * 1.2f), 0, 120);
+			break;
+		case 3: // park
+			break;
+		}
+
+		float rpm = this.data_gas_pedal_position / 100f * 9000;
+		this.data_motor_rpm = SignalDatabase.limit(this.data_motor_rpm, (int) rpm, 0, 9000);
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.data_vehicle_speed));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.MOTOR_RPM, this.data_motor_rpm));
 	}
