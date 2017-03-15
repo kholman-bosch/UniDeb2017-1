@@ -25,11 +25,19 @@ public class HumanMachineInterface extends SystemComponent {
 	}
 	
 	private class HMIKeyHandler implements KeyListener {
-
+		int acceleration = 0;
+		
 		@Override
 		public void keyPressed(KeyEvent keyEvent) {
 			// TODO Auto-generated method stub
-			
+			switch(keyEvent.getKeyChar()){
+				case KeyEvent.VK_UP:
+					if(acceleration == 10)
+						VirtualFunctionBus.sendSignal(new Signal(4, 10));
+					else
+						VirtualFunctionBus.sendSignal(new Signal(4, acceleration++));
+					break;
+			}
 			
 			LOGGER.debug(keyEvent.getKeyCode() + " key were pressed!");
 		}
