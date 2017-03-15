@@ -3,6 +3,7 @@ package com.unideb.bosch.automatedcar;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,30 +19,42 @@ public final class VirtualWorld {
 	private static final String backgroundImagePath = "./world/road_1.png";
 
 	private static WorldObjectParser world = WorldObjectParser.getInstance();
-	private static AutomatedCar car = new AutomatedCar();
 
-	private static JFrame frame = new JFrame("UniDeb Automated Car Project");
-	private static BufferedImage backgroundImage;
-
-	public static Image resizeImage(Image image, int width, int height, boolean max) {
-		if (width < 0 && height > 0) {
-			return resizeImageBy(image, height, false);
-		} else if (width > 0 && height < 0) {
-			return resizeImageBy(image, width, true);
-		} else if (width < 0 && height < 0) {
-			return image;
-		}
-		int currentHeight = image.getHeight(null);
-		int currentWidth = image.getWidth(null);
-		int expectedWidth = (height * currentWidth) / currentHeight;
-		int size = height;
-		if (max && expectedWidth > width) {
-			size = width;
-		} else if (!max && expectedWidth < width) {
-			size = width;
-		}
-		return resizeImageBy(image, size, (size == width));
-	}
+	private static AutomatedCar car;
+	
+    private static JFrame frame;
+    private static BufferedImage backgroundImage;
+    private static BufferedImage carImage;
+    
+    static {
+    	// Order matters because the frame should exist when the HMI set the KeyListener.
+    	frame = new JFrame("UniDeb Automated Car Project");
+    	car = new AutomatedCar();
+    }
+	
+    public static Image resizeImage(Image image, int width, int height, boolean max) {
+      if (width < 0 && height > 0) {
+        return resizeImageBy(image, height, false);
+      } else if (width > 0 && height < 0) {
+        return resizeImageBy(image, width, true);
+      } else if (width < 0 && height < 0) {
+        return image;
+      }
+      int currentHeight = image.getHeight(null);
+      int currentWidth = image.getWidth(null);
+      int expectedWidth = (height * currentWidth) / currentHeight;
+      int size = height;
+      if (max && expectedWidth > width) {
+        size = width;
+      } else if (!max && expectedWidth < width) {
+        size = width;
+      }
+      return resizeImageBy(image, size, (size == width));
+    }
+    
+    public static void addKeyListenerToFrame(KeyListener keyListener) {
+    	frame.addKeyListener(keyListener);
+    }
 
 	public static Image resizeImageBy(Image image, int size, boolean setWidth) {
 		if (setWidth) {
@@ -88,15 +101,17 @@ public final class VirtualWorld {
 				// Resize the display to fit the window
 			}
 		});
-		frame.validate();
-		frame.setSize(800, 600);
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		frame.setVisible(true);
+	    
+	    frame.validate();
+	    frame.setSize(800, 600);
+	    frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	    frame.setVisible(true);
 
-		while (true) {
-			try {
-				car.drive();
-				refreshFrame();
+	    while(true)
+	    {   	
+	    	try {
+	    		car.drive();
+		    	refreshFrame();
 				Thread.sleep(cyclePeriod);
 			} catch (InterruptedException e) {
 				e.printStackTrace();

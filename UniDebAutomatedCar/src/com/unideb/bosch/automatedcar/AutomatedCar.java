@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 import com.unideb.bosch.automatedcar.vehicleparts.Driver;
 import com.unideb.bosch.automatedcar.vehicleparts.PowertrainSystem;
+import com.unideb.bosch.humanmachineinterface.HumanMachineInterface;
 import com.unideb.bosch.instrumentclusterdisplay.InstrumentClusterLogic;
 import com.unideb.bosch.instrumentclusterdisplay.VirtualDisplay_Invoker;
 
@@ -43,6 +44,7 @@ public final class AutomatedCar {
 		// Place a driver into our car
 		new Driver();
 		new VirtualDisplay_Invoker(this, new InstrumentClusterLogic(this.powertrainSystem));
+		new HumanMachineInterface(); // I don't know we need this. HMI branch has it so I just leave it here for now.
 	}
 
 	public void drawCar(Graphics g) {
