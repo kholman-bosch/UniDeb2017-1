@@ -9,6 +9,7 @@ public class RSensorDetectedObjectAttributes {
 	public float lateralRelative_Velcity;
 	public float longitudinalDistance_From_EGO;
 	public float lateralDistance_From_EGO;
+	public int dangerValue = -1;
 
 	public RSensorDetectedObjectAttributes(WorldObject object) {
 		if (object == null) {

@@ -17,7 +17,6 @@ public class RSensor { // radar sensor
 	private int defaultMaximummDetectRange = 250;
 	private int defaultMaximumDetectAngle = 85;
 	//
-	private int maximum_DetectableDangerousObjects = 5;
 	private ArrayList<RSensorDetectedObjectAttributes> detectedWorldObjects = new ArrayList<RSensorDetectedObjectAttributes>(64);
 	private ArrayList<RSensorDetectedObjectAttributes> previousWorldObjects = new ArrayList<RSensorDetectedObjectAttributes>(64);
 	private ArrayList<RSensorDetectedObjectAttributes> movingWorldObjects = new ArrayList<RSensorDetectedObjectAttributes>(64);
@@ -47,7 +46,6 @@ public class RSensor { // radar sensor
 		for (int i = 0; i < this.detectedWorldObjects.size(); i++) {
 			this.calculate_DetectedWorldObject_Attributes(this.detectedWorldObjects.get(i));
 		}
-		this.filterOut_LessDangerousObjects();
 		this.previousWorldObjects.clear();
 	}
 
@@ -70,12 +68,6 @@ public class RSensor { // radar sensor
 			}
 		}
 		// TODO: sensor math and set attributes
-	}
-
-	private void filterOut_LessDangerousObjects() {
-		for (int i = 0; i < this.detectedWorldObjects.size(); i++) {
-			// TODO: remove objects from list based on danger value
-		}
 	}
 
 	// gives back detected WorldObjects up to 5 objects
