@@ -19,6 +19,8 @@ public class RSensor { // radar sensor
 	//
 	private int maximum_DetectableDangerousObjects = 5;
 	private ArrayList<RSensorDetectedObjectAttributes> detectedWorldObjects = new ArrayList<RSensorDetectedObjectAttributes>(64);
+	private ArrayList<RSensorDetectedObjectAttributes> previousWorldObjects = new ArrayList<RSensorDetectedObjectAttributes>(64);
+	private ArrayList<RSensorDetectedObjectAttributes> movingWorldObjects = new ArrayList<RSensorDetectedObjectAttributes>(64);
 
 	public RSensor(int minDetectRange, int maxDetectRange, int minDetctAngle, int maxDetectAngle) {
 		this.minimumDetectRange = minDetectRange;
@@ -30,11 +32,15 @@ public class RSensor { // radar sensor
 
 	public void update() {
 		this.detectedWorldObjects.clear();
+		this.movingWorldObjects.clear();
 		for (int i = 0; i < WorldObjectParser.getInstance().getWorldObjects().size(); i++) {
 			WorldObject actual_WorldObjet = WorldObjectParser.getInstance().getWorldObjects().get(i);
 			if (isValid_WorldObject(actual_WorldObjet.getType())) {
 				if (this.isWorldObject_Detected(actual_WorldObjet)) {
-					this.detectedWorldObjects.add(new RSensorDetectedObjectAttributes(actual_WorldObjet));
+					RSensorDetectedObjectAttributes detectedObjWithAttributes = new RSensorDetectedObjectAttributes(
+							actual_WorldObjet);
+					this.detectedWorldObjects.add(detectedObjWithAttributes);
+					this.previousWorldObjects.add(detectedObjWithAttributes);
 				}
 			}
 		}
@@ -42,6 +48,7 @@ public class RSensor { // radar sensor
 			this.calculate_DetectedWorldObject_Attributes(this.detectedWorldObjects.get(i));
 		}
 		this.filterOut_LessDangerousObjects();
+		this.previousWorldObjects.clear();
 	}
 
 	private boolean isWorldObject_Detected(WorldObject object) {
@@ -50,6 +57,18 @@ public class RSensor { // radar sensor
 	}
 
 	private void calculate_DetectedWorldObject_Attributes(RSensorDetectedObjectAttributes objectWithAttributes) {
+		// detect moving objects
+		for (int i = 0; i < this.detectedWorldObjects.size(); i++) {
+			for (int j = 0; j < this.previousWorldObjects.size(); j++) {
+				WorldObject actObj = this.detectedWorldObjects.get(i).parentWorldObject;
+				WorldObject prevObj = this.previousWorldObjects.get(j).parentWorldObject;
+				if (actObj.equals(prevObj)) { // hashcode based compare, should implement ID in WorldObject
+					if (actObj.getX() != prevObj.getX() || actObj.getY() != prevObj.getY()) {
+						this.movingWorldObjects.add(this.detectedWorldObjects.get(i));
+					}
+				}
+			}
+		}
 		// TODO: sensor math and set attributes
 	}
 

@@ -54,7 +54,6 @@ public final class VirtualWorld {
 		} else if (!max && expectedWidth < width) {
 			size = width;
 		}
-
 		return resizeImageBy(image, size, (size == width));
 	}
 
