@@ -32,6 +32,8 @@ public final class AutomatedCar {
 	// values for interpolation
 	private float previousCarPos_X = 2500f;
 	private float previousCarPos_Y = 2000f;
+	private float previousCarHeadingAngle = 0f;
+	private boolean useNON_QuaternionAngleInterpolation = false;
 
 	public AutomatedCar() {
 		try {
@@ -62,9 +64,20 @@ public final class AutomatedCar {
 		Graphics2D gMatrix_Car = (Graphics2D) g.create();
 		float interpValue = VirtualWorld.getGraphicsInterpolationValue();
 		float oneMinusInterp = 1.0f - interpValue;
-		// handle interpolation of carPosition
+		// handle interpolation of carPosition and headingAngle
 		float carMidPointScaled_X = (this.carPos_X * graphicsScale * interpValue) + (this.previousCarPos_X * graphicsScale * oneMinusInterp);
 		float carMidPointScaled_Y = (this.carPos_Y * graphicsScale * interpValue) + (this.previousCarPos_Y * graphicsScale * oneMinusInterp);
+		float actualCarHeadingAngle;
+		if (this.useNON_QuaternionAngleInterpolation) {
+			if (((this.carHeading_Angle < 0f && this.previousCarHeadingAngle > 0f) || (this.carHeading_Angle > 0f && this.previousCarHeadingAngle < 0f))) {
+				//shoud use quaternions so this small "hack" can be avoided. The interpolation between a positive and a negative number has to be thrown away.
+				actualCarHeadingAngle = this.carHeading_Angle;
+			} else {
+				actualCarHeadingAngle = (this.carHeading_Angle * interpValue) + (this.previousCarHeadingAngle * oneMinusInterp);
+			}
+		} else {
+			actualCarHeadingAngle = this.carHeading_Angle;
+		}
 		// because the car is scaled by 2 so the half of it is the original
 		int scaledCarImageWidth_Half = this.scaledCarImage.getWidth();
 		int scaledCarImageHeight_Half = this.scaledCarImage.getHeight();
@@ -74,7 +87,7 @@ public final class AutomatedCar {
 		this.carImageRectange.setLocation(scaledCarPos_X, scaledCarPos_Y);
 		TexturePaint carPaint = new TexturePaint(this.scaledCarImage, this.carImageRectange);
 		gMatrix_Car.setPaint(carPaint);
-		gMatrix_Car.rotate(-this.carHeading_Angle, carMidPointScaled_X, carMidPointScaled_Y);
+		gMatrix_Car.rotate(-actualCarHeadingAngle, carMidPointScaled_X, carMidPointScaled_Y);
 		gMatrix_Car.fillRect((int) scaledCarPos_X, (int) scaledCarPos_Y, scaledCarImageWidth_Half, scaledCarImageHeight_Half);
 	}
 
@@ -92,6 +105,7 @@ public final class AutomatedCar {
 		// need to save previous position for interpolation to work
 		this.previousCarPos_X = this.carPos_X;
 		this.previousCarPos_Y = this.carPos_Y;
+		this.previousCarHeadingAngle = this.carHeading_Angle;
 		float frontWheel_X = this.carPos_X + (this.wheelBase / 2f) * (float) Math.sin(this.carHeading_Angle);
 		float frontWheel_Y = this.carPos_Y + (this.wheelBase / 2f) * (float) Math.cos(this.carHeading_Angle);
 		float backWheel_X = this.carPos_X - (this.wheelBase / 2f) * (float) Math.sin(this.carHeading_Angle);

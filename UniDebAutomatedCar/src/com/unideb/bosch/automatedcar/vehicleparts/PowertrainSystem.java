@@ -6,8 +6,7 @@ import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 import com.unideb.bosch.instrumentclusterdisplay.SignalDatabase;
 
 /**
- * This class implements the Powertrain System The responsible for this file is
- * TeamA
+ * This class implements the Powertrain System The responsible for this file is TeamA
  */
 public class PowertrainSystem extends SystemComponent {
 
@@ -43,8 +42,7 @@ public class PowertrainSystem extends SystemComponent {
 			break;
 		case SignalDatabase.STEERING_WHEEL_ANGLE:
 			// -720 720 1 � -
-			//actually there is a hack in the system to make turning faster (* 4)
-			this.data_steering_wheel_angle = -actValue * 4;
+			this.data_steering_wheel_angle = SignalDatabase.limit(this.data_steering_wheel_angle, -actValue, -720, 720);
 			break;
 		case SignalDatabase.GEAR_POSITION:
 			// D: 0
@@ -121,8 +119,7 @@ public class PowertrainSystem extends SystemComponent {
 	private void calcSpeedandMotorRPM() {
 		switch (this.data_gear_position) {
 		case 0: // drive
-			this.data_vehicle_speed = SignalDatabase.limit(this.data_vehicle_speed,
-					(int) (this.data_gas_pedal_position * 1.2f), 0, 120);
+			this.data_vehicle_speed = SignalDatabase.limit(this.data_vehicle_speed, (int) (this.data_gas_pedal_position * 1.2f), 0, 120);
 			break;
 		case 1: // neutral
 			this.data_vehicle_speed--;
@@ -131,8 +128,7 @@ public class PowertrainSystem extends SystemComponent {
 			}
 			break;
 		case 2: // reverse
-			this.data_vehicle_speed = -SignalDatabase.limit(this.data_vehicle_speed,
-					(int) (this.data_gas_pedal_position * 1.2f), 0, 120);
+			this.data_vehicle_speed = -SignalDatabase.limit(this.data_vehicle_speed, (int) (this.data_gas_pedal_position * 1.2f), 0, 120);
 			break;
 		case 3: // park
 			break;

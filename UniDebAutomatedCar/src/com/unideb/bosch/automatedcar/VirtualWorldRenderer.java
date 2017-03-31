@@ -32,7 +32,7 @@ public class VirtualWorldRenderer extends JPanel {
 		} catch (IOException ex) {
 			System.err.println(ex.getMessage() + " Error in VirtualWorldRenderer! ImageIO.read");
 		}
-		this.setBackground(Color.white);
+		this.setBackground(Color.gray);
 		this.windowResizeLogic(windowWidth, windowHeight);
 	}
 
