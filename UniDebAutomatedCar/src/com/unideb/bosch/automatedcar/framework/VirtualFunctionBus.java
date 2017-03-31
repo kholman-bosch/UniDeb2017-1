@@ -25,11 +25,11 @@ public class VirtualFunctionBus {
 
     public static void registerComponent(ISystemComponent comp) {
     	VirtualFunctionBus.components.add(comp);
-    	System.out.println("System component " + comp.toString() + " is registered on the virtual function bus");
+    	//System.out.println("System component " + comp.toString() + " is registered on the virtual function bus");
     }
     
     public static void sendSignal(Signal s) {
-		System.out.println("Broadcast signal " + s.toString());
+		//System.out.println("Broadcast signal " + s.toString());
     	// Broadcast the signal to all system components
     	for (ISystemComponent comp : components) {
     		comp.receiveSignal(s);
@@ -40,7 +40,7 @@ public class VirtualFunctionBus {
     	
         // Once the virtual function bus has started components are called cyclically
     	for (ISystemComponent comp : components) {
-    		System.out.println("Calling cyclic function of " + comp.toString());
+    		//System.out.println("Calling cyclic function of " + comp.toString());
 			comp.cyclic();
 		}	
     }
