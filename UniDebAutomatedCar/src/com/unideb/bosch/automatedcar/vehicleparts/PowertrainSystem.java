@@ -42,8 +42,9 @@ public class PowertrainSystem extends SystemComponent {
 			this.data_brake_pedal_position = actValue;
 			break;
 		case SignalDatabase.STEERING_WHEEL_ANGLE:
-			// -720 720 1 ° -
-			this.data_steering_wheel_angle = -actValue;
+			// -720 720 1 ï¿½ -
+			//actually there is a hack in the system to make turning faster (* 4)
+			this.data_steering_wheel_angle = -actValue * 4;
 			break;
 		case SignalDatabase.GEAR_POSITION:
 			// D: 0
