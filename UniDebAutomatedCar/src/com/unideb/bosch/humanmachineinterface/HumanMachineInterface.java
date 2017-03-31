@@ -156,7 +156,7 @@ public class HumanMachineInterface extends SystemComponent {
 			steeringWheelAngle -= 4;
 		}
 		if (right && steeringWheelAngle < 720) {
-			steeringWheelAngle += 3;
+			steeringWheelAngle += 4;
 		}
 
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GAS_PEDAL_POSITION, gasPedalPosition));

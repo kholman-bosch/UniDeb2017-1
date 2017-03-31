@@ -70,7 +70,7 @@ public final class AutomatedCar {
 		float actualCarHeadingAngle;
 		if (this.useNON_QuaternionAngleInterpolation) {
 			if (((this.carHeading_Angle < 0f && this.previousCarHeadingAngle > 0f) || (this.carHeading_Angle > 0f && this.previousCarHeadingAngle < 0f))) {
-				//shoud use quaternions so this small "hack" can be avoided. The interpolation between a positive and a negative number has to be thrown away.
+				// shoud use quaternions so this small "hack" can be avoided. The interpolation between a positive and a negative number has to be thrown away.
 				actualCarHeadingAngle = this.carHeading_Angle;
 			} else {
 				actualCarHeadingAngle = (this.carHeading_Angle * interpValue) + (this.previousCarHeadingAngle * oneMinusInterp);
