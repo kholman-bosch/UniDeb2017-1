@@ -1,14 +1,13 @@
 package com.unideb.bosch.radarsensor;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 import com.unideb.bosch.automatedcar.AutomatedCar;
 import com.unideb.bosch.automatedcar.VirtualWorld;
-import com.unideb.bosch.automatedcar.VirtualWorldRenderer;
 import com.unideb.bosch.automatedcar.WorldObjectParser;
 import com.unideb.bosch.automatedcar.framework.WorldObject;
 
@@ -42,8 +41,9 @@ public class RSensor { // radar sensor
 	}
 
 	public void draw_DebugData(Graphics2D g2) {
-		// sadly the swing coordinate system is not a normal one (the 0,0 is in the upper left) so hacks are needed  (a 180degree offset and sin/cos swaps)
+		// sadly the swing coordinate system is not a normal one (the 0,0 is in the upper left) so hacks are needed (a 180degree offset and sin/cos swaps)
 		g2.setColor(Color.CYAN);
+		g2.setStroke(new BasicStroke(2));
 		float graphicsScale = VirtualWorld.getGraphicsScale();
 		float radarSensorPos_X = (this.car.getRadarSensor_X() * graphicsScale);
 		float radarSensorPos_Y = (this.car.getRadarSensor_Y() * graphicsScale);
@@ -54,24 +54,58 @@ public class RSensor { // radar sensor
 		float sensorForward_Y_end = radarSensorPos_Y + (this.carForwardVector_Y * maxDetectRangeScaled);
 		Line2D lin = new Line2D.Float(sensorForward_X_start, sensorForward_Y_start, sensorForward_X_end, sensorForward_Y_end);
 		g2.draw(lin);
-		// fovline1
+		// maxfovline1
 		g2.setColor(Color.BLUE);
 		float maxDetectAngleHalf = (float) Math.toRadians((180 - this.maximumDetectAngle) / 2f);
 		float radarFOV_endX_1 = (float) (radarSensorPos_X + (sensorForward_X_end - radarSensorPos_X) * Math.sin(maxDetectAngleHalf) - (sensorForward_Y_end - radarSensorPos_Y) * Math.cos(maxDetectAngleHalf));
 		float radarFOV_endY_1 = (float) (radarSensorPos_Y + (sensorForward_X_end - radarSensorPos_X) * Math.cos(maxDetectAngleHalf) + (sensorForward_Y_end - radarSensorPos_Y) * Math.sin(maxDetectAngleHalf));
 		Line2D fov_Line_1 = new Line2D.Float(sensorForward_X_start, sensorForward_Y_start, radarFOV_endX_1, radarFOV_endY_1);
 		g2.draw(fov_Line_1);
-		// fovline2
+		// maxfovline2
 		float maxDetectAngleHalf_inTheOtherDirection = (float) Math.toRadians((180 - (180 - this.maximumDetectAngle) / 2f));
 		float radarFOV_endX_2 = (float) (radarSensorPos_X + (sensorForward_X_end - radarSensorPos_X) * Math.sin(maxDetectAngleHalf_inTheOtherDirection) - (sensorForward_Y_end - radarSensorPos_Y) * Math.cos(maxDetectAngleHalf_inTheOtherDirection));
 		float radarFOV_endY_2 = (float) (radarSensorPos_Y + (sensorForward_X_end - radarSensorPos_X) * Math.cos(maxDetectAngleHalf_inTheOtherDirection) + (sensorForward_Y_end - radarSensorPos_Y) * Math.sin(maxDetectAngleHalf_inTheOtherDirection));
 		Line2D fov_Line_2 = new Line2D.Float(sensorForward_X_start, sensorForward_Y_start, radarFOV_endX_2, radarFOV_endY_2);
 		g2.draw(fov_Line_2);
-		// fovbridge_1_2
-		Line2D fov_bridge_1 = new Line2D.Float(sensorForward_X_end, sensorForward_Y_end, radarFOV_endX_1, radarFOV_endY_1);
-		g2.draw(fov_bridge_1);
-		Line2D fov_bridge_2 = new Line2D.Float(sensorForward_X_end, sensorForward_Y_end, radarFOV_endX_2, radarFOV_endY_2);
-		g2.draw(fov_bridge_2);
+		// tessalate the outer arc of the sensor the arc's lines start at radarFOV_endX_1 , radarFOV_endY_1
+		float previousLineX = radarFOV_endX_1;
+		float previousLineY = radarFOV_endY_1;
+		float tessalationResolution = 12f;
+		double tessalatedAngle = maxDetectAngleHalf;
+		double step = (maxDetectAngleHalf_inTheOtherDirection - maxDetectAngleHalf) / tessalationResolution;
+		for (int i = 0; i < tessalationResolution; i++) {
+			tessalatedAngle += step;
+			radarFOV_endX_1 = (float) (radarSensorPos_X + (sensorForward_X_end - radarSensorPos_X) * Math.sin(tessalatedAngle) - (sensorForward_Y_end - radarSensorPos_Y) * Math.cos(tessalatedAngle));
+			radarFOV_endY_1 = (float) (radarSensorPos_Y + (sensorForward_X_end - radarSensorPos_X) * Math.cos(tessalatedAngle) + (sensorForward_Y_end - radarSensorPos_Y) * Math.sin(tessalatedAngle));
+			Line2D line = new Line2D.Float(previousLineX, previousLineY, radarFOV_endX_1, radarFOV_endY_1);
+			g2.draw(line);
+			previousLineX = radarFOV_endX_1;
+			previousLineY = radarFOV_endY_1;
+		}
+		// non detect zone:
+		maxDetectRangeScaled = (this.minimumDetectRange * graphicsScale);
+		sensorForward_X_end = radarSensorPos_X + (this.carForwardVector_X * maxDetectRangeScaled);
+		sensorForward_Y_end = radarSensorPos_Y + (this.carForwardVector_Y * maxDetectRangeScaled);
+		// minfovline1
+		g2.setColor(Color.BLACK);
+		// initial point where the deadzone debug lines start
+		float deadzone_radarFOV_X = (float) (radarSensorPos_X + (sensorForward_X_end - radarSensorPos_X) * Math.sin(maxDetectAngleHalf) - (sensorForward_Y_end - radarSensorPos_Y) * Math.cos(maxDetectAngleHalf));
+		float deadzone_radarFOV_Y = (float) (radarSensorPos_Y + (sensorForward_X_end - radarSensorPos_X) * Math.cos(maxDetectAngleHalf) + (sensorForward_Y_end - radarSensorPos_Y) * Math.sin(maxDetectAngleHalf));
+		// tessalate the inner deadzone arc of the sensor
+		previousLineX = deadzone_radarFOV_X;
+		previousLineY = deadzone_radarFOV_Y;
+		tessalationResolution = 6f;
+		tessalatedAngle = maxDetectAngleHalf;
+		step = (maxDetectAngleHalf_inTheOtherDirection - maxDetectAngleHalf) / tessalationResolution;
+		for (int i = 0; i < tessalationResolution; i++) {
+			tessalatedAngle += step;
+			deadzone_radarFOV_X = (float) (radarSensorPos_X + (sensorForward_X_end - radarSensorPos_X) * Math.sin(tessalatedAngle) - (sensorForward_Y_end - radarSensorPos_Y) * Math.cos(tessalatedAngle));
+			deadzone_radarFOV_Y = (float) (radarSensorPos_Y + (sensorForward_X_end - radarSensorPos_X) * Math.cos(tessalatedAngle) + (sensorForward_Y_end - radarSensorPos_Y) * Math.sin(tessalatedAngle));
+			Line2D line = new Line2D.Float(previousLineX, previousLineY, deadzone_radarFOV_X, deadzone_radarFOV_Y);
+			g2.draw(line);
+			previousLineX = deadzone_radarFOV_X;
+			previousLineY = deadzone_radarFOV_Y;
+		}
 		// detected objects
 		g2.setColor(Color.RED);
 		for (int i = 0; i < this.detectedWorldObjects.size(); i++) {
@@ -111,7 +145,8 @@ public class RSensor { // radar sensor
 		float radarSensorPos_Y = (this.car.getRadarSensor_Y());
 		float dx = (radarSensorPos_X - object.getX()) * (radarSensorPos_X - object.getX());
 		float dy = (radarSensorPos_Y - object.getY()) * (radarSensorPos_Y - object.getY());
-		if (Math.sqrt((double) (dx + dy)) < this.maximumDetectRange) {
+		float distance = (float) Math.sqrt((double) (dx + dy));
+		if (distance < this.maximumDetectRange && distance > this.minimumDetectRange) {
 			float maxDetectRangeScaled = (this.maximumDetectRange * 2); // to make the triangle large enough, this hack works because before this test there is a distance test
 			float sensorForward_X_end = radarSensorPos_X + (this.carForwardVector_X * maxDetectRangeScaled);
 			float sensorForward_Y_end = radarSensorPos_Y + (this.carForwardVector_Y * maxDetectRangeScaled);

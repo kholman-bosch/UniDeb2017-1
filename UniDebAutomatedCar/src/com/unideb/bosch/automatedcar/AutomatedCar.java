@@ -53,7 +53,7 @@ public final class AutomatedCar {
 		new Driver();
 		new VirtualDisplay_Invoker(this, new InstrumentClusterLogic(this.powertrainSystem));
 		new HumanMachineInterface(); // I don't know we need this. HMI branch has it so I just leave it here for now.
-		this.radarSensor = new RSensor(20, 500, 20, 85, this);
+		this.radarSensor = new RSensor(100, 500, 20, 85, this);
 	}
 
 	public void drawCar(Graphics g, float graphicsScale) {
