@@ -81,6 +81,10 @@ public final class VirtualWorld {
 		return cars;
 	}
 
+	public static float getGraphicsScale() {
+		return renderer.getGraphicsScale();
+	}
+
 	public static float getGraphicsInterpolationValue() {
 		return graphics_Interpolation;
 	}
@@ -92,7 +96,7 @@ public final class VirtualWorld {
 	public static void addKeyListenerToFrame(KeyListener keyListener) {
 		frame.addKeyListener(keyListener);
 	}
-	
+
 	public static BufferedImage scale(BufferedImage imageToScale, int newWidth, int newHeight) {
 		// a simple nearestneighbour scaler since the built in java versions were slow
 		BufferedImage imgBuffer = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
@@ -107,7 +111,7 @@ public final class VirtualWorld {
 		}
 		return imgBuffer;
 	}
-	
+
 	public static BufferedImage scale_WithAlpha(BufferedImage imageToScale, int newWidth, int newHeight) {
 		// a simple nearestneighbour scaler with alpha since the built in java versions were slow
 		BufferedImage imgBuffer = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);

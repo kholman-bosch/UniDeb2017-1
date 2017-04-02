@@ -16,11 +16,12 @@ import com.unideb.bosch.automatedcar.vehicleparts.PowertrainSystem;
 import com.unideb.bosch.humanmachineinterface.HumanMachineInterface;
 import com.unideb.bosch.instrumentclusterdisplay.InstrumentClusterLogic;
 import com.unideb.bosch.instrumentclusterdisplay.VirtualDisplay_Invoker;
+import com.unideb.bosch.radarsensor.RSensor;
 
 public final class AutomatedCar {
 
-	private float carPos_X = 2500f;
-	private float carPos_Y = 2000f;
+	private float carPos_X = 200f;
+	private float carPos_Y = 200f;
 	private PowertrainSystem powertrainSystem;
 	private BufferedImage carImage, scaledCarImage;
 	private Rectangle carImageRectange;
@@ -30,10 +31,11 @@ public final class AutomatedCar {
 	public final float wheelBase = 160f;
 	private float previousGraphicsScale = 1f;
 	// values for interpolation
-	private float previousCarPos_X = 2500f;
-	private float previousCarPos_Y = 2000f;
+	private float previousCarPos_X = 200f;
+	private float previousCarPos_Y = 200f;
 	private float previousCarHeadingAngle = 0f;
 	private boolean useNON_QuaternionAngleInterpolation = false;
+	private RSensor radarSensor;
 
 	public AutomatedCar() {
 		try {
@@ -51,6 +53,7 @@ public final class AutomatedCar {
 		new Driver();
 		new VirtualDisplay_Invoker(this, new InstrumentClusterLogic(this.powertrainSystem));
 		new HumanMachineInterface(); // I don't know we need this. HMI branch has it so I just leave it here for now.
+		this.radarSensor = new RSensor(20, 500, 20, 85, this);
 	}
 
 	public void drawCar(Graphics g, float graphicsScale) {
@@ -98,6 +101,7 @@ public final class AutomatedCar {
 		this.steerAngle = this.powertrainSystem.getSteeringWheelAngle();
 		this.carSpeed = this.powertrainSystem.getCarSpeed();
 		this.carPhysics();
+		this.radarSensor.update();
 		this.teleportCarIntoBounds();
 	}
 
@@ -117,6 +121,18 @@ public final class AutomatedCar {
 		this.carPos_X = (frontWheel_X + backWheel_X) / 2f;
 		this.carPos_Y = (frontWheel_Y + backWheel_Y) / 2f;
 		this.carHeading_Angle = (float) Math.atan2(frontWheel_X - backWheel_X, frontWheel_Y - backWheel_Y);
+	}
+
+	public RSensor getRadarSensor() {
+		return this.radarSensor;
+	}
+
+	public int getRadarSensor_X() {
+		return (int) (this.carPos_X + (this.wheelBase / 2f) * (float) Math.sin(this.carHeading_Angle));
+	}
+
+	public int getRadarSensor_Y() {
+		return (int) (this.carPos_Y + (this.wheelBase / 2f) * (float) Math.cos(this.carHeading_Angle));
 	}
 
 	private void teleportCarIntoBounds() {
