@@ -25,7 +25,6 @@ public class RSensor { // radar sensor
 	//
 	private ArrayList<RSensorDetectedObjectAttributes> detectedWorldObjects = new ArrayList<RSensorDetectedObjectAttributes>(64);
 	private ArrayList<RSensorDetectedObjectAttributes> previousWorldObjects = new ArrayList<RSensorDetectedObjectAttributes>(64);
-	private ArrayList<RSensorDetectedObjectAttributes> movingWorldObjects = new ArrayList<RSensorDetectedObjectAttributes>(64);
 	private AutomatedCar car;
 	//
 	private float carForwardVector_X;
@@ -118,7 +117,6 @@ public class RSensor { // radar sensor
 
 	public void update() {
 		this.detectedWorldObjects.clear();
-		this.movingWorldObjects.clear();
 		for (int i = 0; i < WorldObjectParser.getInstance().getWorldObjects().size(); i++) {
 			WorldObject actual_WorldObjet = WorldObjectParser.getInstance().getWorldObjects().get(i);
 			if (isValid_WorldObject(actual_WorldObjet.getType())) {
@@ -163,6 +161,25 @@ public class RSensor { // radar sensor
 		return false;
 	}
 
+	private void calculate_DetectedWorldObject_Attributes(RSensorDetectedObjectAttributes objectWithAttributes) {
+		// detect moving objects
+		for (int i = 0; i < this.detectedWorldObjects.size(); i++) {
+			for (int j = 0; j < this.previousWorldObjects.size(); j++) {
+				WorldObject actObj = this.detectedWorldObjects.get(i).parentWorldObject;
+				WorldObject prevObj = this.previousWorldObjects.get(j).parentWorldObject;
+				if (actObj.equals(prevObj)) { // hashcode based compare, should implement ID in WorldObject
+					if (actObj.getX() != prevObj.getX() || actObj.getY() != prevObj.getY()) {
+						objectWithAttributes.longitudinalRelative_Velcity = actObj.getX() - prevObj.getX();
+						objectWithAttributes.lateralRelative_Velcity = actObj.getY() - prevObj.getY();
+						objectWithAttributes.longitudinalDistance_From_EGO = Math.abs(this.car.getX() - actObj.getX());
+						objectWithAttributes.lateralDistance_From_EGO = Math.abs(this.car.getY() - actObj.getY());
+					}
+				}
+			}
+		}
+		// TODO: actually calculate remaining things
+	}
+
 	private float sign(float p1X, float p1Y, float p2X, float p2Y, float p3X, float p3Y) {
 		return (p1X - p3X) * (p2Y - p3Y) - (p2X - p3X) * (p1Y - p3Y);
 	}
@@ -175,24 +192,12 @@ public class RSensor { // radar sensor
 		return ((b1 == b2) && (b2 == b3));
 	}
 
-	private void calculate_DetectedWorldObject_Attributes(RSensorDetectedObjectAttributes objectWithAttributes) {
-		// detect moving objects
-		for (int i = 0; i < this.detectedWorldObjects.size(); i++) {
-			for (int j = 0; j < this.previousWorldObjects.size(); j++) {
-				WorldObject actObj = this.detectedWorldObjects.get(i).parentWorldObject;
-				WorldObject prevObj = this.previousWorldObjects.get(j).parentWorldObject;
-				if (actObj.equals(prevObj)) { // hashcode based compare, should implement ID in WorldObject
-					if (actObj.getX() != prevObj.getX() || actObj.getY() != prevObj.getY()) {
-						this.movingWorldObjects.add(this.detectedWorldObjects.get(i));
-					}
-				}
-			}
-		}
-		// TODO: actually calculate remaining things
-	}
-
 	public ArrayList<RSensorDetectedObjectAttributes> get_Detected_WorldObjects() {
 		return this.detectedWorldObjects;
+	}
+
+	public AutomatedCar getCar() {
+		return this.car;
 	}
 
 	private boolean isValid_WorldObject(String object_Type) {
