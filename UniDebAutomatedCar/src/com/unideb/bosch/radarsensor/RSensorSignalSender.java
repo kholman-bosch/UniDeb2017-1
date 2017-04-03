@@ -30,7 +30,7 @@ public class RSensorSignalSender {
 			float dy = (sensorY - actObj_Y_PosWithPreditcion) * (sensorY - actObj_Y_PosWithPreditcion);
 			float distance = (float) Math.sqrt((double) (dx + dy));
 			actObjWithAtts.dangerValue = (int) distance;
-			if (i == 0) {
+			if (i == 0) {//in the first iter set default values
 				preDistance = distance;
 				objectList.add(actObjWithAtts);
 			} else {
