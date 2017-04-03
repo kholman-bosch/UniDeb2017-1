@@ -131,6 +131,7 @@ public class RSensor { // radar sensor
 			this.calculate_DetectedWorldObject_Attributes(this.detectedWorldObjects.get(i));
 		}
 		this.previousWorldObjects.clear();
+		RSensorSignalSender.send_Radar_Sensor_Signals(this);
 	}
 
 	private boolean isWorldObject_Detected(WorldObject object) {
