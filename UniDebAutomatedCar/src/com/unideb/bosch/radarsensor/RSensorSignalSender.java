@@ -20,7 +20,7 @@ public class RSensorSignalSender {
 		ArrayList<RSensorDetectedObjectAttributes> localList = radar.get_Detected_WorldObjects();
 		int sensorX = radar.getCar().getRadarSensor_X();
 		int sensorY = radar.getCar().getRadarSensor_Y();
-		float preDistance = -1;
+
 		for (int i = 0; i < localList.size(); i++) {
 			WorldObject actObj = localList.get(i).parentWorldObject;
 			RSensorDetectedObjectAttributes actObjWithAtts = localList.get(i);
@@ -30,16 +30,33 @@ public class RSensorSignalSender {
 			float dy = (sensorY - actObj_Y_PosWithPreditcion) * (sensorY - actObj_Y_PosWithPreditcion);
 			float distance = (float) Math.sqrt((double) (dx + dy));
 			actObjWithAtts.dangerValue = (int) distance;
-			if (i == 0) {//in the first iter set default values
-				preDistance = distance;
-				objectList.add(actObjWithAtts);
-			} else {
-				if (preDistance > distance) {
-					objectList.add(0, actObjWithAtts);
-					preDistance = distance;
-				} else {
-					objectList.add(actObjWithAtts);
+		}
+
+		boolean added = false;
+		RSensorDetectedObjectAttributes actObjWithAtts, actObjinMyList;
+		for (int i = 0; i < localList.size(); i++) {
+			added = false;
+			actObjWithAtts = localList.get(i);
+			for (int j = 0; j < objectList.size(); j++) {
+				actObjinMyList = objectList.get(j);
+				if (actObjWithAtts.dangerValue < actObjinMyList.dangerValue) {
+					if (j == 0) {
+						objectList.add(j, actObjWithAtts);
+					} else {
+						objectList.add(j , actObjWithAtts);
+					}
+					added = true;
+					break;
 				}
+			}
+			if (!added) {
+				objectList.add(actObjWithAtts);
+			}
+		}
+		//Maximezd the list size
+		if (maximum_DetectableDangerousObjects < objectList.size()) {
+			for (int i = maximum_DetectableDangerousObjects; i < objectList.size(); i++) {
+				objectList.remove(i);
 			}
 		}
 	}
