@@ -17,6 +17,7 @@ public class RSensor { // radar sensor
 	private int maximumDetectRange = 0;
 	private int minimumDetectAngle = 0;
 	private int maximumDetectAngle = 0;
+	private int maximumDetectableObjs = 5;
 	// default sensor configuration values
 	private int defaultMinimumDetectRange = 20;
 	private int defaultMinimumDetectAngle = 10;
@@ -30,11 +31,12 @@ public class RSensor { // radar sensor
 	private float carForwardVector_X;
 	private float carForwardVector_Y;
 
-	public RSensor(int minDetectRange, int maxDetectRange, int minDetctAngle, int maxDetectAngle, AutomatedCar car_f) {
+	public RSensor(int minDetectRange, int maxDetectRange, int minDetctAngle, int maxDetectAngle, AutomatedCar car_f, int maxDetectableObjs_f) {
 		this.minimumDetectRange = minDetectRange;
 		this.maximumDetectRange = maxDetectRange;
 		this.minimumDetectAngle = minDetctAngle;
 		this.maximumDetectAngle = maxDetectAngle;
+		this.maximumDetectableObjs = maxDetectableObjs_f;
 		this.validate_Sensor_Configuration();
 		this.car = car_f;
 	}
@@ -199,6 +201,10 @@ public class RSensor { // radar sensor
 
 	public AutomatedCar getCar() {
 		return this.car;
+	}
+
+	public int getMaxDetectableObjsNum() {
+		return this.maximumDetectableObjs;
 	}
 
 	private boolean isValid_WorldObject(String object_Type) {

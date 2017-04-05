@@ -95,4 +95,12 @@ public class VirtualWorldRenderer extends JPanel {
 			}
 		}
 	}
+
+	public static int getWordlWidth() {
+		return background.getWidth();
+	}
+
+	public static int getWordlHeight() {
+		return background.getHeight();
+	}
 }

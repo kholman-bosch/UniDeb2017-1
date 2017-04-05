@@ -98,6 +98,12 @@ public final class VirtualWorld {
 	}
 
 	public static BufferedImage scale(BufferedImage imageToScale, int newWidth, int newHeight) {
+		if (newWidth <= 0) {
+			newWidth = 1;
+		}
+		if (newHeight <= 0) {
+			newHeight = 1;
+		}
 		// a simple nearestneighbour scaler since the built in java versions were slow
 		BufferedImage imgBuffer = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
 		int baseImageWidth = imageToScale.getWidth();
@@ -113,6 +119,12 @@ public final class VirtualWorld {
 	}
 
 	public static BufferedImage scale_WithAlpha(BufferedImage imageToScale, int newWidth, int newHeight) {
+		if (newWidth <= 0) {
+			newWidth = 1;
+		}
+		if (newHeight <= 0) {
+			newHeight = 1;
+		}
 		// a simple nearestneighbour scaler with alpha since the built in java versions were slow
 		BufferedImage imgBuffer = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
 		int baseImageWidth = imageToScale.getWidth();
@@ -127,5 +139,13 @@ public final class VirtualWorld {
 			}
 		}
 		return imgBuffer;
+	}
+
+	public static int getWorldWidth() {
+		return renderer.getWordlWidth();
+	}
+
+	public static int getWorldHeight() {
+		return renderer.getWordlHeight();
 	}
 }

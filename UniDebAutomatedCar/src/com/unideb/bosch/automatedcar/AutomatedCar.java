@@ -53,7 +53,7 @@ public final class AutomatedCar {
 		new Driver();
 		new VirtualDisplay_Invoker(this, new InstrumentClusterLogic(this.powertrainSystem));
 		new HumanMachineInterface(); // I don't know we need this. HMI branch has it so I just leave it here for now.
-		this.radarSensor = new RSensor(100, 500, 20, 85, this);
+		this.radarSensor = new RSensor(100, 500, 20, 85, this, 5);
 	}
 
 	public void drawCar(Graphics g, float graphicsScale) {
@@ -137,15 +137,15 @@ public final class AutomatedCar {
 
 	private void teleportCarIntoBounds() {
 		if (this.carPos_X < 0) {
-			this.carPos_X = 5000;
+			this.carPos_X = VirtualWorld.getWorldWidth();
 		}
-		if (this.carPos_X > 5000) {
+		if (this.carPos_X > VirtualWorld.getWorldWidth()) {
 			this.carPos_X = 0;
 		}
 		if (this.carPos_Y < 0) {
-			this.carPos_Y = 4000;
+			this.carPos_Y = VirtualWorld.getWorldHeight();
 		}
-		if (this.carPos_Y > 4000) {
+		if (this.carPos_Y > VirtualWorld.getWorldHeight()) {
 			this.carPos_Y = 0;
 		}
 	}
