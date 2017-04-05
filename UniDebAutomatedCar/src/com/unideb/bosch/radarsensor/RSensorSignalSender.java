@@ -62,11 +62,12 @@ public class RSensorSignalSender {
 		RSensorDetectedObjectAttributes actRadarObject;
 		for (int i = 0; i < objectList.size(); i++) {
 			actRadarObject = objectList.get(i);
-			//System.out.println(i + " " + actRadarObject.parentWorldObject.getType() + " " + actRadarObject.dangerValue);
+			System.out.println(i + " " + actRadarObject.parentWorldObject.getType() + " " + actRadarObject.dangerValue);
 			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.LONGITUDINAL_RELATIVE_VELOCITY, (int) actRadarObject.longitudinalRelative_Velcity));
 			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.LONGITUDINAL_DISTANCE_FROM_EGO, (int) actRadarObject.longitudinalDistance_From_EGO));
 			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.LATERAL_RELATIVE_VELOCITY, (int) actRadarObject.longitudinalRelative_Velcity));
 			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.LATERAL_DISTANCE_FROM_EGO, (int) actRadarObject.lateralDistance_From_EGO));
+			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.OBJECT_SIZE, 1));
 		}
 	}
 }
