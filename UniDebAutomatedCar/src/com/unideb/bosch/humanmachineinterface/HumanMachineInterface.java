@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.unideb.bosch.automatedcar.VirtualWorld;
+import com.unideb.bosch.automatedcar.VirtualWorldRenderer;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
@@ -69,6 +70,9 @@ public class HumanMachineInterface extends SystemComponent {
 				break;
 			case KeyEvent.VK_RIGHT:
 				right = false;
+				break;
+			case KeyEvent.VK_F1:
+				VirtualWorldRenderer.showDebugWorldData = !VirtualWorldRenderer.showDebugWorldData;
 				break;
 			}
 

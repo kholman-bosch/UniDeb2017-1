@@ -24,7 +24,7 @@ public class VirtualWorldRenderer extends JPanel {
 	private static int previousWindowWidth = 0, previousWindowHeight = 0;
 	private static float actualGraphics_Scale = 1f;
 	// Debug
-	private static boolean showDebugWorldData = true;
+	public static boolean showDebugWorldData = true;
 	private static Font serifFontBOLD = new Font("Serif", Font.BOLD, 12);
 
 	public VirtualWorldRenderer(int windowWidth, int windowHeight) {
