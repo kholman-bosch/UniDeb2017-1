@@ -5,7 +5,7 @@ import com.unideb.bosch.automatedcar.framework.WorldObject;
 public class RSensorDetectedObjectAttributes {
 
 	public WorldObject parentWorldObject;
-	public float longitudinalRelative_Velcit;
+	public float longitudinalRelative_Velcity;
 	public float lateralRelative_Velcity;
 	public float longitudinalDistance_From_EGO;
 	public float lateralDistance_From_EGO;
