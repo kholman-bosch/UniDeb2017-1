@@ -42,7 +42,7 @@ public class PowertrainSystem extends SystemComponent {
 			this.data_brake_pedal_position = actValue;
 			break;
 		case SignalDatabase.STEERING_WHEEL_ANGLE:
-			// -720 720 1 ° -
+			// -720 720 1 ï¿½ -
 			this.data_steering_wheel_angle = -actValue;
 			break;
 		case SignalDatabase.GEAR_POSITION:
@@ -141,6 +141,13 @@ public class PowertrainSystem extends SystemComponent {
 		this.data_motor_rpm = SignalDatabase.limit(this.data_motor_rpm, (int) rpm, 0, 9000);
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.data_vehicle_speed));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.MOTOR_RPM, this.data_motor_rpm));
+		
+//		// car position x
+//		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase., this.data_vehicle_speed));
+//		// car position y
+//		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.data_vehicle_speed));
+//		// car angle
+//		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.data_vehicle_speed));
 	}
 
 	// Write in the Terminal the actual status about the Signals

@@ -8,10 +8,39 @@ package com.unideb.bosch.frontviewcamera;
  */
 public class RoadSign implements Comparable<RoadSign> {
 	
-	private final float distance;
-	private final long longitudinalEGO;
-	private final long lateralEGO;
-	private final long trafficSignMeaing;
+	public static final int ROAD_SIGN_SPEED_5 = 0;
+	public static final int ROAD_SIGN_SPEED_10 = 1;
+	public static final int ROAD_SIGN_SPEED_20 = 2;
+	public static final int ROAD_SIGN_SPEED_30 = 3;
+	public static final int ROAD_SIGN_SPEED_40 = 4;
+	public static final int ROAD_SIGN_SPEED_50 = 5;
+	public static final int ROAD_SIGN_SPEED_60 = 6;
+	public static final int ROAD_SIGN_SPEED_70 = 7;
+	public static final int ROAD_SIGN_SPEED_80 = 8;
+	public static final int ROAD_SIGN_SPEED_90 = 9;
+	public static final int ROAD_SIGN_SPEED_100 = 10;
+	public static final int ROAD_SIGN_SPEED_110 = 11;
+	public static final int ROAD_SIGN_SPEED_120 = 12;
+	public static final int ROAD_SIGN_SPEED_130 = 13;
+	public static final int ROAD_SIGN_DIRECTION_LEFTONLY = 14;
+	public static final int ROAD_SIGN_DIRECTION_RIGHTONLY = 15;
+//	public static final int ROAD_SIGN_DIRECTION_ = 16;
+//	public static final int ROAD_SIGN_DIRECTION_ = 17;
+	public static final int ROAD_SIGN_DIRECTION_ROUNDABOUT = 18;
+//	public static final int ROAD_SIGN_DIRECTION_ = 19;
+//	public static final int ROAD_SIGN_DIRECTION_ = 20;
+//	public static final int ROAD_SIGN_DIRECTION_ = 21;
+//	public static final int ROAD_SIGN_DIRECTION_ = 22;
+//	public static final int ROAD_SIGN_ = 23;
+	public static final int ROAD_SIGN_PRIORITY_STOP = 24;
+	public static final int ROAD_SIGN_PRIORITY_MAINROAD = 25;
+//	public static final int ROAD_SIGN_PRIORITY_ = 26;
+	
+	
+	private float distance;
+	private long longitudinalEGO;
+	private long lateralEGO;
+	private long trafficSignMeaing;
 	
 	
 	

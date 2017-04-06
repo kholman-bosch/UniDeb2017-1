@@ -7,6 +7,9 @@ package com.unideb.bosch.instrumentclusterdisplay;
 public class SignalDatabase {
 
 	// Signal ID table
+	public static final int CAR_POSITION_X = 0;
+	public static final int CAR_POSITION_Y = 1;
+	public static final int CAR_ANGLE = 2;
 	public static final int INDICATOR = 3;
 	public static final int GAS_PEDAL_POSITION = 4;
 	public static final int BRAKE_PEDAL_POSITION = 5;
