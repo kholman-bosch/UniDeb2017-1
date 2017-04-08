@@ -1,5 +1,6 @@
 package com.unideb.bosch.automatedcar;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -75,16 +76,44 @@ public class VirtualWorldRenderer extends JPanel {
 	}
 
 	private void drawWorldObjectsDebugData(Graphics2D g) {
-		// worldobject texts
+		// -100,-100 offsets were told to us by the creator of the XML
+		int XML_OffsetX = 100;
+		int XML_OffsetY = 100;
 		g.setColor(Color.black);
 		g.setFont(serifFontBOLD);
 		int size = WorldObjectParser.getInstance().getWorldObjects().size();
+		g.setStroke(new BasicStroke(2));
 		for (int i = 0; i < size; i++) {
 			WorldObject worldObj = WorldObjectParser.getInstance().getWorldObjects().get(i);
-			if (worldObj.getType().contains("road_2")) {
+			if (worldObj.getType().contains("lane")) {
 				continue;
 			}
-			g.drawString(worldObj.getType(), (int) (worldObj.getX() * actualGraphics_Scale), (int) (worldObj.getY() * actualGraphics_Scale));
+			g.setColor(Color.BLACK);
+			int textX = (int) ((worldObj.getX() - XML_OffsetX) * actualGraphics_Scale);
+			int textY = (int) ((worldObj.getY() - XML_OffsetY) * actualGraphics_Scale);
+			g.drawString(worldObj.getType() + " ORI: " + Math.toDegrees(worldObj.getOrientation()), textX, textY);
+			// draw orientation redgreen lines:
+			float rotation = worldObj.getOrientation();
+			float s = (float) Math.sin(rotation);
+			float c = (float) Math.cos(rotation);
+			int sx = worldObj.getX() - XML_OffsetX;
+			int sy = worldObj.getY() - XML_OffsetY;
+			int ex = (int) (sx + (50 * s));
+			int ey = (int) (sy + (50 * c));
+			int eex = (int) (sx + (100 * s));
+			int eey = (int) (sy + (100 * c));
+			sx = (int) (sx * getGraphicsScale());
+			sy = (int) (sy * getGraphicsScale());
+			ex = (int) (ex * getGraphicsScale());
+			ey = (int) (ey * getGraphicsScale());
+			eex = (int) (eex * getGraphicsScale());
+			eey = (int) (eey * getGraphicsScale());
+			// red part of the direction indicator line (this is where the line starts)
+			g.setColor(Color.RED);
+			g.drawLine(sx, sy, ex, ey);
+			// green part of the indicator line to see the actual direction
+			g.setColor(Color.GREEN);
+			g.drawLine(ex, ey, eex, eey);
 		}
 		// radar sensor debug
 		ArrayList<AutomatedCar> cars = VirtualWorld.getCars();

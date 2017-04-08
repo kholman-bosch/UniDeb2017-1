@@ -1,8 +1,7 @@
 package com.unideb.bosch.automatedcar.framework;
 
 /**
- * This class represents objects in the virtual world
- * An object has its coordinates, orientation and type
+ * This class represents objects in the virtual world An object has its coordinates, orientation and type
  *
  * Students must not modify this class!
  */
@@ -10,19 +9,29 @@ package com.unideb.bosch.automatedcar.framework;
 public class WorldObject {
 	private int x;
 	private int y;
-	private int rotation;
+	private float rotation;
 	private String type;
-	
-	public WorldObject(int x, int y, int rotation, String type)
-	{
+
+	public WorldObject(int x, int y, float rotation, String type) {
 		this.x = x;
 		this.y = y;
-		this.rotation =rotation;	
+		this.rotation = rotation;
 		this.type = type;
 	}
-	
-	public int getX() { return x; }
-	public int getY() { return y; }
-	public int getOrientation() { return rotation; }
-	public String getType() { return type; }
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public float getOrientation() {
+		return rotation;
+	}
+
+	public String getType() {
+		return type;
+	}
 }
