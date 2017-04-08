@@ -59,6 +59,7 @@ public class VirtualDisplaySurface extends JPanel {
 	}
 
 	private void doDrawing(Graphics g) {
+		this.setBackground(Color.black);
 		Graphics2D gMatrix_KMH = (Graphics2D) g.create();
 		Graphics2D gMatrix_RPM = (Graphics2D) g.create();
 		Graphics2D gMatrix_Icons = (Graphics2D) g.create();
@@ -163,7 +164,7 @@ public class VirtualDisplaySurface extends JPanel {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
+		//super.paintComponent(g);
 		doDrawing(g);
 	}
 

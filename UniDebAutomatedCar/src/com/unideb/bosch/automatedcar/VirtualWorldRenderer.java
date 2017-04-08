@@ -90,6 +90,9 @@ public class VirtualWorldRenderer extends JPanel {
 		ArrayList<AutomatedCar> cars = VirtualWorld.getCars();
 		for (int i = 0; i < cars.size(); i++) {
 			AutomatedCar actCar = cars.get(i);
+			if (actCar.getRadarSensor() != null) {
+				actCar.getRadarSensor().draw_DebugData(g);
+			}
 		}
 	}
 

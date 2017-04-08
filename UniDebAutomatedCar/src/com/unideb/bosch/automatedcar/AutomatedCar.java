@@ -20,6 +20,7 @@ import com.unideb.bosch.humanmachineinterface.HumanMachineInterface;
 import com.unideb.bosch.instrumentclusterdisplay.InstrumentClusterLogic;
 import com.unideb.bosch.instrumentclusterdisplay.SignalDatabase;
 import com.unideb.bosch.instrumentclusterdisplay.VirtualDisplay_Invoker;
+import com.unideb.bosch.radarsensor.RSensor;
 
 public final class AutomatedCar {
 
@@ -39,6 +40,7 @@ public final class AutomatedCar {
 	private float previousCarHeadingAngle = 0f;
 	private boolean useNON_QuaternionAngleInterpolation = false;
 	private FrontViewCamera frontViewCamera;
+	private RSensor radarSensor;
 
 	public AutomatedCar() {
 		try {
@@ -58,6 +60,7 @@ public final class AutomatedCar {
 		new HumanMachineInterface(); // I don't know we need this. HMI branch has it so I just leave it here for now.
 		this.frontViewCamera = new FrontViewCamera();
 		new DetectedRoadSignCatcher();
+		this.radarSensor = new RSensor(100, 500, 20, 85, this, 5);
 	}
 
 	public void drawCar(Graphics g, float graphicsScale) {
@@ -69,7 +72,6 @@ public final class AutomatedCar {
 			this.previousGraphicsScale = graphicsScale;
 		}
 		Graphics2D gMatrix_Car = (Graphics2D) g.create();
-		
 		float interpValue = VirtualWorld.getGraphicsInterpolationValue();
 		float oneMinusInterp = 1.0f - interpValue;
 		// handle interpolation of carPosition and headingAngle
@@ -106,6 +108,7 @@ public final class AutomatedCar {
 		this.steerAngle = this.powertrainSystem.getSteeringWheelAngle();
 		this.carSpeed = this.powertrainSystem.getCarSpeed();
 		this.carPhysics();
+		this.radarSensor.update();
 		this.teleportCarIntoBounds();
 		
 		// TODO somehow need to send float value instead of long
@@ -141,6 +144,18 @@ public final class AutomatedCar {
 		return (int) (this.carPos_Y-50f + (this.wheelBase / 2f) * (float) Math.cos(this.carHeading_Angle));
 	}
 	
+	public RSensor getRadarSensor() {
+		return this.radarSensor;
+	}
+
+	public int getRadarSensor_X() {
+		return (int) (this.carPos_X + (this.wheelBase / 2f) * (float) Math.sin(this.carHeading_Angle));
+	}
+
+	public int getRadarSensor_Y() {
+		return (int) (this.carPos_Y + (this.wheelBase / 2f) * (float) Math.cos(this.carHeading_Angle));
+	}
+
 	private void teleportCarIntoBounds() {
 		if (this.carPos_X < 0) {
 			this.carPos_X = VirtualWorld.getWorldWidth();
