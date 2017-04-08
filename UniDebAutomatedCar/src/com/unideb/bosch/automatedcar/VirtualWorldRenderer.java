@@ -25,6 +25,9 @@ public class VirtualWorldRenderer extends JPanel {
 	private static float actualGraphics_Scale = 1f;
 	// Debug
 	public static boolean showDebugWorldData = true;
+	public static boolean showRadarSensorDebugData = false;
+	public static boolean showCameraDebugData = false;
+	
 	private static Font serifFontBOLD = new Font("Serif", Font.BOLD, 12);
 
 	public VirtualWorldRenderer(int windowWidth, int windowHeight) {
@@ -47,6 +50,12 @@ public class VirtualWorldRenderer extends JPanel {
 		if (showDebugWorldData) {
 			this.drawWorldObjectsDebugData(globalMatrix);
 		}
+		if (showRadarSensorDebugData) {
+			this.drawRadarSensorDebugData(globalMatrix);
+		}
+		if (showCameraDebugData) {
+			this.drawCameraDebugData(globalMatrix);
+		}
 	}
 
 	public void windowResizeLogic(int windowWidth, int windowHeight) {
@@ -55,8 +64,10 @@ public class VirtualWorldRenderer extends JPanel {
 		}
 		// scale the background image to fit the window but only scale if needed
 		if (previousWindowWidth != windowWidth || previousWindowHeight != windowHeight) {
-			actualGraphics_Scale = Math.min(windowWidth / (float) background.getWidth(), windowHeight / (float) background.getHeight());
-			scaledBackground = VirtualWorld.scale(background, (int) (background.getWidth() * actualGraphics_Scale), (int) (background.getHeight() * actualGraphics_Scale));
+			actualGraphics_Scale = Math.min(windowWidth / (float) background.getWidth(),
+					windowHeight / (float) background.getHeight());
+			scaledBackground = VirtualWorld.scale(background, (int) (background.getWidth() * actualGraphics_Scale),
+					(int) (background.getHeight() * actualGraphics_Scale));
 			this.backgroundRectangle = new Rectangle(0, 0, scaledBackground.getWidth(), scaledBackground.getHeight());
 			previousWindowWidth = windowWidth;
 			previousWindowHeight = windowHeight;
@@ -78,20 +89,39 @@ public class VirtualWorldRenderer extends JPanel {
 		// worldobject texts
 		g.setColor(Color.black);
 		g.setFont(serifFontBOLD);
-		int size = WorldObjectParser.getInstance().getWorldObjects().size();
+		WorldObjectParser worldObjectParserInstance = WorldObjectParser.getInstance();
+		int size = worldObjectParserInstance.getWorldObjects().size();
 		for (int i = 0; i < size; i++) {
 			WorldObject worldObj = WorldObjectParser.getInstance().getWorldObjects().get(i);
 			if (worldObj.getType().contains("road_2")) {
 				continue;
 			}
-			g.drawString(worldObj.getType(), (int) (worldObj.getX() * actualGraphics_Scale), (int) (worldObj.getY() * actualGraphics_Scale));
+			g.drawString(worldObj.getType(), (int) (worldObj.getX() * actualGraphics_Scale),
+					(int) (worldObj.getY() * actualGraphics_Scale));
 		}
+
+		worldObjectParserInstance.drawRoadSignOrientations(g);
+	}
+
+	private void drawRadarSensorDebugData(Graphics2D g) {
 		// radar sensor debug
 		ArrayList<AutomatedCar> cars = VirtualWorld.getCars();
 		for (int i = 0; i < cars.size(); i++) {
 			AutomatedCar actCar = cars.get(i);
 			if (actCar.getRadarSensor() != null) {
 				actCar.getRadarSensor().draw_DebugData(g);
+			}
+		}
+	}
+	
+	private void drawCameraDebugData(Graphics2D g) {
+		// camera debug
+		ArrayList<AutomatedCar> cars = VirtualWorld.getCars();
+		for (int i = 0; i < cars.size(); i++) {
+			AutomatedCar actCar = cars.get(i);
+			if (actCar.getFrontViewCamera() != null) {
+				actCar.getFrontViewCamera().draw_DebugData(g);
+				actCar.getFrontViewCamera().connectCameraWithRoadSigns(g);
 			}
 		}
 	}

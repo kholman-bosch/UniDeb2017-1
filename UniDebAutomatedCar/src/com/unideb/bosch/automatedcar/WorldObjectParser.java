@@ -1,5 +1,6 @@
 package com.unideb.bosch.automatedcar;
 
+import java.awt.Graphics2D;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -54,6 +55,10 @@ public class WorldObjectParser {
 			e.printStackTrace();
 		}
 	};
+	
+	public void drawRoadSignOrientations(Graphics2D g2) {
+		// TODO implement
+	}
 	
 	public static WorldObjectParser getInstance() {
 		return instance;

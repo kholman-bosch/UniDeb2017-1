@@ -36,16 +36,12 @@ public class RoadSign implements Comparable<RoadSign> {
 	public static final int ROAD_SIGN_PRIORITY_MAINROAD = 25;
 //	public static final int ROAD_SIGN_PRIORITY_ = 26;
 	
-	
-	private float distance;
-	private long longitudinalEGO;
-	private long lateralEGO;
+	private double distance;
+	private float longitudinalEGO;
+	private float lateralEGO;
 	private long trafficSignMeaing;
 	
-	
-	
-
-	public RoadSign(float distance, long longitudinalEGO, long lateralEGO, long trafficSignMeaing) {
+	public RoadSign(double distance, float longitudinalEGO, float lateralEGO, long trafficSignMeaing) {
 		super();
 		this.distance = distance;
 		this.longitudinalEGO = longitudinalEGO;
@@ -53,36 +49,21 @@ public class RoadSign implements Comparable<RoadSign> {
 		this.trafficSignMeaing = trafficSignMeaing;
 	}
 
-
-	
-
-	public float getDistance() {
+	public double getDistance() {
 		return distance;
 	}
 
-
-
-
-	public long getLongitudinalEGO() {
+	public float getLongitudinalEGO() {
 		return longitudinalEGO;
 	}
 
-
-
-
-	public long getLateralEGO() {
+	public float getLateralEGO() {
 		return lateralEGO;
 	}
-
-
-
 
 	public long getTrafficSignMeaing() {
 		return trafficSignMeaing;
 	}
-
-
-
 
 	@Override
 	public int compareTo(RoadSign o) {

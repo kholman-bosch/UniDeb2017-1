@@ -39,6 +39,7 @@ public final class AutomatedCar {
 	private float previousCarPos_Y = 200f;
 	private float previousCarHeadingAngle = 0f;
 	private boolean useNON_QuaternionAngleInterpolation = false;
+	
 	private FrontViewCamera frontViewCamera;
 	private RSensor radarSensor;
 
@@ -58,7 +59,7 @@ public final class AutomatedCar {
 		new Driver();
 		new VirtualDisplay_Invoker(this, new InstrumentClusterLogic(this.powertrainSystem));
 		new HumanMachineInterface(); // I don't know we need this. HMI branch has it so I just leave it here for now.
-		this.frontViewCamera = new FrontViewCamera();
+		this.frontViewCamera = new FrontViewCamera(this);
 		new DetectedRoadSignCatcher();
 		this.radarSensor = new RSensor(100, 500, 20, 85, this, 5);
 	}
@@ -134,18 +135,13 @@ public final class AutomatedCar {
 		this.carPos_Y = (frontWheel_Y + backWheel_Y) / 2f;
 		this.carHeading_Angle = (float) Math.atan2(frontWheel_X - backWheel_X, frontWheel_Y - backWheel_Y);
 	}
-
-	public int getCamera_X() {
-		return (int) (this.carPos_X + (this.wheelBase / 2f) * (float) Math.sin(this.carHeading_Angle));
-	}
-
-	public int getCamera_Y() {
-		// camera is near the window
-		return (int) (this.carPos_Y-50f + (this.wheelBase / 2f) * (float) Math.cos(this.carHeading_Angle));
-	}
 	
 	public RSensor getRadarSensor() {
 		return this.radarSensor;
+	}
+	
+	public FrontViewCamera getFrontViewCamera() {
+		return this.frontViewCamera;
 	}
 
 	public int getRadarSensor_X() {
@@ -154,6 +150,15 @@ public final class AutomatedCar {
 
 	public int getRadarSensor_Y() {
 		return (int) (this.carPos_Y + (this.wheelBase / 2f) * (float) Math.cos(this.carHeading_Angle));
+	}
+	
+	// CAMERA
+	public int getCamera_X() {
+		return (int) (this.carPos_X + (this.wheelBase / 4f) * (float) Math.sin(this.carHeading_Angle));
+	}
+
+	public int getCamera_Y() {
+		return (int) (this.carPos_Y + (this.wheelBase / 4f) * (float) Math.cos(this.carHeading_Angle));
 	}
 
 	private void teleportCarIntoBounds() {

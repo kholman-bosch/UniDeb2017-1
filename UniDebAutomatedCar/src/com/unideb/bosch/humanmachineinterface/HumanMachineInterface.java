@@ -74,6 +74,18 @@ public class HumanMachineInterface extends SystemComponent {
 			case KeyEvent.VK_F1:
 				VirtualWorldRenderer.showDebugWorldData = !VirtualWorldRenderer.showDebugWorldData;
 				break;
+			case KeyEvent.VK_F2:
+				// Radar sensor debug data toggle
+				// Turn off camera debug info
+				VirtualWorldRenderer.showCameraDebugData = false;
+				VirtualWorldRenderer.showRadarSensorDebugData = !VirtualWorldRenderer.showRadarSensorDebugData;
+				break;
+			case KeyEvent.VK_F3:
+				// Camera debug data toggle
+				// Turn off radar sensor debug info
+				VirtualWorldRenderer.showRadarSensorDebugData = false;
+				VirtualWorldRenderer.showCameraDebugData = !VirtualWorldRenderer.showCameraDebugData;
+				break;
 			}
 
 			LOGGER.debug(keyEvent.getKeyCode() + " key were released!");
