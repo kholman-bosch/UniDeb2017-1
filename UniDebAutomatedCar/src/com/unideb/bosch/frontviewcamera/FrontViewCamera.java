@@ -34,7 +34,7 @@ public class FrontViewCamera extends SystemComponent {
 
 	private ArrayList<RoadSign> detectedRoadSigns;
 	private ArrayList<WorldObject> detectedWorldObjects;
-	
+
 	private long carPosX;
 	private long carPosY;
 	private long carAngle;
@@ -59,14 +59,15 @@ public class FrontViewCamera extends SystemComponent {
 		// the road sign's distance from the camera
 		double distance = distanceFromCamera(worldObject);
 
+		double carHeadingAngle = Math.toDegrees(this.car.carHeading_Angle) < 0
+				? 360 + Math.toDegrees(this.car.carHeading_Angle) : Math.toDegrees(this.car.carHeading_Angle);
+
+//		System.out.println("CAR HEADING ANGLE: " + carHeadingAngle);
+
 		if (distance > ((double) VIEW_DISTANCE * graphicsScale)) {
 			System.out.println(worldObject.getType() + " distance: " + distance + " is TOO FAR");
 			return false;
 		}
-
-		// TODO should be received from bus!!
-		double carHeadingAngle = Math.toDegrees(this.car.carHeading_Angle);
-		// int roadSignAngle = worldObject.getOrientation();
 
 		// TODO should be calculated from carX and carY which received from bus
 		float cameraPos_X = (this.car.getCamera_X() * graphicsScale);
@@ -92,10 +93,27 @@ public class FrontViewCamera extends SystemComponent {
 		double angleBetween2Lines = angleBetween2Lines(camera_maxDist, camera_worldObj);
 		System.out.println(worldObject.getType() + " seeing angle: " + Math.toDegrees(angleBetween2Lines));
 
-		if ((int)Math.abs(Math.toDegrees(angleBetween2Lines)) > (MAX_TOLERANCE_OF_ROADSIGN_ANGLE / 2)) {
+		if ((int) Math.abs(Math.toDegrees(angleBetween2Lines)) > (MAX_TOLERANCE_OF_ROADSIGN_ANGLE / 2)) {
 			System.out.println(worldObject.getType() + " IS OUT OF ANGLE");
 			return false;
 		}
+
+		double roadSignAngle = Math.toDegrees(worldObject.getOrientation());
+
+		// System.out.println("ROAD SIGN_ANGLE: " +
+		// Math.toDegrees(roadSignAngle));
+		// TODO should be received from bus!!
+
+		// double carHeadingAngle = Math.toDegrees(this.car.carHeading_Angle) <
+		// 0 ? 360 - Math.toDegrees(this.car.carHeading_Angle) :
+		// Math.toDegrees(this.car.carHeading_Angle);
+		//
+		// System.out.println("CAR HEADING ANGLE: " + carHeadingAngle);
+		 
+		 if( Math.abs(roadSignAngle - carHeadingAngle) < (180-MAX_TOLERANCE_OF_ROADSIGN_ANGLE) || Math.abs(roadSignAngle - carHeadingAngle) > (180 + MAX_TOLERANCE_OF_ROADSIGN_ANGLE) ){
+			 System.out.println(worldObject.getType() + " IS IN SIGHT BUT TOO MUCH ROTATION");
+			 return false;
+		 }
 
 		System.out.println(worldObject.getType() + " IS DETECTED######################");
 		detectedWorldObjects.add(worldObject);
@@ -112,7 +130,8 @@ public class FrontViewCamera extends SystemComponent {
 		float cameraPos_X = (this.car.getCamera_X() * graphicsScale);
 		float cameraPos_Y = (this.car.getCamera_Y() * graphicsScale);
 
-//		List<WorldObject> worldObjects = WorldObjectParser.getInstance().getWorldObjects();
+		// List<WorldObject> worldObjects =
+		// WorldObjectParser.getInstance().getWorldObjects();
 
 		for (WorldObject worldObject : detectedWorldObjects) {
 
@@ -303,8 +322,8 @@ public class FrontViewCamera extends SystemComponent {
 		Collections.sort(detectedRoadSigns);
 		int size = detectedRoadSigns.size() > 5 ? 5 : detectedRoadSigns.size();
 		for (int i = 0; i < size; i++) {
-			VirtualFunctionBus.sendSignal(new Signal(12, (long)detectedRoadSigns.get(i).getLongitudinalEGO()));
-			VirtualFunctionBus.sendSignal(new Signal(14, (long)detectedRoadSigns.get(i).getLateralEGO()));
+			VirtualFunctionBus.sendSignal(new Signal(12, (long) detectedRoadSigns.get(i).getLongitudinalEGO()));
+			VirtualFunctionBus.sendSignal(new Signal(14, (long) detectedRoadSigns.get(i).getLateralEGO()));
 			VirtualFunctionBus.sendSignal(new Signal(16, detectedRoadSigns.get(i).getTrafficSignMeaing()));
 		}
 	}
