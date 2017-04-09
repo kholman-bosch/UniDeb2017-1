@@ -18,6 +18,9 @@ public class WorldObjectParser {
 	private static final File world = new File("./world/road_1_simplified.xml");
 	private int width = 0;
 	private int height = 0;
+	
+	private static final int XML_OFFSET_X = 100;
+	private static final int XML_OFFSET_Y = 100;
 
 	ArrayList<WorldObject> worldObjects = new ArrayList<WorldObject>();
 
@@ -45,7 +48,7 @@ public class WorldObjectParser {
 				//I extract the rotation from the first component by doint an invers cosine
 				float rot = Float.parseFloat((e.getElementsByTagName("Transform").item(0).getAttributes().getNamedItem("m11").getTextContent().toString()));
 				String typef = e.getAttributes().getNamedItem("type").getTextContent().toString();
-				WorldObject object = new WorldObject(x, y, (float) (Math.acos(rot)), typef);
+				WorldObject object = new WorldObject(x - XML_OFFSET_X, y - XML_OFFSET_Y, (float) (Math.acos(rot)), typef);
 				worldObjects.add(object);
 			}
 		} catch (Exception e) {

@@ -62,7 +62,7 @@ public class FrontViewCamera extends SystemComponent {
 		double carHeadingAngle = Math.toDegrees(this.car.carHeading_Angle) < 0
 				? 360 + Math.toDegrees(this.car.carHeading_Angle) : Math.toDegrees(this.car.carHeading_Angle);
 
-//		System.out.println("CAR HEADING ANGLE: " + carHeadingAngle);
+		// System.out.println("CAR HEADING ANGLE: " + carHeadingAngle);
 
 		if (distance > ((double) VIEW_DISTANCE * graphicsScale)) {
 			System.out.println(worldObject.getType() + " distance: " + distance + " is TOO FAR");
@@ -91,29 +91,19 @@ public class FrontViewCamera extends SystemComponent {
 				woldObjectPos_Y);
 
 		double angleBetween2Lines = angleBetween2Lines(camera_maxDist, camera_worldObj);
-		System.out.println(worldObject.getType() + " seeing angle: " + Math.toDegrees(angleBetween2Lines));
 
-		if ((int) Math.abs(Math.toDegrees(angleBetween2Lines)) > (MAX_TOLERANCE_OF_ROADSIGN_ANGLE / 2)) {
-			System.out.println(worldObject.getType() + " IS OUT OF ANGLE");
-			return false;
-		}
+//		if ((int) Math.abs(Math.toDegrees(angleBetween2Lines)) > (MAX_TOLERANCE_OF_ROADSIGN_ANGLE / 2)) {
+//			System.out.println(worldObject.getType() + " IS OUT OF ANGLE");
+//			return false;
+//		}
 
 		double roadSignAngle = Math.toDegrees(worldObject.getOrientation());
 
-		// System.out.println("ROAD SIGN_ANGLE: " +
-		// Math.toDegrees(roadSignAngle));
-		// TODO should be received from bus!!
-
-		// double carHeadingAngle = Math.toDegrees(this.car.carHeading_Angle) <
-		// 0 ? 360 - Math.toDegrees(this.car.carHeading_Angle) :
-		// Math.toDegrees(this.car.carHeading_Angle);
-		//
-		// System.out.println("CAR HEADING ANGLE: " + carHeadingAngle);
-		 
-		 if( Math.abs(roadSignAngle - carHeadingAngle) < (180-MAX_TOLERANCE_OF_ROADSIGN_ANGLE) || Math.abs(roadSignAngle - carHeadingAngle) > (180 + MAX_TOLERANCE_OF_ROADSIGN_ANGLE) ){
-			 System.out.println(worldObject.getType() + " IS IN SIGHT BUT TOO MUCH ROTATION");
-			 return false;
-		 }
+//		if (Math.abs(roadSignAngle - carHeadingAngle) < (180 - MAX_TOLERANCE_OF_ROADSIGN_ANGLE)
+//				|| Math.abs(roadSignAngle - carHeadingAngle) > (180 + MAX_TOLERANCE_OF_ROADSIGN_ANGLE)) {
+//			System.out.println(worldObject.getType() + " IS IN SIGHT BUT TOO MUCH ROTATION");
+//			return false;
+//		}
 
 		System.out.println(worldObject.getType() + " IS DETECTED######################");
 		detectedWorldObjects.add(worldObject);

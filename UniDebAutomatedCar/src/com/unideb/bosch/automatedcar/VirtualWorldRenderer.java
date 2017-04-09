@@ -88,8 +88,8 @@ public class VirtualWorldRenderer extends JPanel {
 
 	private void drawWorldObjectsDebugData(Graphics2D g) {
 		// -100,-100 offsets were told to us by the creator of the XML
-		int XML_OffsetX = 100;
-		int XML_OffsetY = 100;
+//		int XML_OffsetX = 100;
+//		int XML_OffsetY = 100;
 		g.setColor(Color.black);
 		g.setFont(serifFontBOLD);
 		int size = WorldObjectParser.getInstance().getWorldObjects().size();
@@ -100,15 +100,15 @@ public class VirtualWorldRenderer extends JPanel {
 				continue;
 			}
 			g.setColor(Color.BLACK);
-			int textX = (int) ((worldObj.getX() - XML_OffsetX) * actualGraphics_Scale);
-			int textY = (int) ((worldObj.getY() - XML_OffsetY) * actualGraphics_Scale);
+			int textX = (int) (worldObj.getX() * actualGraphics_Scale);
+			int textY = (int) (worldObj.getY() * actualGraphics_Scale);
 			g.drawString(worldObj.getType() + " ORI: " + Math.toDegrees(worldObj.getOrientation()), textX, textY);
 			// draw orientation redgreen lines:
 			float rotation = worldObj.getOrientation();
 			float s = (float) Math.sin(rotation);
 			float c = (float) Math.cos(rotation);
-			int sx = worldObj.getX() - XML_OffsetX;
-			int sy = worldObj.getY() - XML_OffsetY;
+			int sx = worldObj.getX();
+			int sy = worldObj.getY();
 			int ex = (int) (sx + (50 * s));
 			int ey = (int) (sy + (50 * c));
 			int eex = (int) (sx + (100 * s));
