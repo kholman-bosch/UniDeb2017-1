@@ -92,18 +92,18 @@ public class FrontViewCamera extends SystemComponent {
 
 		double angleBetween2Lines = angleBetween2Lines(camera_maxDist, camera_worldObj);
 
-//		if ((int) Math.abs(Math.toDegrees(angleBetween2Lines)) > (MAX_TOLERANCE_OF_ROADSIGN_ANGLE / 2)) {
-//			System.out.println(worldObject.getType() + " IS OUT OF ANGLE");
-//			return false;
-//		}
+		if ((int) Math.abs(Math.toDegrees(angleBetween2Lines)) > (MAX_TOLERANCE_OF_ROADSIGN_ANGLE / 2)) {
+			System.out.println(worldObject.getType() + " IS OUT OF ANGLE");
+			return false;
+		}
 
 		double roadSignAngle = Math.toDegrees(worldObject.getOrientation());
 
-//		if (Math.abs(roadSignAngle - carHeadingAngle) < (180 - MAX_TOLERANCE_OF_ROADSIGN_ANGLE)
-//				|| Math.abs(roadSignAngle - carHeadingAngle) > (180 + MAX_TOLERANCE_OF_ROADSIGN_ANGLE)) {
-//			System.out.println(worldObject.getType() + " IS IN SIGHT BUT TOO MUCH ROTATION");
-//			return false;
-//		}
+		if (Math.abs(roadSignAngle - carHeadingAngle) < (180 - MAX_TOLERANCE_OF_ROADSIGN_ANGLE)
+				|| Math.abs(roadSignAngle - carHeadingAngle) > (180 + MAX_TOLERANCE_OF_ROADSIGN_ANGLE)) {
+			System.out.println(worldObject.getType() + " IS IN SIGHT BUT TOO MUCH ROTATION");
+			return false;
+		}
 
 		System.out.println(worldObject.getType() + " IS DETECTED######################");
 		detectedWorldObjects.add(worldObject);
