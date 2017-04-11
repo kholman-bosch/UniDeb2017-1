@@ -23,6 +23,11 @@ public class SignalDatabase {
 	public static final int LATERAL_RELATIVE_VELOCITY = 13;
 	public static final int LATERAL_DISTANCE_FROM_EGO = 14;
 	public static final int OBJECT_SIZE = 15;
+	//
+	//
+	//
+	public static final int RADAR_SENSOR_POS_X = 19;
+	public static final int RADAR_SENSOR_POS_Y = 20;
 
 	// Check signal boundaries and limit according to the CommMatrix
 	public static int limit(int localData, int actData, int limit1, int limit2) {

@@ -138,13 +138,6 @@ public class PowertrainSystem extends SystemComponent {
 		this.data_motor_rpm = SignalDatabase.limit(this.data_motor_rpm, (int) rpm, 0, 9000);
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.data_vehicle_speed));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.MOTOR_RPM, this.data_motor_rpm));
-		
-//		// car position x
-//		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase., this.data_vehicle_speed));
-//		// car position y
-//		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.data_vehicle_speed));
-//		// car angle
-//		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.data_vehicle_speed));
 	}
 
 	// Write in the Terminal the actual status about the Signals

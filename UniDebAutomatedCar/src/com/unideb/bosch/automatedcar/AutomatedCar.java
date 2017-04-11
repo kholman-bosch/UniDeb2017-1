@@ -58,7 +58,7 @@ public final class AutomatedCar {
 		new HumanMachineInterface(); // I don't know we need this. HMI branch has it so I just leave it here for now.
 		this.frontViewCamera = new FrontViewCamera(this);
 		new DetectedRoadSignCatcher();
-		this.radarSensor = new RSensor(100, 500, 20, 85, this, 5);
+		this.radarSensor = new RSensor(100, 500, 20, 85, 5);
 	}
 
 	public void drawCar(Graphics g, float graphicsScale) {
@@ -106,12 +106,13 @@ public final class AutomatedCar {
 		this.steerAngle = this.powertrainSystem.getSteeringWheelAngle();
 		this.carSpeed = this.powertrainSystem.getCarSpeed();
 		this.carPhysics();
-		this.radarSensor.update();
 		this.teleportCarIntoBounds();
 		// TODO somehow need to send float value instead of long
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_POSITION_X, this.carPos_X));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_POSITION_Y, this.carPos_Y));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_ANGLE, (float) Math.toDegrees(this.carHeading_Angle) + 180));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.RADAR_SENSOR_POS_X, (this.carPos_X + (this.wheelBase / 2f) * (float) Math.sin(this.carHeading_Angle))));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.RADAR_SENSOR_POS_Y, (this.carPos_Y + (this.wheelBase / 2f) * (float) Math.cos(this.carHeading_Angle))));
 	}
 
 	private void carPhysics() {

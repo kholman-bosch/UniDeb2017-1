@@ -9,10 +9,19 @@ import java.util.ArrayList;
 import com.unideb.bosch.automatedcar.AutomatedCar;
 import com.unideb.bosch.automatedcar.VirtualWorld;
 import com.unideb.bosch.automatedcar.WorldObjectParser;
+import com.unideb.bosch.automatedcar.framework.Signal;
+import com.unideb.bosch.automatedcar.framework.SystemComponent;
 import com.unideb.bosch.automatedcar.framework.WorldObject;
+import com.unideb.bosch.instrumentclusterdisplay.SignalDatabase;
 
-public class RSensor { // radar sensor
+public class RSensor extends SystemComponent { // radar sensor
 
+	public int radarPos_X = 0;
+	public int radarPos_Y = 0;
+	private int car_Pos_X = 0;
+	private int car_Pos_Y = 0;
+	private float carHeadingAngle = 0f;
+	//
 	private int minimumDetectRange = 0;
 	private int maximumDetectRange = 0;
 	private int minimumDetectAngle = 0;
@@ -26,19 +35,17 @@ public class RSensor { // radar sensor
 	//
 	private ArrayList<RSensorDetectedObjectAttributes> detectedWorldObjects = new ArrayList<RSensorDetectedObjectAttributes>(64);
 	private ArrayList<RSensorDetectedObjectAttributes> previousWorldObjects = new ArrayList<RSensorDetectedObjectAttributes>(64);
-	private AutomatedCar car;
 	//
 	private float carForwardVector_X;
 	private float carForwardVector_Y;
 
-	public RSensor(int minDetectRange, int maxDetectRange, int minDetctAngle, int maxDetectAngle, AutomatedCar car_f, int maxDetectableObjs_f) {
+	public RSensor(int minDetectRange, int maxDetectRange, int minDetctAngle, int maxDetectAngle, int maxDetectableObjs_f) {
 		this.minimumDetectRange = minDetectRange;
 		this.maximumDetectRange = maxDetectRange;
 		this.minimumDetectAngle = minDetctAngle;
 		this.maximumDetectAngle = maxDetectAngle;
 		this.maximumDetectableObjs = maxDetectableObjs_f;
 		this.validate_Sensor_Configuration();
-		this.car = car_f;
 	}
 
 	public void draw_DebugData(Graphics2D g2) {
@@ -46,8 +53,8 @@ public class RSensor { // radar sensor
 		g2.setColor(Color.CYAN);
 		g2.setStroke(new BasicStroke(2));
 		float graphicsScale = VirtualWorld.getGraphicsScale();
-		float radarSensorPos_X = (this.car.getRadarSensor_X() * graphicsScale);
-		float radarSensorPos_Y = (this.car.getRadarSensor_Y() * graphicsScale);
+		float radarSensorPos_X = (this.radarPos_X * graphicsScale);
+		float radarSensorPos_Y = (this.radarPos_Y * graphicsScale);
 		float maxDetectRangeScaled = (this.maximumDetectRange * graphicsScale);
 		float sensorForward_X_start = radarSensorPos_X + this.carForwardVector_X;
 		float sensorForward_Y_start = radarSensorPos_Y + this.carForwardVector_Y;
@@ -139,11 +146,11 @@ public class RSensor { // radar sensor
 	private boolean isWorldObject_Detected(WorldObject object) {
 		// sadly the swing coordinate system is not a normal one (the 0,0 is in the upper left) so hacks are needed (a 180degree offset and sin/cos swaps)
 		// there are a number of better methods to calculate this but we are going with a simple triangle based method (vector math would be nicer)
-		this.carForwardVector_X = (float) Math.sin(this.car.carHeading_Angle);
-		this.carForwardVector_Y = (float) Math.cos(this.car.carHeading_Angle);
+		this.carForwardVector_X = (float) Math.sin(this.carHeadingAngle);
+		this.carForwardVector_Y = (float) Math.cos(this.carHeadingAngle);
 		// the first point of our FOV triangle is the position of the radar
-		float radarSensorPos_X = (this.car.getRadarSensor_X());
-		float radarSensorPos_Y = (this.car.getRadarSensor_Y());
+		float radarSensorPos_X = (this.radarPos_X);
+		float radarSensorPos_Y = (this.radarPos_Y);
 		float dx = (radarSensorPos_X - object.getX()) * (radarSensorPos_X - object.getX());
 		float dy = (radarSensorPos_Y - object.getY()) * (radarSensorPos_Y - object.getY());
 		float distance = (float) Math.sqrt((double) (dx + dy));
@@ -174,8 +181,8 @@ public class RSensor { // radar sensor
 					if (actObj.getX() != prevObj.getX() || actObj.getY() != prevObj.getY()) {
 						objectWithAttributes.longitudinalRelative_Velcity = actObj.getX() - prevObj.getX();
 						objectWithAttributes.lateralRelative_Velcity = actObj.getY() - prevObj.getY();
-						objectWithAttributes.longitudinalDistance_From_EGO = Math.abs(this.car.getX() - actObj.getX());
-						objectWithAttributes.lateralDistance_From_EGO = Math.abs(this.car.getY() - actObj.getY());
+						objectWithAttributes.longitudinalDistance_From_EGO = Math.abs(this.car_Pos_X - actObj.getX());
+						objectWithAttributes.lateralDistance_From_EGO = Math.abs(this.car_Pos_Y - actObj.getY());
 					}
 				}
 			}
@@ -197,10 +204,6 @@ public class RSensor { // radar sensor
 
 	public ArrayList<RSensorDetectedObjectAttributes> get_Detected_WorldObjects() {
 		return this.detectedWorldObjects;
-	}
-
-	public AutomatedCar getCar() {
-		return this.car;
 	}
 
 	public int getMaxDetectableObjsNum() {
@@ -236,6 +239,32 @@ public class RSensor { // radar sensor
 		}
 		if (this.maximumDetectAngle > this.defaultMaximumDetectAngle) {
 			this.maximumDetectAngle = this.defaultMaximumDetectAngle;
+		}
+	}
+
+	@Override
+	public void cyclic() {
+		this.update();
+	}
+
+	@Override
+	public void receiveSignal(Signal s) {
+		switch (s.getID()) {
+		case SignalDatabase.CAR_POSITION_X:
+			this.car_Pos_X = (int) s.getData();
+			break;
+		case SignalDatabase.CAR_POSITION_Y:
+			this.car_Pos_Y = (int) s.getData();
+			break;
+		case SignalDatabase.RADAR_SENSOR_POS_X:
+			this.radarPos_X = (int) s.getData();
+			break;
+		case SignalDatabase.RADAR_SENSOR_POS_Y:
+			this.radarPos_Y = (int) s.getData();
+			break;
+		case SignalDatabase.CAR_ANGLE:
+			this.carHeadingAngle = (float) Math.toRadians(s.getData() - 180);
+			break;
 		}
 	}
 }

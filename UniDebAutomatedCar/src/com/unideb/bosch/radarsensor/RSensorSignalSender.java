@@ -18,8 +18,8 @@ public class RSensorSignalSender {
 	private static void filterOut_LessDangerousObjects(RSensor radar) {
 		objectList.clear();
 		ArrayList<RSensorDetectedObjectAttributes> detectedObjects_bySensor = radar.get_Detected_WorldObjects();
-		int sensorX = radar.getCar().getRadarSensor_X();
-		int sensorY = radar.getCar().getRadarSensor_Y();
+		int sensorX = radar.radarPos_X;
+		int sensorY = radar.radarPos_Y;
 
 		for (int i = 0; i < detectedObjects_bySensor.size(); i++) {
 			WorldObject actObj = detectedObjects_bySensor.get(i).parentWorldObject;
