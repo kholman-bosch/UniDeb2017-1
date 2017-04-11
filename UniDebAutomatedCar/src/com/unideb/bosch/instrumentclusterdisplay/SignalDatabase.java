@@ -18,10 +18,10 @@ public class SignalDatabase {
 	public static final int VEHICLE_SPEED = 8;
 	public static final int MOTOR_RPM = 9;
 	public static final int HEADLIGHT = 10;
-	public static final int LONGITUDINAL_RELATIVE_VELOCITY = 11;
-	public static final int LONGITUDINAL_DISTANCE_FROM_EGO = 12;
-	public static final int LATERAL_RELATIVE_VELOCITY = 13;
-	public static final int LATERAL_DISTANCE_FROM_EGO = 14;
+	public static final int RADAR_LONGITUDINAL_RELATIVE_VELOCITY = 11;
+	public static final int RADAR_LONGITUDINAL_DISTANCE_FROM_EGO = 12;
+	public static final int RADAR_LATERAL_RELATIVE_VELOCITY = 13;
+	public static final int RADAR_LATERAL_DISTANCE_FROM_EGO = 14;
 	public static final int OBJECT_SIZE = 15;
 	//
 	//
