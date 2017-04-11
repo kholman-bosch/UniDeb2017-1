@@ -29,7 +29,7 @@ public class VirtualWorldRenderer extends JPanel {
 	public static boolean showRadarSensorDebugData = false;
 	public static boolean showCameraDebugData = false;
 	
-	private static Font serifFontBOLD = new Font("Serif", Font.BOLD, 12);
+	private static Font defaultFontBOLD = new Font("default", Font.BOLD, 12);
 
 	public VirtualWorldRenderer(int windowWidth, int windowHeight) {
 		try {
@@ -48,6 +48,7 @@ public class VirtualWorldRenderer extends JPanel {
 		globalMatrix.setPaint(backgroundPaint);
 		globalMatrix.fillRect(0, 0, scaledBackground.getWidth(), scaledBackground.getHeight());
 		VirtualWorld.getCars().get(0).drawCar(globalMatrix, actualGraphics_Scale);
+		drawKeybindingsInfo(g);
 		if (showDebugWorldData) {
 			this.drawWorldObjectsDebugData(globalMatrix);
 		}
@@ -85,13 +86,21 @@ public class VirtualWorldRenderer extends JPanel {
 	public float getGraphicsScale() {
 		return actualGraphics_Scale;
 	}
+	
+	private void drawKeybindingsInfo(Graphics g){
+		g.setColor(Color.black);
+		g.setFont(defaultFontBOLD);
+		g.drawString("[F1] World debug info", 0, 20);
+		g.drawString("[F2] Radar Sensor debug info", 0, 35);
+		g.drawString("[F3] Camera debug info", 0, 50);
+	}
 
 	private void drawWorldObjectsDebugData(Graphics2D g) {
 		// -100,-100 offsets were told to us by the creator of the XML
 //		int XML_OffsetX = 100;
 //		int XML_OffsetY = 100;
 		g.setColor(Color.black);
-		g.setFont(serifFontBOLD);
+		g.setFont(defaultFontBOLD);
 		int size = WorldObjectParser.getInstance().getWorldObjects().size();
 		g.setStroke(new BasicStroke(2));
 		for (int i = 0; i < size; i++) {
