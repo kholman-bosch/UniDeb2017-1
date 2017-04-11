@@ -1,6 +1,4 @@
 package com.unideb.bosch.automatedcar.framework;
-import com.unideb.bosch.automatedcar.framework.ISystemComponent;
-import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 
 /**
  * 

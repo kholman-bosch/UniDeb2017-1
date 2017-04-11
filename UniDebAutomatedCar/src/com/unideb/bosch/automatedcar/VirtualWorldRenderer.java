@@ -28,7 +28,7 @@ public class VirtualWorldRenderer extends JPanel {
 	public static boolean showDebugWorldData = true;
 	public static boolean showRadarSensorDebugData = false;
 	public static boolean showCameraDebugData = false;
-	
+
 	private static Font defaultFontBOLD = new Font("default", Font.BOLD, 12);
 
 	public VirtualWorldRenderer(int windowWidth, int windowHeight) {
@@ -66,10 +66,8 @@ public class VirtualWorldRenderer extends JPanel {
 		}
 		// scale the background image to fit the window but only scale if needed
 		if (previousWindowWidth != windowWidth || previousWindowHeight != windowHeight) {
-			actualGraphics_Scale = Math.min(windowWidth / (float) background.getWidth(),
-					windowHeight / (float) background.getHeight());
-			scaledBackground = VirtualWorld.scale(background, (int) (background.getWidth() * actualGraphics_Scale),
-					(int) (background.getHeight() * actualGraphics_Scale));
+			actualGraphics_Scale = Math.min(windowWidth / (float) background.getWidth(), windowHeight / (float) background.getHeight());
+			scaledBackground = VirtualWorld.scale(background, (int) (background.getWidth() * actualGraphics_Scale), (int) (background.getHeight() * actualGraphics_Scale));
 			this.backgroundRectangle = new Rectangle(0, 0, scaledBackground.getWidth(), scaledBackground.getHeight());
 			previousWindowWidth = windowWidth;
 			previousWindowHeight = windowHeight;
@@ -86,8 +84,8 @@ public class VirtualWorldRenderer extends JPanel {
 	public float getGraphicsScale() {
 		return actualGraphics_Scale;
 	}
-	
-	private void drawKeybindingsInfo(Graphics g){
+
+	private void drawKeybindingsInfo(Graphics g) {
 		g.setColor(Color.black);
 		g.setFont(defaultFontBOLD);
 		g.drawString("[F1] World debug info", 0, 20);
@@ -97,8 +95,8 @@ public class VirtualWorldRenderer extends JPanel {
 
 	private void drawWorldObjectsDebugData(Graphics2D g) {
 		// -100,-100 offsets were told to us by the creator of the XML
-//		int XML_OffsetX = 100;
-//		int XML_OffsetY = 100;
+		// int XML_OffsetX = 100;
+		// int XML_OffsetY = 100;
 		g.setColor(Color.black);
 		g.setFont(defaultFontBOLD);
 		int size = WorldObjectParser.getInstance().getWorldObjects().size();
@@ -147,7 +145,7 @@ public class VirtualWorldRenderer extends JPanel {
 			}
 		}
 	}
-	
+
 	private void drawCameraDebugData(Graphics2D g) {
 		// camera debug
 		ArrayList<AutomatedCar> cars = VirtualWorld.getCars();

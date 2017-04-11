@@ -1,5 +1,4 @@
 package com.unideb.bosch.automatedcar.framework;
-import com.unideb.bosch.automatedcar.framework.Signal;
 
 /**
  * This interface provides the necessary methods for system components.

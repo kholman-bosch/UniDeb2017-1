@@ -12,7 +12,6 @@ import javax.imageio.ImageIO;
 
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
-import com.unideb.bosch.automatedcar.vehicleparts.Driver;
 import com.unideb.bosch.automatedcar.vehicleparts.PowertrainSystem;
 import com.unideb.bosch.frontviewcamera.DetectedRoadSignCatcher;
 import com.unideb.bosch.frontviewcamera.FrontViewCamera;
@@ -39,7 +38,7 @@ public final class AutomatedCar {
 	private float previousCarPos_Y = 200f;
 	private float previousCarHeadingAngle = 0f;
 	private boolean useNON_QuaternionAngleInterpolation = false;
-	
+
 	private FrontViewCamera frontViewCamera;
 	private RSensor radarSensor;
 
@@ -55,8 +54,6 @@ public final class AutomatedCar {
 		this.powertrainSystem = new PowertrainSystem();
 		// The rest of the components use the VirtualFunctionBus to communicate,
 		// they do not communicate with the car itself
-		// Place a driver into our car
-		new Driver();
 		new VirtualDisplay_Invoker(this, new InstrumentClusterLogic(this.powertrainSystem));
 		new HumanMachineInterface(); // I don't know we need this. HMI branch has it so I just leave it here for now.
 		this.frontViewCamera = new FrontViewCamera(this);
@@ -111,11 +108,10 @@ public final class AutomatedCar {
 		this.carPhysics();
 		this.radarSensor.update();
 		this.teleportCarIntoBounds();
-		
 		// TODO somehow need to send float value instead of long
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_POSITION_X, (long)this.carPos_X));
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_POSITION_Y, (long)this.carPos_Y));
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_ANGLE, (long)Math.toDegrees(this.carHeading_Angle)+180));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_POSITION_X, this.carPos_X));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_POSITION_Y, this.carPos_Y));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_ANGLE, (float) Math.toDegrees(this.carHeading_Angle) + 180));
 	}
 
 	private void carPhysics() {
@@ -135,11 +131,11 @@ public final class AutomatedCar {
 		this.carPos_Y = (frontWheel_Y + backWheel_Y) / 2f;
 		this.carHeading_Angle = (float) Math.atan2(frontWheel_X - backWheel_X, frontWheel_Y - backWheel_Y);
 	}
-	
+
 	public RSensor getRadarSensor() {
 		return this.radarSensor;
 	}
-	
+
 	public FrontViewCamera getFrontViewCamera() {
 		return this.frontViewCamera;
 	}
@@ -151,7 +147,7 @@ public final class AutomatedCar {
 	public int getRadarSensor_Y() {
 		return (int) (this.carPos_Y + (this.wheelBase / 2f) * (float) Math.cos(this.carHeading_Angle));
 	}
-	
+
 	// CAMERA
 	public int getCamera_X() {
 		return (int) (this.carPos_X + (this.wheelBase / 4f) * (float) Math.sin(this.carHeading_Angle));
