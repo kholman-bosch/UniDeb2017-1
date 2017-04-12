@@ -33,6 +33,9 @@ public class HumanMachineInterface extends SystemComponent {
 	boolean breakPressed = false;
 	boolean left = false;
 	boolean right = false;
+	
+	// By default TSD is enabled
+	private boolean tsrEnabled = true;
 
 	private class HMIKeyHandler implements KeyListener {
 
@@ -139,6 +142,9 @@ public class HumanMachineInterface extends SystemComponent {
 					isHeadLightOn = true;
 					;
 				}
+			} else if (character == 't' || character == 'T') {
+				tsrEnabled = !tsrEnabled;
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.TSR_MODULE_STATUS, tsrEnabled ? 1 : 0));
 			}
 
 			LOGGER.debug(keyEvent.getKeyCode() + " key were typed!");
