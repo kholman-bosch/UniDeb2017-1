@@ -28,6 +28,12 @@ public class SignalDatabase {
 	//
 	public static final int RADAR_SENSOR_POS_X = 19;
 	public static final int RADAR_SENSOR_POS_Y = 20;
+	public static final int MOST_RELEVANT_SPEED_LIMIT = 21;
+	public static final int SHOW_SUPPLEMENTAL_SIGNS_ON_IC = 22;
+	public static final int POWERTRAIN_STEERING_WHEEL_ANGLE = 23;
+	public static final int POWERTRAIN_GEAR_POSITION = 24;
+	public static final int POWERTRAIN_HEADLIGHT = 25;
+	public static final int POWERTRAIN_INDEX_INDICATORS = 26;
 
 	// Check signal boundaries and limit according to the CommMatrix
 	public static int limit(int localData, int actData, int limit1, int limit2) {
