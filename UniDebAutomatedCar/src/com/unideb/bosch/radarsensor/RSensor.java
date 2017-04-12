@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
-import com.unideb.bosch.automatedcar.AutomatedCar;
 import com.unideb.bosch.automatedcar.VirtualWorld;
 import com.unideb.bosch.automatedcar.WorldObjectParser;
 import com.unideb.bosch.automatedcar.framework.Signal;

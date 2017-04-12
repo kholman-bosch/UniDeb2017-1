@@ -2,8 +2,6 @@ package com.unideb.bosch.instrumentclusterdisplay;
 
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
-import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
-import com.unideb.bosch.automatedcar.vehicleparts.PowertrainSystem;
 
 /**
  * This class implements the InstrumentClusterLogic System
@@ -21,7 +19,7 @@ public class InstrumentClusterLogic extends SystemComponent {
 	private int turn_signal_tick = 0;
 	private boolean turn_signal_left = false, turn_signal_right = false;
 
-	public InstrumentClusterLogic(PowertrainSystem ptsf) {
+	public InstrumentClusterLogic() {
 		super();
 	}
 
@@ -69,7 +67,7 @@ public class InstrumentClusterLogic extends SystemComponent {
 		}
 	}
 
-	//get Values for the Instrument Cluster
+	// get Values for the Instrument Cluster
 	public int getVehicleSpeed() {
 		return this.data_vehicle_speed;
 	}

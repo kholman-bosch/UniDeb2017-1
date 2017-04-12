@@ -12,7 +12,6 @@ public final class VirtualWorld {
 	// Parameters
 	private static final int visualisationCyclePeriod = 16; // ms 16ms means 60Hz
 	private static final int logicCyclePeriod = 100; // ms 100ms means 10Hz
-	private static WorldObjectParser world = WorldObjectParser.getInstance();
 	private static ArrayList<AutomatedCar> cars = new ArrayList<AutomatedCar>();
 	private static VirtualWorldJFrame frame;
 	private static VirtualWorldRenderer renderer;

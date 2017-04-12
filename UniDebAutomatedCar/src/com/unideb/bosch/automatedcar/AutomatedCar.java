@@ -54,7 +54,7 @@ public final class AutomatedCar {
 		this.powertrainSystem = new PowertrainSystem();
 		// The rest of the components use the VirtualFunctionBus to communicate,
 		// they do not communicate with the car itself
-		new VirtualDisplay_Invoker(this, new InstrumentClusterLogic(this.powertrainSystem));
+		new VirtualDisplay_Invoker(this, new InstrumentClusterLogic());
 		new HumanMachineInterface(); // I don't know we need this. HMI branch has it so I just leave it here for now.
 		this.frontViewCamera = new FrontViewCamera(this);
 		new DetectedRoadSignCatcher();
