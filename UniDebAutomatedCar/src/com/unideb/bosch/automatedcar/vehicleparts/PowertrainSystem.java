@@ -12,11 +12,13 @@ public class PowertrainSystem extends SystemComponent {
 
 	private int data_gas_pedal_position = 3;
 	private int data_brake_pedal_position = 0;
-	private int data_steering_wheel_angle = 0;
-	private int data_gear_position = 3;
-	private int data_headlight = 0;
+	//
 	private int data_vehicle_speed = 0;
 	private int data_motor_rpm = 0;
+	private int data_headlight = 0;
+	private int data_index = 0;
+	private int data_steering_wheel_angle = 0;
+	private int data_gear_position = 3;
 
 	public PowertrainSystem() {
 		super();
@@ -24,8 +26,12 @@ public class PowertrainSystem extends SystemComponent {
 
 	@Override
 	public void cyclic() {
-		this.calcSpeedandMotorRPM();
-		// this.writeInTerminalInfos();
+		this.calcSpeed_MotorRPMandSendSignals();
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_HEADLIGHT, this.data_headlight));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_INDEX_INDICATORS, this.data_index));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_GEAR_POSITION, this.data_gear_position));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_STEERING_WHEEL_ANGLE, this.data_steering_wheel_angle));
+		//this.writeInTerminalInfos();
 	}
 
 	@Override
@@ -40,9 +46,17 @@ public class PowertrainSystem extends SystemComponent {
 			// 0 100 1 % -
 			this.data_brake_pedal_position = actValue;
 			break;
-		case SignalDatabase.STEERING_WHEEL_ANGLE:
-			// -720 720 1 � -
-			this.data_steering_wheel_angle = SignalDatabase.limit(this.data_steering_wheel_angle, -actValue, -720, 720);
+		case SignalDatabase.HEADLIGHT:
+			// ON: 1
+			// OFF: 0
+			this.data_headlight = actValue;
+			break;
+		case SignalDatabase.INDICATOR:
+			// NONE: 0
+			// RIGHT: 1
+			// LEFT: 2
+			// EMERGENCY: 3
+			this.data_index = actValue;
 			break;
 		case SignalDatabase.GEAR_POSITION:
 			// D: 0
@@ -51,36 +65,11 @@ public class PowertrainSystem extends SystemComponent {
 			// P: 3
 			this.checkAndSetValidGearStatus(actValue);
 			break;
-		case SignalDatabase.HEADLIGHT:
-			// ON: 1
-			// OFF: 0
-			this.data_headlight = actValue;
+		case SignalDatabase.STEERING_WHEEL_ANGLE:
+			// -720 720 1
+			this.data_steering_wheel_angle = SignalDatabase.limit(this.data_steering_wheel_angle, -actValue, -720, 720);
 			break;
 		}
-	}
-
-	public boolean getGearPos_D_Status() {
-		return this.data_gear_position == 0;
-	}
-
-	public boolean getGearPos_N_Status() {
-		return this.data_gear_position == 1;
-	}
-
-	public boolean getGearPos_R_Status() {
-		return this.data_gear_position == 2;
-	}
-
-	public boolean getGearPos_P_Status() {
-		return this.data_gear_position == 3;
-	}
-
-	public boolean getHeadlightStatus() {
-		return this.data_headlight == 1;
-	}
-
-	public int getSteeringWheelAngle() {
-		return this.data_steering_wheel_angle;
 	}
 
 	public int getCarSpeed() {
@@ -89,6 +78,10 @@ public class PowertrainSystem extends SystemComponent {
 			return this.data_vehicle_speed;
 		}
 		return (int) (this.data_vehicle_speed * brakeSlowdown);
+	}
+	
+	public int getSteeringWheelAngle() {
+		return this.data_steering_wheel_angle;
 	}
 
 	private void checkAndSetValidGearStatus(int value) {
@@ -116,7 +109,7 @@ public class PowertrainSystem extends SystemComponent {
 		}
 	}
 
-	private void calcSpeedandMotorRPM() {
+	private void calcSpeed_MotorRPMandSendSignals() {
 		switch (this.data_gear_position) {
 		case 0: // drive
 			this.data_vehicle_speed = SignalDatabase.limit(this.data_vehicle_speed, (int) (this.data_gas_pedal_position * 1.2f), 0, 120);
@@ -143,11 +136,14 @@ public class PowertrainSystem extends SystemComponent {
 	// Write in the Terminal the actual status about the Signals
 	private void writeInTerminalInfos() {
 		System.out.println("---POWERTRAINSYSTEM---");
-		System.out.println("GAS_PEDAL_POSITION data: " + this.data_gas_pedal_position);
-		System.out.println("BRAKE_PEDAL_POSITION data: " + this.data_brake_pedal_position);
-		System.out.println("STEERING_WHEEL_ANGLE data: " + this.data_steering_wheel_angle);
-		System.out.println("GEAR_POSITION data: " + this.data_gear_position);
+		//System.out.println("GAS_PEDAL_POSITION data: " + this.data_gas_pedal_position);
+		//System.out.println("BRAKE_PEDAL_POSITION data: " + this.data_brake_pedal_position);
 		System.out.println("VEHICLE_SPEED data: " + this.data_vehicle_speed);
+		System.out.println("MOTOR_RPM data: " + this.data_motor_rpm);
+		System.out.println("HEADLIGHT data: " + this.data_headlight);
+		System.out.println("INDEX_INDICATORS data: " + this.data_index);
+		System.out.println("GEAR_POSITION data: " + this.data_gear_position);
+		System.out.println("STEERING_WHEEL_ANGLE data: " + this.data_steering_wheel_angle);
 		System.out.println("----------------------");
 	}
 }

@@ -2,6 +2,7 @@ package com.unideb.bosch.instrumentclusterdisplay;
 
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
+import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 import com.unideb.bosch.automatedcar.vehicleparts.PowertrainSystem;
 
 /**
@@ -10,49 +11,65 @@ import com.unideb.bosch.automatedcar.vehicleparts.PowertrainSystem;
 
 public class InstrumentClusterLogic extends SystemComponent {
 
-	// Turn Signal values
-	private int data_turn_signal = 0;
 	private int data_vehicle_speed = 0;
 	private int data_motor_rpm = 0;
+	private int data_headlight = 0;
+	private int data_turn_signal = 0;
+	private int data_steering_wheel_angle = 0;
+	private int data_gear_position = 3;
 	//
 	private int turn_signal_tick = 0;
 	private boolean turn_signal_left = false, turn_signal_right = false;
-	private PowertrainSystem pts;
 
 	public InstrumentClusterLogic(PowertrainSystem ptsf) {
 		super();
-		this.pts = ptsf;
 	}
 
 	@Override
 	public void cyclic() {
 		this.blinkingTurnSignals();
-		//this.writeInTerminalInfos();
+		// this.writeInTerminalInfos();
 	}
 
 	@Override
 	public void receiveSignal(Signal s) {
 		int actValue = (int) s.getData();
 		switch (s.getID()) {
-		case SignalDatabase.INDICATOR:
+		case SignalDatabase.VEHICLE_SPEED:
+			// 0 120 1 KM/H -
+			this.data_vehicle_speed = Math.abs(actValue);
+			break;
+		case SignalDatabase.MOTOR_RPM:
+			// 0 9000 1 RPM -
+			this.data_motor_rpm = actValue;
+			break;
+		case SignalDatabase.POWERTRAIN_HEADLIGHT:
+			// ON: 1
+			// OFF: 0
+			this.data_headlight = actValue;
+			break;
+		case SignalDatabase.POWERTRAIN_INDEX_INDICATORS:
 			// NONE: 0
 			// RIGHT: 1
 			// LEFT: 2
 			// EMERGENCY: 3
 			this.data_turn_signal = actValue;
 			break;
-		case SignalDatabase.VEHICLE_SPEED:
-			// 0 120 1 KM/H -
-			this.data_vehicle_speed =Math.abs(actValue);
+		case SignalDatabase.POWERTRAIN_GEAR_POSITION:
+			// D: 0
+			// N: 1
+			// R: 2
+			// P: 3
+			this.data_gear_position = actValue;
 			break;
-		case SignalDatabase.MOTOR_RPM:
-			// 0 9000 1 RPM -
-			this.data_motor_rpm = actValue;
+		case SignalDatabase.POWERTRAIN_STEERING_WHEEL_ANGLE:
+			// -720 720 1
+			this.data_steering_wheel_angle = actValue;
 			break;
 		}
 	}
 
-	// get Values for the Instrument Cluster
+	//get Values for the Instrument Cluster
 	public int getVehicleSpeed() {
 		return this.data_vehicle_speed;
 	}
@@ -62,27 +79,27 @@ public class InstrumentClusterLogic extends SystemComponent {
 	}
 
 	public int getSteeringWheelAngle() {
-		return this.pts.getSteeringWheelAngle();
+		return this.data_steering_wheel_angle;
 	}
 
 	public boolean getGearPos_D_Status() {
-		return this.pts.getGearPos_D_Status();
+		return this.data_gear_position == 0;
 	}
 
 	public boolean getGearPos_N_Status() {
-		return this.pts.getGearPos_N_Status();
+		return this.data_gear_position == 1;
 	}
 
 	public boolean getGearPos_R_Status() {
-		return this.pts.getGearPos_R_Status();
+		return this.data_gear_position == 2;
 	}
 
 	public boolean getGearPos_P_Status() {
-		return this.pts.getGearPos_P_Status();
+		return this.data_gear_position == 3;
 	}
 
 	public boolean getHeadlightStatus() {
-		return this.pts.getHeadlightStatus();
+		return this.data_headlight == 1;
 	}
 
 	public boolean getLeftTurnSignalStatus() {
@@ -132,8 +149,7 @@ public class InstrumentClusterLogic extends SystemComponent {
 	// Write in the Terminal the actual status about the Signals
 	private void writeInTerminalInfos() {
 		System.out.println("---INSTRUMENT CLUSTER CYCLE---");
-		System.out.println("Left/Right Turn Signals: " + this.turn_signal_left + " " + this.turn_signal_right
-				+ " data: " + this.data_turn_signal);
+		System.out.println("Left/Right Turn Signals: " + this.turn_signal_left + " " + this.turn_signal_right + " data: " + this.data_turn_signal);
 		System.out.println("----------------------");
 	}
 }
