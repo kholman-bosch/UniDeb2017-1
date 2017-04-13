@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.unideb.bosch.SignalDatabase;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 import com.unideb.bosch.automatedcar.vehicleparts.PowertrainSystem;
@@ -17,7 +18,6 @@ import com.unideb.bosch.frontviewcamera.DetectedRoadSignCatcher;
 import com.unideb.bosch.frontviewcamera.FrontViewCamera;
 import com.unideb.bosch.humanmachineinterface.HumanMachineInterface;
 import com.unideb.bosch.instrumentclusterdisplay.InstrumentClusterLogic;
-import com.unideb.bosch.instrumentclusterdisplay.SignalDatabase;
 import com.unideb.bosch.instrumentclusterdisplay.VirtualDisplay_Invoker;
 import com.unideb.bosch.radarsensor.RSensor;
 

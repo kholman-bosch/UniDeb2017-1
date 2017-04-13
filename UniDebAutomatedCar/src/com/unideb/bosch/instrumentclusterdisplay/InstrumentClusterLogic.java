@@ -1,5 +1,6 @@
 package com.unideb.bosch.instrumentclusterdisplay;
 
+import com.unideb.bosch.SignalDatabase;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
 

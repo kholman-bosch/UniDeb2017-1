@@ -1,4 +1,4 @@
-package com.unideb.bosch.instrumentclusterdisplay;
+package com.unideb.bosch;
 
 /**
  * This class implements the Signals ID table

@@ -2,10 +2,10 @@ package com.unideb.bosch.radarsensor;
 
 import java.util.ArrayList;
 
+import com.unideb.bosch.SignalDatabase;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 import com.unideb.bosch.automatedcar.framework.WorldObject;
-import com.unideb.bosch.instrumentclusterdisplay.SignalDatabase;
 
 public class RSensorSignalSender {
 

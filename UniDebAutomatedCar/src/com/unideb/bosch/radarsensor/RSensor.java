@@ -6,12 +6,12 @@ import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
+import com.unideb.bosch.SignalDatabase;
 import com.unideb.bosch.automatedcar.VirtualWorld;
 import com.unideb.bosch.automatedcar.WorldObjectParser;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
 import com.unideb.bosch.automatedcar.framework.WorldObject;
-import com.unideb.bosch.instrumentclusterdisplay.SignalDatabase;
 
 public class RSensor extends SystemComponent { // radar sensor
 

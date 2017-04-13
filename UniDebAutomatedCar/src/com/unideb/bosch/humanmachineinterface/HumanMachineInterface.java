@@ -6,12 +6,12 @@ import java.awt.event.KeyListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.unideb.bosch.SignalDatabase;
 import com.unideb.bosch.automatedcar.VirtualWorld;
 import com.unideb.bosch.automatedcar.VirtualWorldRenderer;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
-import com.unideb.bosch.instrumentclusterdisplay.SignalDatabase;
 
 public class HumanMachineInterface extends SystemComponent {
 

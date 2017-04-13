@@ -1,9 +1,9 @@
 package com.unideb.bosch.automatedcar.vehicleparts;
 
+import com.unideb.bosch.SignalDatabase;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
-import com.unideb.bosch.instrumentclusterdisplay.SignalDatabase;
 
 /**
  * This class implements the Powertrain System The responsible for this file is TeamA
