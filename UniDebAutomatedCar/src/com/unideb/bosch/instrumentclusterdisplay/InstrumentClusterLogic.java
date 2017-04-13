@@ -19,6 +19,13 @@ public class InstrumentClusterLogic extends SystemComponent {
 	//
 	private int turn_signal_tick = 0;
 	private boolean turn_signal_left = false, turn_signal_right = false;
+	// tsr stuff:
+	private boolean tsr_on = true;
+	private int tsr_speedLimit = 0;
+	private boolean tsr_stopSing = false;
+	private boolean tsr_yieldSing = false;
+	private boolean tsr_citySixtySign = false;
+	private boolean tsr_noSpeedLimitSign = false;
 
 	public InstrumentClusterLogic() {
 		super();
@@ -64,6 +71,32 @@ public class InstrumentClusterLogic extends SystemComponent {
 		case SignalDatabase.POWERTRAIN_STEERING_WHEEL_ANGLE:
 			// -720 720 1
 			this.data_steering_wheel_angle = actValue;
+			break;
+		case SignalDatabase.MOST_RELEVANT_SPEED_LIMIT:
+			this.tsr_speedLimit = actValue;
+			break;
+		case SignalDatabase.SHOW_SUPPLEMENTAL_SIGNS_ON_IC:
+			switch (actValue) {
+			case 0:
+				this.tsr_noSpeedLimitSign = true;
+				break;
+			case 1:
+				this.tsr_stopSing = true;
+				break;
+			case 2:
+				this.tsr_citySixtySign = true;
+				break;
+			case 3:
+				this.tsr_yieldSing = true;
+				break;
+			}
+			break;
+		case SignalDatabase.TSR_MODULE_STATUS:
+			if (actValue == 0) {
+				this.tsr_on = false;
+			} else {
+				this.tsr_on = true;
+			}
 			break;
 		}
 	}
@@ -111,6 +144,30 @@ public class InstrumentClusterLogic extends SystemComponent {
 
 	public boolean getEmergencySignalStatus() {
 		return this.turn_signal_left && this.turn_signal_right;
+	}
+
+	public boolean is_TSR_Active() {
+		return this.tsr_on;
+	}
+
+	public int get_TSR_ActualSpeedLimit() {
+		return this.tsr_speedLimit;
+	}
+
+	public boolean get_TSR_StopSign() {
+		return this.tsr_stopSing;
+	}
+
+	public boolean get_TSR_NoSpeedLimit() {
+		return this.tsr_noSpeedLimitSign;
+	}
+
+	public boolean get_TSR_SixtyInCity() {
+		return this.tsr_citySixtySign;
+	}
+
+	public boolean get_TSR_Yield() {
+		return this.tsr_yieldSing;
 	}
 
 	// Blinking the Turn Signals on the Instrument Cluster and

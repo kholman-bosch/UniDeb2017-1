@@ -20,6 +20,7 @@ import com.unideb.bosch.humanmachineinterface.HumanMachineInterface;
 import com.unideb.bosch.instrumentclusterdisplay.InstrumentClusterLogic;
 import com.unideb.bosch.instrumentclusterdisplay.VirtualDisplay_Invoker;
 import com.unideb.bosch.radarsensor.RSensor;
+import com.unideb.bosch.traficsignrecognition.TSR_Logic;
 
 public final class AutomatedCar {
 
@@ -41,6 +42,7 @@ public final class AutomatedCar {
 
 	private FrontViewCamera frontViewCamera;
 	private RSensor radarSensor;
+	private TSR_Logic tsr;
 
 	public AutomatedCar() {
 		try {
@@ -59,6 +61,7 @@ public final class AutomatedCar {
 		this.frontViewCamera = new FrontViewCamera(this);
 		new DetectedRoadSignCatcher();
 		this.radarSensor = new RSensor(100, 500, 20, 85, 5);
+		this.tsr = new TSR_Logic();
 	}
 
 	public void drawCar(Graphics g, float graphicsScale) {
