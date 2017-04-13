@@ -284,6 +284,30 @@ public class VirtualDisplaySurface extends JPanel {
 		this.steeringWheel_Angle = angle;
 	}
 
+	public void set_TSR_Status(boolean state) {
+		this.show_tsr = state;
+	}
+
+	public void set_TSR_ActualSpeedLimit(int speedlimt) {
+		this.show_activespeedlimit = speedlimt;
+	}
+
+	public void set_TSR_StopSign(boolean state) {
+		this.show_stop = state;
+	}
+
+	public void set_TSR_NoSpeedLimit(boolean state) {
+		this.show_nospeedlimit = state;
+	}
+
+	public void set_TSR_SixtyInCity(boolean state) {
+		this.show_sixtyincity = state;
+	}
+
+	public void set_TSR_Yield(boolean state) {
+		this.show_yield = state;
+	}
+
 	private int truncateAngle(int angle, int max) {
 		if (angle < 0) {
 			angle = 0;

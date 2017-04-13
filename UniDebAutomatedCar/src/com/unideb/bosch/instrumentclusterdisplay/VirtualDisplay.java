@@ -74,4 +74,28 @@ public class VirtualDisplay extends JFrame {
 	public void set_Actual_SteeringWheel_Angle(int angle) {
 		this.surface.set_Actual_SteeringWHeel_Angle(angle);
 	}
+
+	public void set_TSR_Status(boolean state) {
+		this.surface.set_TSR_Status(state);
+	}
+
+	public void set_TSR_ActualSpeedLimit(int speedlimit) {
+		this.surface.set_TSR_ActualSpeedLimit(speedlimit);
+	}
+
+	public void set_TSR_StopSign(boolean state) {
+		this.surface.set_TSR_StopSign(state);
+	}
+
+	public void set_TSR_NoSpeedLimit(boolean state) {
+		this.surface.set_TSR_NoSpeedLimit(state);
+	}
+
+	public void set_TSR_SixtyInCity(boolean state) {
+		this.surface.set_TSR_SixtyInCity(state);
+	}
+
+	public void set_TSR_Yield(boolean state) {
+		this.surface.set_TSR_Yield(state);
+	}
 }

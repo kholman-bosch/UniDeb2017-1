@@ -26,6 +26,12 @@ public class VirtualDisplay_Invoker extends SystemComponent {
 		this.vd.set_Actual_LeftIndex(this.icl.getLeftTurnSignalStatus());
 		this.vd.set_Actual_Headlights(this.icl.getHeadlightStatus());
 		this.vd.set_Actual_SteeringWheel_Angle(this.icl.getSteeringWheelAngle());
+		this.vd.set_TSR_Status(this.icl.is_TSR_Active());
+		this.vd.set_TSR_ActualSpeedLimit(this.icl.get_TSR_ActualSpeedLimit());
+		this.vd.set_TSR_NoSpeedLimit(this.icl.get_TSR_NoSpeedLimit());
+		this.vd.set_TSR_SixtyInCity(this.icl.get_TSR_SixtyInCity());
+		this.vd.set_TSR_StopSign(this.icl.get_TSR_StopSign());
+		this.vd.set_TSR_Yield(this.icl.get_TSR_Yield());
 		this.vd.invalidate();
 		this.vd.validate();
 		this.vd.repaint();
