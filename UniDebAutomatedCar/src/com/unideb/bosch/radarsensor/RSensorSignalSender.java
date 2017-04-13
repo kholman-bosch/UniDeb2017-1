@@ -68,7 +68,7 @@ public class RSensorSignalSender {
 			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.RADAR_LONGITUDINAL_DISTANCE_FROM_EGO, (int) actRadarObject.longitudinalDistance_From_EGO));
 			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.RADAR_LATERAL_RELATIVE_VELOCITY, (int) actRadarObject.longitudinalRelative_Velcity));
 			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.RADAR_LATERAL_DISTANCE_FROM_EGO, (int) actRadarObject.lateralDistance_From_EGO));
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.OBJECT_SIZE, 1));
+			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.OBJECT_SIZE, actRadarObject.parentWorldObject.getRadius()));
 		}
 	}
 }
