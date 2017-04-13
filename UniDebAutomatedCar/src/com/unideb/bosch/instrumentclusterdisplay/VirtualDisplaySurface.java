@@ -19,13 +19,17 @@ public class VirtualDisplaySurface extends JPanel {
 
 	private static final long serialVersionUID = 1;
 	private BufferedImage background, needle, r, n, d, p, rightindex, leftindex, headlight, steeringWheel;
+	private BufferedImage activespeedlimit_icon, nospeedlimit_icon, sixtyincity_icon, stop_icon, yield_icon, tsr_icon, acc_icon;
 	private int actual_KMH_Needle_Angle = 0;
 	private int actual_RPM_Needle_Angle = 0;
 	private int steeringWheel_Angle = 0;
 	private Rectangle backgroundRectangle, needleRectangle_KMH, needleRectangle_RPM;
 	private Rectangle r_Rectangle, n_Rectangle, d_Rectangle, p_Rectangle;
 	private Rectangle rightIndex_Rectangle, leftIndex_Rectangle, headlight_Rectangle, steeringWheel_Rectangle;
+	private Rectangle activespeedlimit_Rectangle, nospeedlimit_Rectangle, sixtyincity_Rectangle, stop_Rectangle, yield_Rectangle, acc_Rectangle, tsr_Rectangle;
 	private boolean show_R = true, show_N = true, show_D = true, show_P = true, show_RIndex = true, show_LIndex = true, show_Headlight = true;
+	private boolean show_nospeedlimit = true, show_sixtyincity = true, show_stop = true, show_yield = true, show_tsr = true, show_acc = true;
+	private int show_activespeedlimit = 50;
 
 	public VirtualDisplaySurface(AutomatedCar car) {
 		try {
@@ -39,6 +43,13 @@ public class VirtualDisplaySurface extends JPanel {
 			leftindex = ImageIO.read(new File("./ic_res/leftindex.png"));
 			headlight = ImageIO.read(new File("./ic_res/headl.png"));
 			steeringWheel = ImageIO.read(new File("./ic_res/steeringwheel.png"));
+			activespeedlimit_icon = ImageIO.read(new File("./ic_res/activespeedlimit.png"));
+			nospeedlimit_icon = ImageIO.read(new File("./ic_res/nospeedlimit.png"));
+			sixtyincity_icon = ImageIO.read(new File("./ic_res/sixtyincity.png"));
+			stop_icon = ImageIO.read(new File("./ic_res/stop.png"));
+			yield_icon = ImageIO.read(new File("./ic_res/yield.png"));
+			acc_icon = ImageIO.read(new File("./ic_res/accon.png"));
+			tsr_icon = ImageIO.read(new File("./ic_res/tsron.png"));
 		} catch (IOException ex) {
 			System.err.println(ex.getMessage() + " Error in virtual display! ImageIO.read");
 		}
@@ -53,6 +64,13 @@ public class VirtualDisplaySurface extends JPanel {
 		leftIndex_Rectangle = new Rectangle(0, 0, leftindex.getWidth(), leftindex.getHeight());
 		headlight_Rectangle = new Rectangle(0, 0, headlight.getWidth(), headlight.getHeight());
 		steeringWheel_Rectangle = new Rectangle(0, 0, steeringWheel.getWidth(), steeringWheel.getHeight());
+		activespeedlimit_Rectangle = new Rectangle(0, 0, activespeedlimit_icon.getWidth(), activespeedlimit_icon.getHeight());
+		nospeedlimit_Rectangle = new Rectangle(0, 0, nospeedlimit_icon.getWidth(), nospeedlimit_icon.getHeight());
+		sixtyincity_Rectangle = new Rectangle(0, 0, sixtyincity_icon.getWidth(), sixtyincity_icon.getHeight());
+		stop_Rectangle = new Rectangle(0, 0, stop_icon.getWidth(), stop_icon.getHeight());
+		yield_Rectangle = new Rectangle(0, 0, yield_icon.getWidth(), yield_icon.getHeight());
+		acc_Rectangle = new Rectangle(0, 0, acc_icon.getWidth(), acc_icon.getHeight());
+		tsr_Rectangle = new Rectangle(0, 0, tsr_icon.getWidth(), tsr_icon.getHeight());
 		this.setBackground(Color.black);
 		this.setVisible(true);
 	}
@@ -89,6 +107,63 @@ public class VirtualDisplaySurface extends JPanel {
 		gMatrix_RPM.rotate(Math.toRadians(actual_RPM_Needle_Angle), needleMidPoint_RPM_X, needleMidPoint_RPM_Y);
 		gMatrix_RPM.fillRect(needleLocationX_RPM, needleLocationY_RPM, needle.getWidth(), needle.getHeight());
 		//
+		if (this.show_acc) {
+			int iconLoc_X = 7;
+			int iconLoc_Y = 230;
+			acc_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
+			TexturePaint acc_Paint = new TexturePaint(acc_icon, acc_Rectangle);
+			gMatrix_Icons.setPaint(acc_Paint);
+			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, acc_icon.getWidth(), acc_icon.getHeight());
+		}
+		if (this.show_tsr) {
+			int iconLoc_X = 285;
+			int iconLoc_Y = 175;
+			tsr_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
+			TexturePaint tsr_Paint = new TexturePaint(tsr_icon, tsr_Rectangle);
+			gMatrix_Icons.setPaint(tsr_Paint);
+			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, tsr_icon.getWidth(), tsr_icon.getHeight());
+
+			if (this.show_activespeedlimit != 0) {
+				iconLoc_X = 179;
+				iconLoc_Y = 123;
+				activespeedlimit_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
+				TexturePaint activespeedlimit_Paint = new TexturePaint(activespeedlimit_icon, activespeedlimit_Rectangle);
+				gMatrix_Icons.setPaint(activespeedlimit_Paint);
+				gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, activespeedlimit_icon.getWidth(), activespeedlimit_icon.getHeight());
+			}
+			if (this.show_nospeedlimit) {
+				iconLoc_X = 304;
+				iconLoc_Y = 203;
+				nospeedlimit_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
+				TexturePaint nospeedlimit_Paint = new TexturePaint(nospeedlimit_icon, nospeedlimit_Rectangle);
+				gMatrix_Icons.setPaint(nospeedlimit_Paint);
+				gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, nospeedlimit_icon.getWidth(), nospeedlimit_icon.getHeight());
+			}
+			if (this.show_sixtyincity) {
+				iconLoc_X = 453;
+				iconLoc_Y = 203;
+				sixtyincity_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
+				TexturePaint sixtyincity_Paint = new TexturePaint(sixtyincity_icon, sixtyincity_Rectangle);
+				gMatrix_Icons.setPaint(sixtyincity_Paint);
+				gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, sixtyincity_icon.getWidth(), sixtyincity_icon.getHeight());
+			}
+			if (this.show_stop) {
+				iconLoc_X = 356;
+				iconLoc_Y = 203;
+				stop_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
+				TexturePaint stop_Paint = new TexturePaint(stop_icon, stop_Rectangle);
+				gMatrix_Icons.setPaint(stop_Paint);
+				gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, stop_icon.getWidth(), stop_icon.getHeight());
+			}
+			if (this.show_yield) {
+				iconLoc_X = 405;
+				iconLoc_Y = 203;
+				yield_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
+				TexturePaint yield_Paint = new TexturePaint(yield_icon, yield_Rectangle);
+				gMatrix_Icons.setPaint(yield_Paint);
+				gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, yield_icon.getWidth(), yield_icon.getHeight());
+			}
+		}
 		if (this.show_R) {
 			int iconLoc_X = 39 - 30;
 			int iconLoc_Y = 89 - 33;
