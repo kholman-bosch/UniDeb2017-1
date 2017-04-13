@@ -144,6 +144,11 @@ public class TSR_Logic extends SystemComponent {
 		case SignalDatabase.TSR_MODULE_STATUS:
 			if (s.getData() == 0) {
 				this.on = false;
+				this.yieldSignDetected = false;
+				this.sixtyInCitySignDetected = false;
+				this.noSpeedLimitSignDetected = false;
+				this.stopSignDetected = false;
+				this.actualSpeedLimit = 0;
 			} else {
 				this.on = true;
 			}

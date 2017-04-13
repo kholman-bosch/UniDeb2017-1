@@ -36,6 +36,7 @@ public class SignalDatabase {
 	public static final int POWERTRAIN_INDEX_INDICATORS = 26;
 	
 	public static final int TSR_MODULE_STATUS = 27;
+	public static final int DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC = 28;
 
 	// Check signal boundaries and limit according to the CommMatrix
 	public static int limit(int localData, int actData, int limit1, int limit2) {
