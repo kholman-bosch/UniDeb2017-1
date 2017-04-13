@@ -15,12 +15,14 @@ public class WorldObject {
 	private int y;
 	private float rotation;
 	private String type;
+	private float radius;
 
-	public WorldObject(int x, int y, float rotation, String type) {
+	public WorldObject(int x, int y, float rotation, String type, float radi) {
 		this.x = x;
 		this.y = y;
 		this.rotation = rotation;
 		this.type = type;
+		this.radius = radi;
 	}
 
 	public int getX() {
@@ -37,5 +39,9 @@ public class WorldObject {
 
 	public String getType() {
 		return type;
+	}
+
+	public float getRadius() {
+		return this.radius;
 	}
 }

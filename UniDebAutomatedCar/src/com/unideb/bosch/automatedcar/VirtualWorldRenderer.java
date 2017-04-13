@@ -94,9 +94,6 @@ public class VirtualWorldRenderer extends JPanel {
 	}
 
 	private void drawWorldObjectsDebugData(Graphics2D g) {
-		// -100,-100 offsets were told to us by the creator of the XML
-		// int XML_OffsetX = 100;
-		// int XML_OffsetY = 100;
 		g.setColor(Color.black);
 		g.setFont(defaultFontBOLD);
 		int size = WorldObjectParser.getInstance().getWorldObjects().size();

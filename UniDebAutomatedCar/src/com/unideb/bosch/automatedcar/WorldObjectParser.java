@@ -47,7 +47,10 @@ public class WorldObjectParser {
 				// I extract the rotation from the first component by doint an invers cosine
 				float rot = Float.parseFloat((e.getElementsByTagName("Transform").item(0).getAttributes().getNamedItem("m11").getTextContent().toString()));
 				String typef = e.getAttributes().getNamedItem("type").getTextContent().toString();
-				WorldObject object = new WorldObject(x - XML_OFFSET_X, y - XML_OFFSET_Y, (float) (Math.acos(rot)), typef);
+				float objRadius = getObjectRadius(typef);
+				int objMidPointX = x - XML_OFFSET_X + (int) objRadius;
+				int objMidPointY = y - XML_OFFSET_Y + (int) objRadius;
+				WorldObject object = new WorldObject(objMidPointX, objMidPointY, (float) (Math.acos(rot)), typef, objRadius);
 				worldObjects.add(object);
 			}
 		} catch (Exception e) {
@@ -69,5 +72,22 @@ public class WorldObjectParser {
 
 	public ArrayList<WorldObject> getWorldObjects() {
 		return worldObjects;
+	}
+
+	private float getObjectRadius(String o_type) {
+		switch (o_type) {
+		case "tree":
+			return 150f / 2f;
+		case "man":
+			return 80f / 2f;
+		case "parking_bollard":
+			return 80f / 2f;
+		default:
+			if (o_type.contains("sign")) {
+				return 80f / 2f;
+			}
+			break;
+		}
+		return 1f;
 	}
 }
