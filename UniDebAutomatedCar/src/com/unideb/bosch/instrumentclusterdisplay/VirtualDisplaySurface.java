@@ -25,8 +25,7 @@ public class VirtualDisplaySurface extends JPanel {
 	private Rectangle backgroundRectangle, needleRectangle_KMH, needleRectangle_RPM;
 	private Rectangle r_Rectangle, n_Rectangle, d_Rectangle, p_Rectangle;
 	private Rectangle rightIndex_Rectangle, leftIndex_Rectangle, headlight_Rectangle, steeringWheel_Rectangle;
-	private boolean show_R = true, show_N = true, show_D = true, show_P = true, show_RIndex = true, show_LIndex = true,
-			show_Headlight = true;
+	private boolean show_R = true, show_N = true, show_D = true, show_P = true, show_RIndex = true, show_LIndex = true, show_Headlight = true;
 
 	public VirtualDisplaySurface(AutomatedCar car) {
 		try {
@@ -91,39 +90,39 @@ public class VirtualDisplaySurface extends JPanel {
 		gMatrix_RPM.fillRect(needleLocationX_RPM, needleLocationY_RPM, needle.getWidth(), needle.getHeight());
 		//
 		if (this.show_R) {
-			int iconLoc_X = 39;
-			int iconLoc_Y = 89;
+			int iconLoc_X = 39 - 30;
+			int iconLoc_Y = 89 - 33;
 			r_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
 			TexturePaint r_Paint = new TexturePaint(r, r_Rectangle);
 			gMatrix_Icons.setPaint(r_Paint);
 			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, r.getWidth(), r.getHeight());
 		}
 		if (this.show_N) {
-			int iconLoc_X = 39;
-			int iconLoc_Y = 139;
+			int iconLoc_X = 39 - 30;
+			int iconLoc_Y = 139 - 33;
 			n_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
 			TexturePaint n_Paint = new TexturePaint(n, n_Rectangle);
 			gMatrix_Icons.setPaint(n_Paint);
 			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, n.getWidth(), n.getHeight());
 		}
 		if (this.show_D) {
-			int iconLoc_X = 39;
-			int iconLoc_Y = 189;
+			int iconLoc_X = 39 - 30;
+			int iconLoc_Y = 189 - 33;
 			d_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
 			TexturePaint d_Paint = new TexturePaint(d, d_Rectangle);
 			gMatrix_Icons.setPaint(d_Paint);
 			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, d.getWidth(), d.getHeight());
 		}
 		if (this.show_P) {
-			int iconLoc_X = 39;
-			int iconLoc_Y = 39;
+			int iconLoc_X = 39 - 30;
+			int iconLoc_Y = 39 - 33;
 			p_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
 			TexturePaint p_Paint = new TexturePaint(p, p_Rectangle);
 			gMatrix_Icons.setPaint(p_Paint);
 			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, p.getWidth(), p.getHeight());
 		}
 		if (this.show_RIndex) {
-			int iconLoc_X = 352;
+			int iconLoc_X = 352 - 130;
 			int iconLoc_Y = 198;
 			rightIndex_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
 			TexturePaint rightIndex_Paint = new TexturePaint(rightindex, rightIndex_Rectangle);
@@ -131,7 +130,7 @@ public class VirtualDisplaySurface extends JPanel {
 			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, rightindex.getWidth(), rightindex.getHeight());
 		}
 		if (this.show_LIndex) {
-			int iconLoc_X = 292;
+			int iconLoc_X = 292 - 130;
 			int iconLoc_Y = 198;
 			leftIndex_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
 			TexturePaint leftIndex_Paint = new TexturePaint(leftindex, leftIndex_Rectangle);
@@ -139,7 +138,7 @@ public class VirtualDisplaySurface extends JPanel {
 			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, leftindex.getWidth(), leftindex.getHeight());
 		}
 		if (this.show_Headlight) {
-			int iconLoc_X = 205;
+			int iconLoc_X = 205 - 130;
 			int iconLoc_Y = 200;
 			headlight_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
 			TexturePaint headLight_Paint = new TexturePaint(headlight, headlight_Rectangle);
@@ -164,7 +163,7 @@ public class VirtualDisplaySurface extends JPanel {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		//super.paintComponent(g);
+		// super.paintComponent(g);
 		doDrawing(g);
 	}
 
