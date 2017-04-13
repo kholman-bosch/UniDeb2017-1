@@ -23,9 +23,9 @@ public class SignalDatabase {
 	public static final int RADAR_LATERAL_RELATIVE_VELOCITY = 13;
 	public static final int RADAR_LATERAL_DISTANCE_FROM_EGO = 14;
 	public static final int OBJECT_SIZE = 15;
-	//
-	//
-	//
+	public static final int TRAFFIC_SIGN_MEANING = 16;
+	public static final int TRAFFIC_SIGN_LATERAL_DISTANCE_FROM_EGO = 17;
+	public static final int TRAFFIC_SIGN_LONGITUDINAL_DISTANCE_FROM_EGO = 18;
 	public static final int RADAR_SENSOR_POS_X = 19;
 	public static final int RADAR_SENSOR_POS_Y = 20;
 	public static final int MOST_RELEVANT_SPEED_LIMIT = 21;

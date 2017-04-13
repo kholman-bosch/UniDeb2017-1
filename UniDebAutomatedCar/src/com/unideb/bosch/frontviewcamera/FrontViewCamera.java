@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.unideb.bosch.SignalDatabase;
 import com.unideb.bosch.automatedcar.AutomatedCar;
 import com.unideb.bosch.automatedcar.VirtualWorld;
 import com.unideb.bosch.automatedcar.WorldObjectParser;
@@ -312,9 +313,9 @@ public class FrontViewCamera extends SystemComponent {
 		Collections.sort(detectedRoadSigns);
 		int size = detectedRoadSigns.size() > 5 ? 5 : detectedRoadSigns.size();
 		for (int i = 0; i < size; i++) {
-			VirtualFunctionBus.sendSignal(new Signal(16, detectedRoadSigns.get(i).getTrafficSignMeaing()));
-			VirtualFunctionBus.sendSignal(new Signal(17, detectedRoadSigns.get(i).getLongitudinalEGO()));
-			VirtualFunctionBus.sendSignal(new Signal(18, detectedRoadSigns.get(i).getLateralEGO()));
+			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.TRAFFIC_SIGN_MEANING, detectedRoadSigns.get(i).getTrafficSignMeaing()));
+			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.TRAFFIC_SIGN_LATERAL_DISTANCE_FROM_EGO, detectedRoadSigns.get(i).getLongitudinalEGO()));
+			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.TRAFFIC_SIGN_LONGITUDINAL_DISTANCE_FROM_EGO, detectedRoadSigns.get(i).getLateralEGO()));
 		}
 	}
 
