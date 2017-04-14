@@ -91,6 +91,22 @@ public class InstrumentClusterLogic extends SystemComponent {
 				break;
 			}
 			break;
+		case SignalDatabase.DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC:
+			switch (actValue) {
+			case 0:
+				this.tsr_noSpeedLimitSign = false;
+				break;
+			case 1:
+				this.tsr_stopSing = false;
+				break;
+			case 2:
+				this.tsr_citySixtySign = false;
+				break;
+			case 3:
+				this.tsr_yieldSing = false;
+				break;
+			}
+			break;
 		case SignalDatabase.TSR_MODULE_STATUS:
 			if (actValue == 0) {
 				this.tsr_on = false;

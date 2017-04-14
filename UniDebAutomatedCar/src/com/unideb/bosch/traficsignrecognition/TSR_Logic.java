@@ -15,33 +15,65 @@ public class TSR_Logic extends SystemComponent {
 	private boolean noSpeedLimitSignDetected = false;
 	private boolean sixtyInCitySignDetected = false;
 	private boolean yieldSignDetected = false;
+	// timers
+	private double fiveSecondsInMS = 5000, twoSecondsInMS = 2000;
+	private double noSpeedLimitDetectedTimer = 0d;
+	private double stopSignDetectedTimer = 0d;
+	private double yieldDetectedTimer = 0d;
 
 	@Override
 	public void cyclic() {
-		if (this.discardSignSignals) {
+		// TO DO: sign drop logic
+		if (!this.on || this.discardSignSignals) {
 			this.yieldSignDetected = false;
 			this.sixtyInCitySignDetected = false;
 			this.noSpeedLimitSignDetected = false;
+			this.noSpeedLimitDetectedTimer = 0d;
 			this.stopSignDetected = false;
 			this.actualSpeedLimit = 0;
 		}
-		// TO DO: sign drop logic
+		// discard on no signal signs after 2 seconds:
+		if (this.yieldSignDetected) {
+			if (getNanotimeInMS() > (this.yieldDetectedTimer + twoSecondsInMS)) {
+				this.yieldSignDetected = false;
+			}
+		}
+		if (this.stopSignDetected) {
+			if (getNanotimeInMS() > (this.stopSignDetectedTimer + twoSecondsInMS)) {
+				this.stopSignDetected = false;
+			}
+		}
+		// timers:
+		if (this.noSpeedLimitSignDetected) {
+			if (getNanotimeInMS() > (this.noSpeedLimitDetectedTimer + fiveSecondsInMS)) {
+				this.noSpeedLimitSignDetected = false;
+			}
+		}
 		this.sendSignals();
 	}
 
 	public void sendSignals() {
 		if (this.stopSignDetected) {
 			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 1));
+		} else {
+			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 1));
 		}
 		if (this.noSpeedLimitSignDetected) {
 			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 0));
+		} else {
+			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 0));
 		}
 		if (this.sixtyInCitySignDetected) {
 			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 2));
+		} else {
+			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 2));
 		}
 		if (this.yieldSignDetected) {
 			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 3));
+		} else {
+			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 3));
 		}
+		//
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.MOST_RELEVANT_SPEED_LIMIT, this.actualSpeedLimit));
 	}
 
@@ -52,80 +84,63 @@ public class TSR_Logic extends SystemComponent {
 			switch ((int) s.getData()) {
 			case RoadSign.ROAD_SIGN_PRIORITY_STOP:
 				this.stopSignDetected = true;
+				this.stopSignDetectedTimer = getNanotimeInMS();
 				break;
 			case RoadSign.ROAD_SIGN_PRIORITY_MAINROAD:
 				this.sixtyInCitySignDetected = true;
 				break;
+			case 23:
+				this.noSpeedLimitSignDetected = true;
+				this.noSpeedLimitDetectedTimer = getNanotimeInMS();
+				this.actualSpeedLimit = 0;
+				this.sixtyInCitySignDetected = false;
+				break;
+			case 26:
+				this.yieldSignDetected = true;
+				this.yieldDetectedTimer = getNanotimeInMS();
+				break;
 			////
 			case RoadSign.ROAD_SIGN_SPEED_5:
-				if (this.actualSpeedLimit < 5) {
-					this.actualSpeedLimit = 5;
-				}
+				this.actualSpeedLimit = 5;
 				break;
 			case RoadSign.ROAD_SIGN_SPEED_10:
-				if (this.actualSpeedLimit < 10) {
-					this.actualSpeedLimit = 10;
-				}
+				this.actualSpeedLimit = 10;
 				break;
 			case RoadSign.ROAD_SIGN_SPEED_20:
-				if (this.actualSpeedLimit < 20) {
-					this.actualSpeedLimit = 20;
-				}
+				this.actualSpeedLimit = 20;
 				break;
 			case RoadSign.ROAD_SIGN_SPEED_30:
-				if (this.actualSpeedLimit < 30) {
-					this.actualSpeedLimit = 30;
-				}
+				this.actualSpeedLimit = 30;
 				break;
 			case RoadSign.ROAD_SIGN_SPEED_40:
-				if (this.actualSpeedLimit < 40) {
-					this.actualSpeedLimit = 40;
-				}
+				this.actualSpeedLimit = 40;
 				break;
 			case RoadSign.ROAD_SIGN_SPEED_50:
-				if (this.actualSpeedLimit < 50) {
-					this.actualSpeedLimit = 50;
-				}
+				this.actualSpeedLimit = 50;
 				break;
 			case RoadSign.ROAD_SIGN_SPEED_60:
-				if (this.actualSpeedLimit < 60) {
-					this.actualSpeedLimit = 60;
-				}
+				this.actualSpeedLimit = 60;
 				break;
 			case RoadSign.ROAD_SIGN_SPEED_70:
-				if (this.actualSpeedLimit < 70) {
-					this.actualSpeedLimit = 70;
-				}
+				this.actualSpeedLimit = 70;
 				break;
 			case RoadSign.ROAD_SIGN_SPEED_80:
-				if (this.actualSpeedLimit < 80) {
-					this.actualSpeedLimit = 80;
-				}
+				this.actualSpeedLimit = 80;
 				break;
 			case RoadSign.ROAD_SIGN_SPEED_90:
-				if (this.actualSpeedLimit < 90) {
-					this.actualSpeedLimit = 90;
-				}
+				this.actualSpeedLimit = 90;
 				break;
 			case RoadSign.ROAD_SIGN_SPEED_100:
-				if (this.actualSpeedLimit < 100) {
-					this.actualSpeedLimit = 100;
-				}
+				this.actualSpeedLimit = 100;
 				break;
 			case RoadSign.ROAD_SIGN_SPEED_110:
-				if (this.actualSpeedLimit < 110) {
-					this.actualSpeedLimit = 110;
-				}
+				this.actualSpeedLimit = 110;
 				break;
 			case RoadSign.ROAD_SIGN_SPEED_120:
-				if (this.actualSpeedLimit < 120) {
-					this.actualSpeedLimit = 120;
-				}
+				this.actualSpeedLimit = 120;
 				break;
 			case RoadSign.ROAD_SIGN_SPEED_130:
-				if (this.actualSpeedLimit < 130) {
-					this.actualSpeedLimit = 130;
-				}
+				this.actualSpeedLimit = 130;
 				break;
 			}
 			break;
@@ -144,15 +159,14 @@ public class TSR_Logic extends SystemComponent {
 		case SignalDatabase.TSR_MODULE_STATUS:
 			if (s.getData() == 0) {
 				this.on = false;
-				this.yieldSignDetected = false;
-				this.sixtyInCitySignDetected = false;
-				this.noSpeedLimitSignDetected = false;
-				this.stopSignDetected = false;
-				this.actualSpeedLimit = 0;
 			} else {
 				this.on = true;
 			}
 			break;
 		}
+	}
+
+	private static double getNanotimeInMS() {
+		return (System.nanoTime() / 1000000d);
 	}
 }

@@ -34,7 +34,7 @@ public class SignalDatabase {
 	public static final int POWERTRAIN_GEAR_POSITION = 24;
 	public static final int POWERTRAIN_HEADLIGHT = 25;
 	public static final int POWERTRAIN_INDEX_INDICATORS = 26;
-	
+
 	public static final int TSR_MODULE_STATUS = 27;
 	public static final int DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC = 28;
 
