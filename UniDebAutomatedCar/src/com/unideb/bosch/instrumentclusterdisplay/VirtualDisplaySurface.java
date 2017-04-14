@@ -1,6 +1,7 @@
 package com.unideb.bosch.instrumentclusterdisplay;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -30,6 +31,7 @@ public class VirtualDisplaySurface extends JPanel {
 	private boolean show_R = true, show_N = true, show_D = true, show_P = true, show_RIndex = true, show_LIndex = true, show_Headlight = true;
 	private boolean show_nospeedlimit = true, show_sixtyincity = true, show_stop = true, show_yield = true, show_tsr = true, show_acc = true;
 	private int show_activespeedlimit = 50;
+	private static Font defaultFontBOLD = new Font("default", Font.BOLD, 12);
 
 	public VirtualDisplaySurface(AutomatedCar car) {
 		try {
@@ -130,6 +132,9 @@ public class VirtualDisplaySurface extends JPanel {
 				TexturePaint activespeedlimit_Paint = new TexturePaint(activespeedlimit_icon, activespeedlimit_Rectangle);
 				gMatrix_Icons.setPaint(activespeedlimit_Paint);
 				gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, activespeedlimit_icon.getWidth(), activespeedlimit_icon.getHeight());
+				g.setFont(defaultFontBOLD);
+				g.setColor(Color.white);
+				g.drawString(String.valueOf(this.show_activespeedlimit), iconLoc_X + 18, iconLoc_Y + 32);
 			}
 			if (this.show_nospeedlimit) {
 				iconLoc_X = 304;
