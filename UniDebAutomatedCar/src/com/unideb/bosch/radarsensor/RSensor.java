@@ -153,6 +153,7 @@ public class RSensor extends SystemComponent { // radar sensor
 		float dx = (radarSensorPos_X - object.getX()) * (radarSensorPos_X - object.getX());
 		float dy = (radarSensorPos_Y - object.getY()) * (radarSensorPos_Y - object.getY());
 		float distance = (float) Math.sqrt((double) (dx + dy));
+		distance -= object.getRadius();
 		if (distance < this.maximumDetectRange && distance > this.minimumDetectRange) {
 			float maxDetectRangeScaled = (this.maximumDetectRange * 2); // to make the triangle large enough, this hack works because before this test there is a distance test
 			float sensorForward_X_end = radarSensorPos_X + (this.carForwardVector_X * maxDetectRangeScaled);
