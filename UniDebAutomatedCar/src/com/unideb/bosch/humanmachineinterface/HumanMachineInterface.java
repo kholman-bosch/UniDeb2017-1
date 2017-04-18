@@ -15,13 +15,13 @@ import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 
 public class HumanMachineInterface extends SystemComponent {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	// private static final Logger LOGGER = LogManager.getLogger();
 
 	private KeyListener keyListener;
 
 	public HumanMachineInterface() {
 		super();
-		LOGGER.debug("HMI created!");
+		// LOGGER.debug("HMI created!");
 		keyListener = this.new HMIKeyHandler();
 		VirtualWorld.addKeyListenerToFrame(keyListener);
 	}
@@ -33,7 +33,7 @@ public class HumanMachineInterface extends SystemComponent {
 	boolean breakPressed = false;
 	boolean left = false;
 	boolean right = false;
-	
+
 	// By default TSD is enabled
 	private boolean tsrEnabled = true;
 
@@ -56,7 +56,7 @@ public class HumanMachineInterface extends SystemComponent {
 				break;
 			}
 
-			LOGGER.debug(keyEvent.getKeyCode() + " key were pressed!");
+			// LOGGER.debug(keyEvent.getKeyCode() + " key were pressed!");
 		}
 
 		@Override
@@ -91,7 +91,7 @@ public class HumanMachineInterface extends SystemComponent {
 				break;
 			}
 
-			LOGGER.debug(keyEvent.getKeyCode() + " key were released!");
+			// LOGGER.debug(keyEvent.getKeyCode() + " key were released!");
 		}
 
 		int lastIndicatorSignal = 0;
@@ -147,7 +147,7 @@ public class HumanMachineInterface extends SystemComponent {
 				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.TSR_MODULE_STATUS, tsrEnabled ? 1 : 0));
 			}
 
-			LOGGER.debug(keyEvent.getKeyCode() + " key were typed!");
+			// LOGGER.debug(keyEvent.getKeyCode() + " key were typed!");
 		}
 
 	}
@@ -156,22 +156,18 @@ public class HumanMachineInterface extends SystemComponent {
 	public void cyclic() {
 		if (gasPressed) {
 			if (gasPedalPosition < 100) {
-				gasPedalPosition++;
+				gasPedalPosition += 5;
 			}
 		} else {
-			if (gasPedalPosition > 0) {
-				gasPedalPosition--;
-			}
+			gasPedalPosition = 0;
 		}
 
 		if (breakPressed) {
 			if (breakPedalPosition < 100) {
-				breakPedalPosition++;
+				breakPedalPosition += 5;
 			}
 		} else {
-			if (breakPedalPosition > 0) {
-				breakPedalPosition--;
-			}
+			breakPedalPosition = 0;
 		}
 
 		if (left && steeringWheelAngle > -720) {
@@ -186,14 +182,14 @@ public class HumanMachineInterface extends SystemComponent {
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.STEERING_WHEEL_ANGLE, steeringWheelAngle));
 
 		// TODO Auto-generated method stub
-		LOGGER.debug("HMI cyclic()");
+		// LOGGER.debug("HMI cyclic()");
 
 	}
 
 	@Override
 	public void receiveSignal(Signal s) {
 		// TODO Auto-generated method stub
-		LOGGER.debug("HMI receiveSignal()");
+		// LOGGER.debug("HMI receiveSignal()");
 	}
 
 }

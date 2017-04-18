@@ -31,7 +31,7 @@ public class PowertrainSystem extends SystemComponent {
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_INDEX_INDICATORS, this.data_index));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_GEAR_POSITION, this.data_gear_position));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_STEERING_WHEEL_ANGLE, this.data_steering_wheel_angle));
-		//this.writeInTerminalInfos();
+		// this.writeInTerminalInfos();
 	}
 
 	@Override
@@ -72,14 +72,6 @@ public class PowertrainSystem extends SystemComponent {
 		}
 	}
 
-	public int getCarSpeed() {
-		float brakeSlowdown = 1f - this.data_brake_pedal_position / 100f;
-		if (brakeSlowdown == 0) {
-			return this.data_vehicle_speed;
-		}
-		return (int) (this.data_vehicle_speed * brakeSlowdown);
-	}
-	
 	public int getSteeringWheelAngle() {
 		return this.data_steering_wheel_angle;
 	}
@@ -109,6 +101,11 @@ public class PowertrainSystem extends SystemComponent {
 		}
 	}
 
+	public int getCarSpeed() {
+		float brakeSlowdown = 1f - this.data_brake_pedal_position / 100f;
+		return (int) (this.data_vehicle_speed * brakeSlowdown);
+	}
+
 	private void calcSpeed_MotorRPMandSendSignals() {
 		switch (this.data_gear_position) {
 		case 0: // drive
@@ -126,18 +123,17 @@ public class PowertrainSystem extends SystemComponent {
 		case 3: // park
 			break;
 		}
-
 		float rpm = this.data_gas_pedal_position / 100f * 9000;
 		this.data_motor_rpm = SignalDatabase.limit(this.data_motor_rpm, (int) rpm, 0, 9000);
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.data_vehicle_speed));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.getCarSpeed()));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.MOTOR_RPM, this.data_motor_rpm));
 	}
 
 	// Write in the Terminal the actual status about the Signals
 	private void writeInTerminalInfos() {
 		System.out.println("---POWERTRAINSYSTEM---");
-		//System.out.println("GAS_PEDAL_POSITION data: " + this.data_gas_pedal_position);
-		//System.out.println("BRAKE_PEDAL_POSITION data: " + this.data_brake_pedal_position);
+		// System.out.println("GAS_PEDAL_POSITION data: " + this.data_gas_pedal_position);
+		// System.out.println("BRAKE_PEDAL_POSITION data: " + this.data_brake_pedal_position);
 		System.out.println("VEHICLE_SPEED data: " + this.data_vehicle_speed);
 		System.out.println("MOTOR_RPM data: " + this.data_motor_rpm);
 		System.out.println("HEADLIGHT data: " + this.data_headlight);
