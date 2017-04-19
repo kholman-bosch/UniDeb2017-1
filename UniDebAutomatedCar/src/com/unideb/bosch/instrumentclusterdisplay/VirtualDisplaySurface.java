@@ -248,7 +248,8 @@ public class VirtualDisplaySurface extends JPanel {
 	}
 
 	public void set_Actual_KMH_Needle_Angle(int kmh) {
-		float actKMH_needleIndicator_Angle = (kmh / 120f) * 245;
+		kmh -= 10; //the kmh graphics start at 10kmh
+		float actKMH_needleIndicator_Angle = (kmh / 120f) * 268;
 		this.actual_KMH_Needle_Angle = (int) actKMH_needleIndicator_Angle;
 	}
 
