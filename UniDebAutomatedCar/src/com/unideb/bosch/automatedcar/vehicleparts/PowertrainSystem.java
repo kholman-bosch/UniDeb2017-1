@@ -21,6 +21,9 @@ public class PowertrainSystem extends SystemComponent {
 	private int data_gear_position = 3;
 	//
 	private float car_Speed_Pixels = 0f;
+	private float neutral_rpm = 0;
+	private int inner_gear_state_in_D = 1;
+	private int keep_alive_rpm = 1100, maximum_rpm = 9000;
 
 	public PowertrainSystem() {
 		super();
@@ -29,6 +32,7 @@ public class PowertrainSystem extends SystemComponent {
 	@Override
 	public void cyclic() {
 		this.calculatePowertrainPhysics();
+		this.calcMotorRPM();
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_HEADLIGHT, this.data_headlight));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_INDEX_INDICATORS, this.data_index));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_GEAR_POSITION, this.data_gear_position));
@@ -109,6 +113,105 @@ public class PowertrainSystem extends SystemComponent {
 
 	public int getCarSpeed_InPixels() {
 		return (int) this.car_Speed_Pixels;
+	}
+
+	public void calcMotorRPM() {
+		int minRPM, maxRPM, startSpeed, endSpeed;
+		float car_Speed = this.pixels_To_mps_To_kmh(this.car_Speed_Pixels);
+
+		switch (this.data_gear_position) {
+		case 0: // drive
+			if (this.inner_gear_state_in_D <= 0) {
+				this.inner_gear_state_in_D = 1;
+			}
+			this.neutral_rpm = 0;
+			break;
+		case 1: // neutral
+			this.inner_gear_state_in_D = -1;
+			if (this.data_gas_pedal_position != 0) {
+				this.neutral_rpm = this.data_gas_pedal_position;
+			} else {
+				this.neutral_rpm -= 5;
+				if (this.neutral_rpm < 0) {
+					this.neutral_rpm = 0;
+				}
+			}
+			break;
+		case 2: // reverse
+			this.inner_gear_state_in_D = 0;
+			this.neutral_rpm = 0;
+			break;
+		case 3: // park
+			this.neutral_rpm = 0;
+			break;
+		}
+
+		switch (this.inner_gear_state_in_D) {
+		case -1:
+		default:
+			startSpeed = 0;
+			endSpeed = 120;
+			minRPM = this.keep_alive_rpm;
+			maxRPM = 9000;
+			car_Speed = this.neutral_rpm * 1.2f;
+			break;
+		case 0:// reverse 0-50
+			startSpeed = 0;
+			endSpeed = 35;
+			minRPM = this.keep_alive_rpm;
+			maxRPM = 3200;
+			car_Speed = -car_Speed;
+			break;
+		case 1:// 0-30
+			startSpeed = 0;
+			endSpeed = 30;
+			minRPM = this.keep_alive_rpm;
+			maxRPM = 3700;
+			if (car_Speed >= endSpeed) {
+				this.inner_gear_state_in_D = 2;
+			}
+			break;
+		case 2:// 30-70
+			startSpeed = 30;
+			endSpeed = 70;
+			minRPM = 2200;
+			maxRPM = 3700;
+			if (car_Speed < startSpeed) {
+				this.inner_gear_state_in_D = 1;
+			}
+			if (car_Speed >= endSpeed) {
+				this.inner_gear_state_in_D = 3;
+			}
+			break;
+		case 3:// 70-90
+			startSpeed = 70;
+			endSpeed = 90;
+			minRPM = 2200;
+			maxRPM = 3700;
+			if (car_Speed < startSpeed) {
+				this.inner_gear_state_in_D = 2;
+			}
+			if (car_Speed >= endSpeed) {
+				this.inner_gear_state_in_D = 4;
+			}
+			break;
+		case 4:// 90-120
+			startSpeed = 90;
+			endSpeed = 120;
+			minRPM = 2700;
+			maxRPM = 9000;
+			if (car_Speed < startSpeed) {
+				this.inner_gear_state_in_D = 3;
+			}
+			break;
+		}
+		this.data_motor_rpm = (int) (minRPM + (car_Speed - startSpeed) * ((maxRPM - minRPM) / (endSpeed - startSpeed)));
+		if (this.data_motor_rpm < this.keep_alive_rpm) {
+			this.data_motor_rpm = this.keep_alive_rpm;
+		}
+		if (this.data_motor_rpm > this.maximum_rpm) {
+			this.data_motor_rpm = this.maximum_rpm;
+		}
 	}
 
 	@Override
