@@ -29,7 +29,7 @@ public final class AutomatedCar {
 	private PowertrainSystem powertrainSystem;
 	private BufferedImage carImage, scaledCarImage;
 	private Rectangle carImageRectange;
-	public float carSpeed = 0f;
+	public float carSpeedInPixels = 0f;
 	private float steerAngle = 0f;
 	public float carHeading_Angle = 0f;
 	public final float wheelBase = 160f;
@@ -107,7 +107,7 @@ public final class AutomatedCar {
 		VirtualFunctionBus.cyclic();
 		// Update the position and orientation of the car
 		this.steerAngle = this.powertrainSystem.getSteeringWheelAngle();
-		this.carSpeed = this.powertrainSystem.getCarSpeed();
+		this.carSpeedInPixels = this.powertrainSystem.getCarSpeed_InPixels();
 		this.carPhysics();
 		this.teleportCarIntoBounds();
 		// TODO somehow need to send float value instead of long
@@ -127,10 +127,10 @@ public final class AutomatedCar {
 		float frontWheel_Y = this.carPos_Y + (this.wheelBase / 2f) * (float) Math.cos(this.carHeading_Angle);
 		float backWheel_X = this.carPos_X - (this.wheelBase / 2f) * (float) Math.sin(this.carHeading_Angle);
 		float backWheel_Y = this.carPos_Y - (this.wheelBase / 2f) * (float) Math.cos(this.carHeading_Angle);
-		frontWheel_X += this.carSpeed * (float) Math.sin(this.carHeading_Angle + Math.toRadians(this.steerAngle));
-		frontWheel_Y += this.carSpeed * (float) Math.cos(this.carHeading_Angle + Math.toRadians(this.steerAngle));
-		backWheel_X += this.carSpeed * (float) Math.sin(this.carHeading_Angle);
-		backWheel_Y += this.carSpeed * (float) Math.cos(this.carHeading_Angle);
+		frontWheel_X += this.carSpeedInPixels * (float) Math.sin(this.carHeading_Angle + Math.toRadians(this.steerAngle));
+		frontWheel_Y += this.carSpeedInPixels * (float) Math.cos(this.carHeading_Angle + Math.toRadians(this.steerAngle));
+		backWheel_X += this.carSpeedInPixels * (float) Math.sin(this.carHeading_Angle);
+		backWheel_Y += this.carSpeedInPixels * (float) Math.cos(this.carHeading_Angle);
 		this.carPos_X = (frontWheel_X + backWheel_X) / 2f;
 		this.carPos_Y = (frontWheel_Y + backWheel_Y) / 2f;
 		this.carHeading_Angle = (float) Math.atan2(frontWheel_X - backWheel_X, frontWheel_Y - backWheel_Y);

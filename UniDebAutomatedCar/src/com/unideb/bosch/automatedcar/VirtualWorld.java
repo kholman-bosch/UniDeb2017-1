@@ -84,6 +84,10 @@ public final class VirtualWorld {
 		return renderer.getGraphicsScale();
 	}
 
+	public static int getTicksPerSecond() {
+		return 1000 / logicCyclePeriod;
+	}
+
 	public static float getGraphicsInterpolationValue() {
 		return graphics_Interpolation;
 	}

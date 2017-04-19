@@ -1,6 +1,7 @@
 package com.unideb.bosch.automatedcar.vehicleparts;
 
 import com.unideb.bosch.SignalDatabase;
+import com.unideb.bosch.automatedcar.VirtualWorld;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
@@ -19,7 +20,7 @@ public class PowertrainSystem extends SystemComponent {
 	private int data_steering_wheel_angle = 0;
 	private int data_gear_position = 3;
 	//
-	private float car_Speed = 0f;
+	private float car_Speed_Pixels = 0f;
 
 	public PowertrainSystem() {
 		super();
@@ -32,25 +33,25 @@ public class PowertrainSystem extends SystemComponent {
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_INDEX_INDICATORS, this.data_index));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_GEAR_POSITION, this.data_gear_position));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_STEERING_WHEEL_ANGLE, this.data_steering_wheel_angle));
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.car_Speed));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.pixels_To_mps_To_kmh(this.car_Speed_Pixels)));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.MOTOR_RPM, this.data_motor_rpm));
 		// this.writeInTerminalInfos();
 	}
 
 	private void calculatePowertrainPhysics() {
-		float maxForwardSpeed = 120f;
-		float maxReverseSpeed = 35f;
-		//negative powers
+		float maxForwardSpeed_InPixels = this.kmh_To_pixelsPerTick(120f); // when we clamp speeds we need to clamp pixel values so we need to convert kmh to pixels
+		float maxReverseSpeed_InPixels = this.kmh_To_pixelsPerTick(35f);
+		// negative powers
 		float powerFromBreakPedal = this.data_brake_pedal_position / 100f;
 		float maximumBrakingPower = -30f;
 		float negativePowerFromBraking = maximumBrakingPower * powerFromBreakPedal;
 		float baseNegativePowers_GRAV_FRICT = -4f;
 		float allNegativePowers = baseNegativePowers_GRAV_FRICT + negativePowerFromBraking;
-		//positive powers
+		// positive powers
 		float powerFromGasPedal = this.data_gas_pedal_position / 100f;
 		float maximumForwardPower = 5f;
 		float allPositivePowers = 0f;
-		//total powers
+		// total powers
 		if (powerFromGasPedal > 0f) {
 			allPositivePowers = Math.abs(baseNegativePowers_GRAV_FRICT) + (maximumForwardPower * powerFromGasPedal);
 		}
@@ -58,42 +59,56 @@ public class PowertrainSystem extends SystemComponent {
 		// gear logic
 		switch (this.data_gear_position) {
 		case 0: // drive
-			this.car_Speed += allPowers;
-			if (this.car_Speed < 0f) {
-				this.car_Speed = 0f;
+			this.car_Speed_Pixels += allPowers;
+			if (this.car_Speed_Pixels < 0f) {
+				this.car_Speed_Pixels = 0f;
 			}
 			// max speed limit
-			if (this.car_Speed > maxForwardSpeed) {
-				this.car_Speed = maxForwardSpeed;
+			if (this.car_Speed_Pixels > maxForwardSpeed_InPixels) {
+				this.car_Speed_Pixels = maxForwardSpeed_InPixels;
 			}
 			break;
 		case 1: // neutral
-			this.car_Speed += allNegativePowers;
-			if (this.car_Speed < 0f) {
-				this.car_Speed = 0f;
+			this.car_Speed_Pixels += allNegativePowers;
+			if (this.car_Speed_Pixels < 0f) {
+				this.car_Speed_Pixels = 0f;
 			}
 			break;
 		case 2: // reverse
-			this.car_Speed -= allPowers;
-			if (this.car_Speed > 0f) {
-				this.car_Speed = 0f;
+			this.car_Speed_Pixels -= allPowers;
+			if (this.car_Speed_Pixels > 0f) {
+				this.car_Speed_Pixels = 0f;
 			}
 			// max speed limit
-			if (this.car_Speed < -maxReverseSpeed) {
-				this.car_Speed = -maxReverseSpeed;
+			if (this.car_Speed_Pixels < -maxReverseSpeed_InPixels) {
+				this.car_Speed_Pixels = -maxReverseSpeed_InPixels;
 			}
 			break;
 		case 3: // park
-			this.car_Speed += allNegativePowers;
-			if (this.car_Speed < 0f) {
-				this.car_Speed = 0f;
+			this.car_Speed_Pixels += allNegativePowers;
+			if (this.car_Speed_Pixels < 0f) {
+				this.car_Speed_Pixels = 0f;
 			}
 			break;
 		}
 	}
 
-	public int getCarSpeed() {
-		return (int) this.car_Speed;
+	public float pixels_To_mps_To_kmh(float pixelVelocity) {
+		float ticksPerSecond = VirtualWorld.getTicksPerSecond();
+		float MPS_to_KMH_ratio = 3.6f;
+		float onePixelInMeters = 0.02f;
+		return pixelVelocity * ticksPerSecond * onePixelInMeters * MPS_to_KMH_ratio;
+	}
+
+	public float kmh_To_pixelsPerTick(float kmh) {
+		float ticksPerSecond = VirtualWorld.getTicksPerSecond();
+		float MPS_to_KMH_ratio = 3.6f;
+		float onePixelInMeters = 0.02f;
+		return kmh / ticksPerSecond / onePixelInMeters / MPS_to_KMH_ratio;
+	}
+
+	public int getCarSpeed_InPixels() {
+		return (int) this.car_Speed_Pixels;
 	}
 
 	@Override
@@ -139,11 +154,11 @@ public class PowertrainSystem extends SystemComponent {
 	}
 
 	private void checkAndSetValidGearStatus(int value) {
-		if (this.car_Speed == 0) {
+		if (this.car_Speed_Pixels == 0) {
 			this.data_gear_position = value;
 			return;
 		}
-		if (this.car_Speed > 0) {
+		if (this.car_Speed_Pixels > 0) {
 			if ((this.data_gear_position == 0 || this.data_gear_position == 1)) {
 				switch (value) {
 				case 0:// D
@@ -170,7 +185,7 @@ public class PowertrainSystem extends SystemComponent {
 		// this.data_gas_pedal_position);
 		// System.out.println("BRAKE_PEDAL_POSITION data: " +
 		// this.data_brake_pedal_position);
-		System.out.println("VEHICLE_SPEED data: " + this.car_Speed);
+		System.out.println("VEHICLE_SPEED data: " + this.car_Speed_Pixels);
 		System.out.println("MOTOR_RPM data: " + this.data_motor_rpm);
 		System.out.println("HEADLIGHT data: " + this.data_headlight);
 		System.out.println("INDEX_INDICATORS data: " + this.data_index);
