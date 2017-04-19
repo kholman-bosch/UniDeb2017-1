@@ -10,15 +10,16 @@ import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
  */
 public class PowertrainSystem extends SystemComponent {
 
-	private int data_gas_pedal_position = 3;
+	private int data_gas_pedal_position = 0;
 	private int data_brake_pedal_position = 0;
 	//
-	private int data_vehicle_speed = 0;
 	private int data_motor_rpm = 0;
 	private int data_headlight = 0;
 	private int data_index = 0;
 	private int data_steering_wheel_angle = 0;
 	private int data_gear_position = 3;
+	//
+	private float car_Speed = 0f;
 
 	public PowertrainSystem() {
 		super();
@@ -26,12 +27,73 @@ public class PowertrainSystem extends SystemComponent {
 
 	@Override
 	public void cyclic() {
-		this.calcSpeed_MotorRPMandSendSignals();
+		this.calculatePowertrainPhysics();
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_HEADLIGHT, this.data_headlight));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_INDEX_INDICATORS, this.data_index));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_GEAR_POSITION, this.data_gear_position));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_STEERING_WHEEL_ANGLE, this.data_steering_wheel_angle));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.car_Speed));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.MOTOR_RPM, this.data_motor_rpm));
 		// this.writeInTerminalInfos();
+	}
+
+	private void calculatePowertrainPhysics() {
+		float maxForwardSpeed = 120f;
+		float maxReverseSpeed = 35f;
+		//negative powers
+		float powerFromBreakPedal = this.data_brake_pedal_position / 100f;
+		float maximumBrakingPower = -30f;
+		float negativePowerFromBraking = maximumBrakingPower * powerFromBreakPedal;
+		float baseNegativePowers_GRAV_FRICT = -4f;
+		float allNegativePowers = baseNegativePowers_GRAV_FRICT + negativePowerFromBraking;
+		//positive powers
+		float powerFromGasPedal = this.data_gas_pedal_position / 100f;
+		float maximumForwardPower = 5f;
+		float allPositivePowers = 0f;
+		//total powers
+		if (powerFromGasPedal > 0f) {
+			allPositivePowers = Math.abs(baseNegativePowers_GRAV_FRICT) + (maximumForwardPower * powerFromGasPedal);
+		}
+		float allPowers = (allPositivePowers + allNegativePowers);
+		// gear logic
+		switch (this.data_gear_position) {
+		case 0: // drive
+			this.car_Speed += allPowers;
+			if (this.car_Speed < 0f) {
+				this.car_Speed = 0f;
+			}
+			// max speed limit
+			if (this.car_Speed > maxForwardSpeed) {
+				this.car_Speed = maxForwardSpeed;
+			}
+			break;
+		case 1: // neutral
+			this.car_Speed += allNegativePowers;
+			if (this.car_Speed < 0f) {
+				this.car_Speed = 0f;
+			}
+			break;
+		case 2: // reverse
+			this.car_Speed -= allPowers;
+			if (this.car_Speed > 0f) {
+				this.car_Speed = 0f;
+			}
+			// max speed limit
+			if (this.car_Speed < -maxReverseSpeed) {
+				this.car_Speed = -maxReverseSpeed;
+			}
+			break;
+		case 3: // park
+			this.car_Speed += allNegativePowers;
+			if (this.car_Speed < 0f) {
+				this.car_Speed = 0f;
+			}
+			break;
+		}
+	}
+
+	public int getCarSpeed() {
+		return (int) this.car_Speed;
 	}
 
 	@Override
@@ -77,11 +139,11 @@ public class PowertrainSystem extends SystemComponent {
 	}
 
 	private void checkAndSetValidGearStatus(int value) {
-		if (this.data_vehicle_speed == 0) {
+		if (this.car_Speed == 0) {
 			this.data_gear_position = value;
 			return;
 		}
-		if (this.data_vehicle_speed > 0) {
+		if (this.car_Speed > 0) {
 			if ((this.data_gear_position == 0 || this.data_gear_position == 1)) {
 				switch (value) {
 				case 0:// D
@@ -101,40 +163,14 @@ public class PowertrainSystem extends SystemComponent {
 		}
 	}
 
-	public int getCarSpeed() {
-		float brakeSlowdown = 1f - this.data_brake_pedal_position / 100f;
-		return (int) (this.data_vehicle_speed * brakeSlowdown);
-	}
-
-	private void calcSpeed_MotorRPMandSendSignals() {
-		switch (this.data_gear_position) {
-		case 0: // drive
-			this.data_vehicle_speed = SignalDatabase.limit(this.data_vehicle_speed, (int) (this.data_gas_pedal_position * 1.2f), 0, 120);
-			break;
-		case 1: // neutral
-			this.data_vehicle_speed--;
-			if (this.data_vehicle_speed < 0) {
-				this.data_vehicle_speed = 0;
-			}
-			break;
-		case 2: // reverse
-			this.data_vehicle_speed = -SignalDatabase.limit(this.data_vehicle_speed, (int) (this.data_gas_pedal_position * 1.2f), 0, 120);
-			break;
-		case 3: // park
-			break;
-		}
-		float rpm = this.data_gas_pedal_position / 100f * 9000;
-		this.data_motor_rpm = SignalDatabase.limit(this.data_motor_rpm, (int) rpm, 0, 9000);
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.getCarSpeed()));
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.MOTOR_RPM, this.data_motor_rpm));
-	}
-
 	// Write in the Terminal the actual status about the Signals
 	private void writeInTerminalInfos() {
 		System.out.println("---POWERTRAINSYSTEM---");
-		// System.out.println("GAS_PEDAL_POSITION data: " + this.data_gas_pedal_position);
-		// System.out.println("BRAKE_PEDAL_POSITION data: " + this.data_brake_pedal_position);
-		System.out.println("VEHICLE_SPEED data: " + this.data_vehicle_speed);
+		// System.out.println("GAS_PEDAL_POSITION data: " +
+		// this.data_gas_pedal_position);
+		// System.out.println("BRAKE_PEDAL_POSITION data: " +
+		// this.data_brake_pedal_position);
+		System.out.println("VEHICLE_SPEED data: " + this.car_Speed);
 		System.out.println("MOTOR_RPM data: " + this.data_motor_rpm);
 		System.out.println("HEADLIGHT data: " + this.data_headlight);
 		System.out.println("INDEX_INDICATORS data: " + this.data_index);
