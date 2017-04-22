@@ -15,7 +15,7 @@ import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 
 public class HumanMachineInterface extends SystemComponent {
 
-	// private static final Logger LOGGER = LogManager.getLogger();
+	 private static final Logger LOGGER = LogManager.getLogger(HumanMachineInterface.class);
 
 	private KeyListener keyListener;
 
@@ -34,8 +34,9 @@ public class HumanMachineInterface extends SystemComponent {
 	boolean left = false;
 	boolean right = false;
 
-	// By default TSD is enabled
+	// By default TSR is enabled
 	private boolean tsrEnabled = true;
+	private boolean accEnabled = false;
 
 	private class HMIKeyHandler implements KeyListener {
 
@@ -145,6 +146,11 @@ public class HumanMachineInterface extends SystemComponent {
 			} else if (character == 't' || character == 'T') {
 				tsrEnabled = !tsrEnabled;
 				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.TSR_MODULE_STATUS, tsrEnabled ? 1 : 0));
+			} else if (character == 'a' || character == 'A') {
+				LOGGER.debug("A key pressed!");
+				LOGGER.debug("ACC status change " + (accEnabled ? "ENABLED" : "DISABLED") + " -> " + (!accEnabled ? "ENABLED" : "DISABLED") );
+				accEnabled = !accEnabled;
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, accEnabled ? 1 : 0));
 			}
 
 			// LOGGER.debug(keyEvent.getKeyCode() + " key were typed!");
@@ -188,8 +194,12 @@ public class HumanMachineInterface extends SystemComponent {
 
 	@Override
 	public void receiveSignal(Signal s) {
-		// TODO Auto-generated method stub
-		// LOGGER.debug("HMI receiveSignal()");
+		
+		if( s.getID() == SignalDatabase.ACC_STATUS_CHANGED ){
+			accEnabled = s.getData() == 1.0;
+			LOGGER.debug("ACC_STATUS_CHANGED SIGNAL RECEIVED: " + s.getData());
+			LOGGER.debug("ACC IS NOW " + (accEnabled ? "ENABLED" : "DISABLED")  );
+		}
 	}
 
 }

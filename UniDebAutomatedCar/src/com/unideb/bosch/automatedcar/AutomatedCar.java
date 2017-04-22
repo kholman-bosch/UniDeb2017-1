@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.unideb.bosch.SignalDatabase;
+import com.unideb.bosch.acc.AdaptiveCruiseControlModule;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 import com.unideb.bosch.automatedcar.vehicleparts.PowertrainSystem;
@@ -43,6 +44,7 @@ public final class AutomatedCar {
 	private FrontViewCamera frontViewCamera;
 	private RSensor radarSensor;
 	private TSR_Logic tsr;
+	private AdaptiveCruiseControlModule accModule;
 
 	public AutomatedCar() {
 		try {
@@ -62,6 +64,7 @@ public final class AutomatedCar {
 		new DetectedRoadSignCatcher();
 		this.radarSensor = new RSensor(100, 500, 20, 85, 5);
 		this.tsr = new TSR_Logic();
+		this.accModule = new AdaptiveCruiseControlModule();
 	}
 
 	public void drawCar(Graphics g, float graphicsScale) {

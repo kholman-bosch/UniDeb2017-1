@@ -314,6 +314,10 @@ public class VirtualDisplaySurface extends JPanel {
 		this.show_yield = state;
 	}
 
+	public void set_ACC_Status(boolean state) {
+		this.show_acc = state;
+	}
+
 	private int truncateAngle(int angle, int max) {
 		if (angle < 0) {
 			angle = 0;

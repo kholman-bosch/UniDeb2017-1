@@ -26,6 +26,9 @@ public class InstrumentClusterLogic extends SystemComponent {
 	private boolean tsr_yieldSing = false;
 	private boolean tsr_citySixtySign = false;
 	private boolean tsr_noSpeedLimitSign = false;
+	
+	// acc
+	private boolean acc_on = false;
 
 	public InstrumentClusterLogic() {
 		super();
@@ -114,6 +117,9 @@ public class InstrumentClusterLogic extends SystemComponent {
 				this.tsr_on = true;
 			}
 			break;
+		case SignalDatabase.ACC_STATUS_CHANGED:
+			this.acc_on = actValue == 1.0f;
+			break;
 		}
 	}
 
@@ -184,6 +190,10 @@ public class InstrumentClusterLogic extends SystemComponent {
 
 	public boolean get_TSR_Yield() {
 		return this.tsr_yieldSing;
+	}
+	
+	public boolean is_ACC_Active() {
+		return this.acc_on;
 	}
 
 	// Blinking the Turn Signals on the Instrument Cluster and

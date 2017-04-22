@@ -98,4 +98,8 @@ public class VirtualDisplay extends JFrame {
 	public void set_TSR_Yield(boolean state) {
 		this.surface.set_TSR_Yield(state);
 	}
+	
+	public void set_ACC_Status(boolean state) {
+		this.surface.set_ACC_Status(state);
+	}
 }
