@@ -24,6 +24,7 @@ public class PowertrainSystem extends SystemComponent {
 	private float neutral_rpm = 0;
 	private int inner_gear_state_in_D = 1;
 	private int keep_alive_rpm = 1100, maximum_rpm = 9000;
+	private float maxSpeedClampHelper = 0f;
 
 	public PowertrainSystem() {
 		super();
@@ -68,7 +69,17 @@ public class PowertrainSystem extends SystemComponent {
 				this.car_Speed_Pixels = 0f;
 			}
 			// max speed limit
-			maxForwardSpeed_InPixels *= powerFromGasPedal; //simple maxSpeedClampBasedOnGasPedal
+			if (this.maxSpeedClampHelper <= powerFromGasPedal) {
+				this.maxSpeedClampHelper = powerFromGasPedal;
+			} else {
+				this.maxSpeedClampHelper -= 0.02f;
+				if (this.maxSpeedClampHelper < 0f) {
+					this.maxSpeedClampHelper = 0f;
+				}
+			}
+			if (this.maxSpeedClampHelper > 0f) {
+				maxForwardSpeed_InPixels *= this.maxSpeedClampHelper; // simple maxSpeedClampBasedOnGasPedal
+			}
 			if (this.car_Speed_Pixels > maxForwardSpeed_InPixels) {
 				this.car_Speed_Pixels = maxForwardSpeed_InPixels;
 			}
