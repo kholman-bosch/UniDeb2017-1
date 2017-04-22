@@ -68,6 +68,7 @@ public class PowertrainSystem extends SystemComponent {
 				this.car_Speed_Pixels = 0f;
 			}
 			// max speed limit
+			maxForwardSpeed_InPixels *= powerFromGasPedal; //simple maxSpeedClampBasedOnGasPedal
 			if (this.car_Speed_Pixels > maxForwardSpeed_InPixels) {
 				this.car_Speed_Pixels = maxForwardSpeed_InPixels;
 			}
