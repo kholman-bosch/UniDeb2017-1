@@ -15,7 +15,7 @@ import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 
 public class HumanMachineInterface extends SystemComponent {
 
-	 private static final Logger LOGGER = LogManager.getLogger(HumanMachineInterface.class);
+	private static final Logger LOGGER = LogManager.getLogger(HumanMachineInterface.class);
 
 	private KeyListener keyListener;
 
