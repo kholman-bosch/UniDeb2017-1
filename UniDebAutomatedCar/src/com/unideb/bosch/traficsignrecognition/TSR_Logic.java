@@ -16,7 +16,7 @@ public class TSR_Logic extends SystemComponent {
 	private boolean sixtyInCitySignDetected = false;
 	private boolean yieldSignDetected = false;
 	// timers
-	private double fiveSecondsInMS = 5000, twoSecondsInMS = 2000;
+	private double fiveSecondsInMS = 5000, slightSignDelayInMS = 50;
 	private double noSpeedLimitDetectedTimer = 0d;
 	private double stopSignDetectedTimer = 0d;
 	private double yieldDetectedTimer = 0d;
@@ -34,12 +34,12 @@ public class TSR_Logic extends SystemComponent {
 		}
 		// discard on no signal signs after 2 seconds:
 		if (this.yieldSignDetected) {
-			if (getNanotimeInMS() > (this.yieldDetectedTimer + twoSecondsInMS)) {
+			if (getNanotimeInMS() > (this.yieldDetectedTimer + slightSignDelayInMS)) {
 				this.yieldSignDetected = false;
 			}
 		}
 		if (this.stopSignDetected) {
-			if (getNanotimeInMS() > (this.stopSignDetectedTimer + twoSecondsInMS)) {
+			if (getNanotimeInMS() > (this.stopSignDetectedTimer + slightSignDelayInMS)) {
 				this.stopSignDetected = false;
 			}
 		}
