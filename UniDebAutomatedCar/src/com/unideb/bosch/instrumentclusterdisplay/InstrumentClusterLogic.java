@@ -1,6 +1,7 @@
 package com.unideb.bosch.instrumentclusterdisplay;
 
 import com.unideb.bosch.SignalDatabase;
+import com.unideb.bosch.acc.AdaptiveCruiseControlState;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
 
@@ -28,6 +29,9 @@ public class InstrumentClusterLogic extends SystemComponent {
 	private boolean tsr_noSpeedLimitSign = false;
 	private int ccsValue = 0;
 	private int sdValue = 0;
+	
+	// acc
+	private AdaptiveCruiseControlState accState = AdaptiveCruiseControlState.DISABLED;
 
 	public InstrumentClusterLogic() {
 		super();
@@ -116,11 +120,20 @@ public class InstrumentClusterLogic extends SystemComponent {
 				this.tsr_on = true;
 			}
 			break;
-		case 29: // acc signal
-			if (actValue == 0) {
-				this.acc_on = false;
-			} else {
-				this.acc_on = true;
+		case SignalDatabase.ACC_STATUS_CHANGED:
+			switch( actValue ){
+			case 0: // DISABLED
+				this.accState = AdaptiveCruiseControlState.DISABLED;
+				break;
+			case 1: // ACTIVE
+				this.accState = AdaptiveCruiseControlState.ACTIVE;
+				break;
+			case 2: // SUSPENDED
+				this.accState = AdaptiveCruiseControlState.SUSPENDED;
+				break;
+			case 3: // STOPANDGO
+				this.accState = AdaptiveCruiseControlState.STOPANDGO;
+				break;
 			}
 			break;
 		case SignalDatabase.ACC_CURRENT_CRUISE_CONTROL_SPEED:
@@ -207,6 +220,10 @@ public class InstrumentClusterLogic extends SystemComponent {
 	
 	public int get_SafeDistance() {
 		return this.sdValue;
+	}
+	
+	public AdaptiveCruiseControlState getAccState() {
+		return this.accState;
 	}
 
 	// Blinking the Turn Signals on the Instrument Cluster and

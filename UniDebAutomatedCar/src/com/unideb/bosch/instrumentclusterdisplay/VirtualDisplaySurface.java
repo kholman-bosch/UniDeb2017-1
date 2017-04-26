@@ -14,13 +14,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import com.unideb.bosch.acc.AdaptiveCruiseControlState;
 import com.unideb.bosch.automatedcar.AutomatedCar;
 
 public class VirtualDisplaySurface extends JPanel {
 
 	private static final long serialVersionUID = 1;
 	private BufferedImage background, needle, r, n, d, p, rightindex, leftindex, headlight, steeringWheel;
-	private BufferedImage activespeedlimit_icon, nospeedlimit_icon, sixtyincity_icon, stop_icon, yield_icon, tsr_icon, acc_icon;
+	private BufferedImage activespeedlimit_icon, nospeedlimit_icon, sixtyincity_icon, stop_icon, yield_icon, tsr_icon, acc_active_icon, acc_suspended_icon, acc_stopandgo_icon;
 	private int actual_KMH_Needle_Angle = 0;
 	private int actual_RPM_Needle_Angle = 0;
 	private int steeringWheel_Angle = 0;
@@ -29,7 +30,8 @@ public class VirtualDisplaySurface extends JPanel {
 	private Rectangle rightIndex_Rectangle, leftIndex_Rectangle, headlight_Rectangle, steeringWheel_Rectangle;
 	private Rectangle activespeedlimit_Rectangle, nospeedlimit_Rectangle, sixtyincity_Rectangle, stop_Rectangle, yield_Rectangle, acc_Rectangle, tsr_Rectangle;
 	private boolean show_R = true, show_N = true, show_D = true, show_P = true, show_RIndex = true, show_LIndex = true, show_Headlight = true;
-	private boolean show_nospeedlimit = true, show_sixtyincity = true, show_stop = true, show_yield = true, show_tsr = true, show_acc = true;
+	private boolean show_nospeedlimit = true, show_sixtyincity = true, show_stop = true, show_yield = true, show_tsr = true; // show_acc = true;
+	private AdaptiveCruiseControlState accState = AdaptiveCruiseControlState.ACTIVE;
 	private int show_activespeedlimit = 50;
 	private int cruseControlSpeed = 0, safeDistance = 0;
 	private static Font defaultFontBOLD = new Font("default", Font.BOLD, 12);
@@ -51,7 +53,10 @@ public class VirtualDisplaySurface extends JPanel {
 			sixtyincity_icon = ImageIO.read(new File("./ic_res/sixtyincity.png"));
 			stop_icon = ImageIO.read(new File("./ic_res/stop.png"));
 			yield_icon = ImageIO.read(new File("./ic_res/yield.png"));
-			acc_icon = ImageIO.read(new File("./ic_res/accon.png"));
+			acc_active_icon = ImageIO.read(new File("./ic_res/accon_active.png"));
+			acc_suspended_icon = ImageIO.read(new File("./ic_res/accon_suspended.png"));
+			acc_stopandgo_icon = ImageIO.read(new File("./ic_res/accon_stopandgo.png"));
+			
 			tsr_icon = ImageIO.read(new File("./ic_res/tsron.png"));
 		} catch (IOException ex) {
 			System.err.println(ex.getMessage() + " Error in virtual display! ImageIO.read");
@@ -72,7 +77,7 @@ public class VirtualDisplaySurface extends JPanel {
 		sixtyincity_Rectangle = new Rectangle(0, 0, sixtyincity_icon.getWidth(), sixtyincity_icon.getHeight());
 		stop_Rectangle = new Rectangle(0, 0, stop_icon.getWidth(), stop_icon.getHeight());
 		yield_Rectangle = new Rectangle(0, 0, yield_icon.getWidth(), yield_icon.getHeight());
-		acc_Rectangle = new Rectangle(0, 0, acc_icon.getWidth(), acc_icon.getHeight());
+		acc_Rectangle = new Rectangle(0, 0, acc_active_icon.getWidth(), acc_active_icon.getHeight());
 		tsr_Rectangle = new Rectangle(0, 0, tsr_icon.getWidth(), tsr_icon.getHeight());
 		this.setBackground(Color.black);
 		this.setVisible(true);
@@ -110,13 +115,18 @@ public class VirtualDisplaySurface extends JPanel {
 		gMatrix_RPM.rotate(Math.toRadians(actual_RPM_Needle_Angle), needleMidPoint_RPM_X, needleMidPoint_RPM_Y);
 		gMatrix_RPM.fillRect(needleLocationX_RPM, needleLocationY_RPM, needle.getWidth(), needle.getHeight());
 		//
-		if (this.show_acc) {
-			int iconLoc_X = 50;
-			int iconLoc_Y = 17;
-			acc_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
-			TexturePaint acc_Paint = new TexturePaint(acc_icon, acc_Rectangle);
-			gMatrix_Icons.setPaint(acc_Paint);
-			gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, acc_icon.getWidth(), acc_icon.getHeight());
+		switch( this.accState ){
+		case ACTIVE:
+			this.drawAccIcon(gMatrix_Icons, acc_active_icon);
+			break;
+		case DISABLED:
+			break;
+		case SUSPENDED:
+			this.drawAccIcon(gMatrix_Icons, acc_suspended_icon);
+			break;
+		case STOPANDGO:
+			this.drawAccIcon(gMatrix_Icons, acc_stopandgo_icon);
+			break;
 		}
 		if (this.show_tsr) {
 			int iconLoc_X = 285;
@@ -253,6 +263,15 @@ public class VirtualDisplaySurface extends JPanel {
 		gMatrix_Icons.dispose();
 		g.dispose();
 	}
+	
+	private void drawAccIcon(Graphics2D gMatrix_Icons, BufferedImage icon) {
+		int iconLoc_X = 7;
+		int iconLoc_Y = 230;
+		acc_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
+		TexturePaint acc_Paint = new TexturePaint(icon, acc_Rectangle);
+		gMatrix_Icons.setPaint(acc_Paint);
+		gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, acc_active_icon.getWidth(), acc_active_icon.getHeight());
+	}
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -333,6 +352,10 @@ public class VirtualDisplaySurface extends JPanel {
 	
 	public void set_SD(int distance) {
 		this.safeDistance = distance;
+	}
+
+	public void set_ACC_Status(AdaptiveCruiseControlState state) {
+		this.accState = state;
 	}
 
 	private int truncateAngle(int angle, int max) {

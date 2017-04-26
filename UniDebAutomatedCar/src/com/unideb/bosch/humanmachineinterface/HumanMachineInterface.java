@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.unideb.bosch.SignalDatabase;
+import com.unideb.bosch.acc.AdaptiveCruiseControlState;
 import com.unideb.bosch.automatedcar.VirtualWorld;
 import com.unideb.bosch.automatedcar.VirtualWorldRenderer;
 import com.unideb.bosch.automatedcar.framework.Signal;
@@ -15,7 +16,7 @@ import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 
 public class HumanMachineInterface extends SystemComponent {
 
-	// private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(HumanMachineInterface.class);
 
 	private KeyListener keyListener;
 
@@ -34,8 +35,10 @@ public class HumanMachineInterface extends SystemComponent {
 	boolean left = false;
 	boolean right = false;
 
-	// By default TSD is enabled
+	// By default TSR is enabled
 	private boolean tsrEnabled = true;
+	private boolean accEnabled = false;
+	private float currentACCSetting = 0.0f; // the default is the cc speed
 
 	private class HMIKeyHandler implements KeyListener {
 
@@ -146,6 +149,22 @@ public class HumanMachineInterface extends SystemComponent {
 			} else if (character == 't' || character == 'T') {
 				tsrEnabled = !tsrEnabled;
 				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.TSR_MODULE_STATUS, tsrEnabled ? 1 : 0));
+			} else if (character == 'a' || character == 'A') {
+				LOGGER.debug("A key pressed!");
+				LOGGER.debug("ACC status change " + (accEnabled ? "ENABLED" : "DISABLED") + " -> " + (!accEnabled ? "ENABLED" : "DISABLED") );
+				accEnabled = !accEnabled;
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, accEnabled ? 1 : 0));
+			} else if (character == 's' || character == 'S') {
+				if( currentACCSetting == 0.0f ) {
+					currentACCSetting = 1.0f;
+				} else {
+					currentACCSetting = 0.0f;	
+				}
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_SETTING_SWITCHED, currentACCSetting));
+			} else if (character == '+') {
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_CHANGE_VALUE, 1.0f));
+			} else if (character == '-') {
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_CHANGE_VALUE, 0.0f));
 			}
 
 			// LOGGER.debug(keyEvent.getKeyCode() + " key were typed!");
@@ -181,16 +200,30 @@ public class HumanMachineInterface extends SystemComponent {
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GAS_PEDAL_POSITION, gasPedalPosition));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.BRAKE_PEDAL_POSITION, breakPedalPosition));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.STEERING_WHEEL_ANGLE, steeringWheelAngle));
-
-		// TODO Auto-generated method stub
-		// LOGGER.debug("HMI cyclic()");
-
 	}
 
 	@Override
 	public void receiveSignal(Signal s) {
-		// TODO Auto-generated method stub
-		// LOGGER.debug("HMI receiveSignal()");
+		
+		if( s.getID() == SignalDatabase.ACC_STATUS_CHANGED ){
+			LOGGER.debug("ACC_STATUS_CHANGED SIGNAL RECEIVED: " + s.getData());
+			
+			int actValue = new Float(s.getData()).intValue();
+			switch( actValue ){
+			case 0: // DISABLED
+				this.accEnabled = false;
+				break;
+			case 1: // ACTIVE
+				this.accEnabled = true;
+				break;
+			case 2: // SUSPENDED
+				break;
+			case 3: // STOPANDGO
+				break;
+			}
+			
+			LOGGER.debug("ACC IS NOW " + (accEnabled ? "ENABLED" : "DISABLED")  );
+		}
 	}
 
 }

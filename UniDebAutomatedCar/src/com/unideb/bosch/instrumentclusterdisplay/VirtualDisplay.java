@@ -6,6 +6,7 @@ import java.awt.Insets;
 
 import javax.swing.JFrame;
 
+import com.unideb.bosch.acc.AdaptiveCruiseControlState;
 import com.unideb.bosch.automatedcar.AutomatedCar;
 
 public class VirtualDisplay extends JFrame {
@@ -105,5 +106,9 @@ public class VirtualDisplay extends JFrame {
 
 	public void set_SD(int distance) {
 		this.surface.set_SD(distance);
+	}
+	
+	public void set_ACC_Status(AdaptiveCruiseControlState state) {
+		this.surface.set_ACC_Status(state);
 	}
 }
