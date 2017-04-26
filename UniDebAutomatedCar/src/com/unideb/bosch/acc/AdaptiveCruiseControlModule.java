@@ -48,6 +48,9 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 		LOGGER.debug("Vehicle speed: " + this.currentSpeed);
 		LOGGER.debug("Vehicle gas pedal position: " + this.currentGasPedalPosition);
 		LOGGER.debug("Vehicle brake pedal position: " + this.currentBrakePedalPosition);
+		
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_CURRENT_SAFE_DISTANCE, this.safeDistance));
+		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_CURRENT_CRUISE_CONTROL_SPEED, this.cruiseControlSpeed));
 
 		if (this.accState.equals(AdaptiveCruiseControlState.ACTIVE)) {
 			if (Math.abs(this.currentSpeed - this.cruiseControlSpeed) < 1.0) {

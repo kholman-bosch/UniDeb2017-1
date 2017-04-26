@@ -40,6 +40,8 @@ public class SignalDatabase {
 	public static final int ACC_STATUS_CHANGED = 29;
 	public static final int ACC_SETTING_SWITCHED = 30;
 	public static final int ACC_CHANGE_VALUE = 31;
+	public static final int ACC_CURRENT_CRUISE_CONTROL_SPEED= 32;
+	public static final int ACC_CURRENT_SAFE_DISTANCE= 33;
 
 	// Check signal boundaries and limit according to the CommMatrix
 	public static int limit(int localData, int actData, int limit1, int limit2) {
