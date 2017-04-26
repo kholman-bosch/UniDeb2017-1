@@ -1,5 +1,8 @@
 package com.unideb.bosch.acc;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -7,7 +10,6 @@ import com.unideb.bosch.SignalDatabase;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
-import com.unideb.bosch.humanmachineinterface.HumanMachineInterface;
 
 public class AdaptiveCruiseControlModule extends SystemComponent {
 	
@@ -26,7 +28,12 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 	
 	private float cruiseControlGasPedalPosition;
 	private float cruiseControlSpeed;
-	private float safeDistance;
+	private float safeDistance = 2.5f;
+	
+	private float currentACCSetting = 0.0f; // the default is the cc speed
+	
+	private List<Float> safeDistanceValues = Arrays.asList(1.0f, 1.5f, 2.0f, 2.5f);
+	private int currentSafeDistanceIndex = 3;
 
 	@Override
 	public void cyclic() {
@@ -58,6 +65,12 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 			break;
 		case SignalDatabase.BRAKE_PEDAL_POSITION:
 			onReceiveBrakePedalPositionSignal(s);
+			break;
+		case SignalDatabase.ACC_SETTING_SWITCHED:
+			onReceiveAccSettingSwitchedSignal(s);
+			break;
+		case SignalDatabase.ACC_CHANGE_VALUE:
+			onReceiveAccChangeValueSignal(s);
 			break;
 		}
 	}
@@ -112,6 +125,50 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 		if( this.accState == AdaptiveCruiseControlState.ACTIVE && s.getData() != 0.0){
 			this.accState = AdaptiveCruiseControlState.SUSPENDED;
 		}
+	}
+	
+	private void onReceiveAccSettingSwitchedSignal(Signal s) {
+		this.currentACCSetting = s.getData();
+	}
+	
+	private void onReceiveAccChangeValueSignal(Signal s) {
+		if( this.currentACCSetting == 0.0f ) {
+			// cruise control speed setting
+			changeAccCruiseControlSpeed(s.getData());
+		} else if ( this.currentACCSetting == 1.0f ){
+			// safe distance setting
+			changeAccSafeDistance(s.getData());
+		}
+	}
+	
+	private void changeAccCruiseControlSpeed(float signalValue) {
+		if( signalValue == 0.0f ) {
+			// decrement
+			if( this.cruiseControlSpeed > 0.0f ){
+				this.cruiseControlSpeed -= 1.0f;
+			}
+		} else if ( signalValue == 1.0f ) {
+			// increment
+			// TODO should not increment over 120km/h
+			if( this.cruiseControlSpeed < 200.0f ){
+				this.cruiseControlSpeed += 1.0f;
+			}
+		}
+	}
+	
+	private void changeAccSafeDistance(float signalValue) {
+		if( signalValue == 0.0f ) {
+			// decrement
+			if( this.currentSafeDistanceIndex > 0 ){
+				this.currentSafeDistanceIndex -= 1;
+			}
+		} else if ( signalValue == 1.0f ) {
+			// increment
+			if( this.currentSafeDistanceIndex < this.safeDistanceValues.size()-1 ){
+				this.currentSafeDistanceIndex += 1;
+			}
+		}
+		this.safeDistance = this.safeDistanceValues.get(this.currentSafeDistanceIndex);
 	}
 	
 	private void enableACC() {

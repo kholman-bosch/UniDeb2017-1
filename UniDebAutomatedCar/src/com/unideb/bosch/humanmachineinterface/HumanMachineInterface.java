@@ -37,6 +37,7 @@ public class HumanMachineInterface extends SystemComponent {
 	// By default TSR is enabled
 	private boolean tsrEnabled = true;
 	private boolean accEnabled = false;
+	private float currentACCSetting = 0.0f; // the default is the cc speed
 
 	private class HMIKeyHandler implements KeyListener {
 
@@ -102,6 +103,7 @@ public class HumanMachineInterface extends SystemComponent {
 		public void keyTyped(KeyEvent keyEvent) {
 
 			char character = keyEvent.getKeyChar();
+			System.out.println("character typed: " + character);
 			if (character == 'p' || character == 'P') {
 				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 3));
 			} else if (character == 'r' || character == 'R') {
@@ -151,6 +153,17 @@ public class HumanMachineInterface extends SystemComponent {
 				LOGGER.debug("ACC status change " + (accEnabled ? "ENABLED" : "DISABLED") + " -> " + (!accEnabled ? "ENABLED" : "DISABLED") );
 				accEnabled = !accEnabled;
 				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, accEnabled ? 1 : 0));
+			} else if (character == 's' || character == 'S') {
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_SETTING_SWITCHED, currentACCSetting));
+				if( currentACCSetting == 0.0f ) {
+					currentACCSetting = 1.0f;
+				} else {
+					currentACCSetting = 0.0f;	
+				}
+			} else if (character == '+') {
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_CHANGE_VALUE, 1.0f));
+			} else if (character == '-') {
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_CHANGE_VALUE, 0.0f));
 			}
 
 			// LOGGER.debug(keyEvent.getKeyCode() + " key were typed!");
