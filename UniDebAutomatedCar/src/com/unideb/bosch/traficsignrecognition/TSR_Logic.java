@@ -1,6 +1,7 @@
 package com.unideb.bosch.traficsignrecognition;
 
 import com.unideb.bosch.SignalDatabase;
+import com.unideb.bosch.acc.AdaptiveCruiseControlModule;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
@@ -20,6 +21,12 @@ public class TSR_Logic extends SystemComponent {
 	private double noSpeedLimitDetectedTimer = 0d;
 	private double stopSignDetectedTimer = 0d;
 	private double yieldDetectedTimer = 0d;
+	// TO DO- remove reference of ACC and do communication via signals
+	private AdaptiveCruiseControlModule acc;
+
+	public TSR_Logic(AdaptiveCruiseControlModule accf) {
+		this.acc = accf;
+	}
 
 	@Override
 	public void cyclic() {
