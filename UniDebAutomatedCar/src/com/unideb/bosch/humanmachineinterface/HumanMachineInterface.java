@@ -101,6 +101,7 @@ public class HumanMachineInterface extends SystemComponent {
 		public void keyTyped(KeyEvent keyEvent) {
 
 			char character = keyEvent.getKeyChar();
+			System.out.println("character typed: " + character);
 			if (character == 'p' || character == 'P') {
 				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 3));
 			} else if (character == 'r' || character == 'R') {
