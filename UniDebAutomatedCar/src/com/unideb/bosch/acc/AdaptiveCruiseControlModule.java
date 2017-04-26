@@ -219,5 +219,12 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 		LOGGER.debug("ACC IS NOW SUSPENDED");
 		this.accState = AdaptiveCruiseControlState.SUSPENDED;
 	}
-
+	
+	public float getActualCruiseSpeed(){
+		return this.cruiseControlSpeed;
+	}
+	
+	public void overrideSetSpeedWithValueFromTSR(int newSpeed){
+		this.cruiseControlSpeed = newSpeed;
+	}
 }
