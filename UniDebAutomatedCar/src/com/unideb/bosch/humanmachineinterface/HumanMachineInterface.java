@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.unideb.bosch.SignalDatabase;
+import com.unideb.bosch.acc.AdaptiveCruiseControlState;
 import com.unideb.bosch.automatedcar.VirtualWorld;
 import com.unideb.bosch.automatedcar.VirtualWorldRenderer;
 import com.unideb.bosch.automatedcar.framework.Signal;
@@ -154,12 +155,12 @@ public class HumanMachineInterface extends SystemComponent {
 				accEnabled = !accEnabled;
 				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, accEnabled ? 1 : 0));
 			} else if (character == 's' || character == 'S') {
-				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_SETTING_SWITCHED, currentACCSetting));
 				if( currentACCSetting == 0.0f ) {
 					currentACCSetting = 1.0f;
 				} else {
 					currentACCSetting = 0.0f;	
 				}
+				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_SETTING_SWITCHED, currentACCSetting));
 			} else if (character == '+') {
 				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_CHANGE_VALUE, 1.0f));
 			} else if (character == '-') {
@@ -199,18 +200,28 @@ public class HumanMachineInterface extends SystemComponent {
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GAS_PEDAL_POSITION, gasPedalPosition));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.BRAKE_PEDAL_POSITION, breakPedalPosition));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.STEERING_WHEEL_ANGLE, steeringWheelAngle));
-
-		// TODO Auto-generated method stub
-		// LOGGER.debug("HMI cyclic()");
-
 	}
 
 	@Override
 	public void receiveSignal(Signal s) {
 		
 		if( s.getID() == SignalDatabase.ACC_STATUS_CHANGED ){
-			accEnabled = s.getData() == 1.0;
 			LOGGER.debug("ACC_STATUS_CHANGED SIGNAL RECEIVED: " + s.getData());
+			
+			int actValue = new Float(s.getData()).intValue();
+			switch( actValue ){
+			case 0: // DISABLED
+				this.accEnabled = false;
+				break;
+			case 1: // ACTIVE
+				this.accEnabled = true;
+				break;
+			case 2: // SUSPENDED
+				break;
+			case 3: // STOPANDGO
+				break;
+			}
+			
 			LOGGER.debug("ACC IS NOW " + (accEnabled ? "ENABLED" : "DISABLED")  );
 		}
 	}

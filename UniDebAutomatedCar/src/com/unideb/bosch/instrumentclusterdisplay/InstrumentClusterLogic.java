@@ -1,6 +1,7 @@
 package com.unideb.bosch.instrumentclusterdisplay;
 
 import com.unideb.bosch.SignalDatabase;
+import com.unideb.bosch.acc.AdaptiveCruiseControlState;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
 
@@ -28,7 +29,7 @@ public class InstrumentClusterLogic extends SystemComponent {
 	private boolean tsr_noSpeedLimitSign = false;
 	
 	// acc
-	private boolean acc_on = false;
+	private AdaptiveCruiseControlState accState = AdaptiveCruiseControlState.DISABLED;
 
 	public InstrumentClusterLogic() {
 		super();
@@ -118,7 +119,20 @@ public class InstrumentClusterLogic extends SystemComponent {
 			}
 			break;
 		case SignalDatabase.ACC_STATUS_CHANGED:
-			this.acc_on = actValue == 1.0f;
+			switch( actValue ){
+			case 0: // DISABLED
+				this.accState = AdaptiveCruiseControlState.DISABLED;
+				break;
+			case 1: // ACTIVE
+				this.accState = AdaptiveCruiseControlState.ACTIVE;
+				break;
+			case 2: // SUSPENDED
+				this.accState = AdaptiveCruiseControlState.SUSPENDED;
+				break;
+			case 3: // STOPANDGO
+				this.accState = AdaptiveCruiseControlState.STOPANDGO;
+				break;
+			}
 			break;
 		}
 	}
@@ -192,8 +206,8 @@ public class InstrumentClusterLogic extends SystemComponent {
 		return this.tsr_yieldSing;
 	}
 	
-	public boolean is_ACC_Active() {
-		return this.acc_on;
+	public AdaptiveCruiseControlState getAccState() {
+		return this.accState;
 	}
 
 	// Blinking the Turn Signals on the Instrument Cluster and
