@@ -21,14 +21,14 @@ public class InstrumentClusterLogic extends SystemComponent {
 	private int turn_signal_tick = 0;
 	private boolean turn_signal_left = false, turn_signal_right = false;
 	// tsr stuff:
-	private boolean tsr_on = true, acc_on = true;
+	private boolean tsr_on = true;
 	private int tsr_speedLimit = 0;
 	private boolean tsr_stopSing = false;
 	private boolean tsr_yieldSing = false;
 	private boolean tsr_citySixtySign = false;
 	private boolean tsr_noSpeedLimitSign = false;
 	private int ccsValue = 0;
-	private int sdValue = 0;
+	private float sdValue = 0;
 	
 	// acc
 	private AdaptiveCruiseControlState accState = AdaptiveCruiseControlState.DISABLED;
@@ -139,8 +139,8 @@ public class InstrumentClusterLogic extends SystemComponent {
 		case SignalDatabase.ACC_CURRENT_CRUISE_CONTROL_SPEED:
 			this.ccsValue = actValue;
 			break;
-		case SignalDatabase.ACC_CURRENT_SAFE_DISTANCE: // acc signal
-			this.sdValue = actValue;
+		case SignalDatabase.ACC_CURRENT_SAFE_DISTANCE:
+			this.sdValue = s.getData();
 			break;
 		}
 	}
@@ -218,7 +218,7 @@ public class InstrumentClusterLogic extends SystemComponent {
 		return this.ccsValue;
 	}
 	
-	public int get_SafeDistance() {
+	public float get_SafeDistance() {
 		return this.sdValue;
 	}
 	

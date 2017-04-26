@@ -33,7 +33,8 @@ public class VirtualDisplaySurface extends JPanel {
 	private boolean show_nospeedlimit = true, show_sixtyincity = true, show_stop = true, show_yield = true, show_tsr = true; // show_acc = true;
 	private AdaptiveCruiseControlState accState = AdaptiveCruiseControlState.ACTIVE;
 	private int show_activespeedlimit = 50;
-	private int cruseControlSpeed = 0, safeDistance = 0;
+	private int cruseControlSpeed = 0;
+	private float safeDistance = 0f;
 	private static Font defaultFontBOLD = new Font("default", Font.BOLD, 12);
 
 	public VirtualDisplaySurface(AutomatedCar car) {
@@ -265,8 +266,8 @@ public class VirtualDisplaySurface extends JPanel {
 	}
 	
 	private void drawAccIcon(Graphics2D gMatrix_Icons, BufferedImage icon) {
-		int iconLoc_X = 7;
-		int iconLoc_Y = 230;
+		int iconLoc_X = 50;
+		int iconLoc_Y = 15;
 		acc_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
 		TexturePaint acc_Paint = new TexturePaint(icon, acc_Rectangle);
 		gMatrix_Icons.setPaint(acc_Paint);
@@ -350,7 +351,7 @@ public class VirtualDisplaySurface extends JPanel {
 		this.cruseControlSpeed = speed;
 	}
 	
-	public void set_SD(int distance) {
+	public void set_SD(float distance) {
 		this.safeDistance = distance;
 	}
 

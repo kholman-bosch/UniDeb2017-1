@@ -104,7 +104,7 @@ public class VirtualDisplay extends JFrame {
 		this.surface.set_CCS(speed);
 	}
 
-	public void set_SD(int distance) {
+	public void set_SD(float distance) {
 		this.surface.set_SD(distance);
 	}
 	
