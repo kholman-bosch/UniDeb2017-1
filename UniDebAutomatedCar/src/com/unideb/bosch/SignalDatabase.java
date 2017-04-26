@@ -37,9 +37,9 @@ public class SignalDatabase {
 	public static final int TSR_MODULE_STATUS = 27;
 	public static final int DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC = 28;
 	// ACC signals goes here after merge into master branch
-	
-	public static final int ACC_CURRENT_CRUISE_CONTROL_SPEED= 32;
-	public static final int ACC_CURRENT_SAFE_DISTANCE= 33;
+
+	public static final int ACC_CURRENT_CRUISE_CONTROL_SPEED = 32;
+	public static final int ACC_CURRENT_SAFE_DISTANCE = 33;
 
 	// Check signal boundaries and limit according to the CommMatrix
 	public static int limit(int localData, int actData, int limit1, int limit2) {

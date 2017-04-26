@@ -32,6 +32,8 @@ public class VirtualDisplay_Invoker extends SystemComponent {
 		this.vd.set_TSR_SixtyInCity(this.icl.get_TSR_SixtyInCity());
 		this.vd.set_TSR_StopSign(this.icl.get_TSR_StopSign());
 		this.vd.set_TSR_Yield(this.icl.get_TSR_Yield());
+		this.vd.set_CCS(this.icl.get_CruseControlSpeed());
+		this.vd.set_SD(this.icl.get_SafeDistance());
 		this.vd.invalidate();
 		this.vd.validate();
 		this.vd.repaint();

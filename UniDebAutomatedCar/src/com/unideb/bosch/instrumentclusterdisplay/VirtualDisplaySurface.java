@@ -31,6 +31,7 @@ public class VirtualDisplaySurface extends JPanel {
 	private boolean show_R = true, show_N = true, show_D = true, show_P = true, show_RIndex = true, show_LIndex = true, show_Headlight = true;
 	private boolean show_nospeedlimit = true, show_sixtyincity = true, show_stop = true, show_yield = true, show_tsr = true, show_acc = true;
 	private int show_activespeedlimit = 50;
+	private int cruseControlSpeed = 0, safeDistance = 0;
 	private static Font defaultFontBOLD = new Font("default", Font.BOLD, 12);
 
 	public VirtualDisplaySurface(AutomatedCar car) {
@@ -110,8 +111,8 @@ public class VirtualDisplaySurface extends JPanel {
 		gMatrix_RPM.fillRect(needleLocationX_RPM, needleLocationY_RPM, needle.getWidth(), needle.getHeight());
 		//
 		if (this.show_acc) {
-			int iconLoc_X = 7;
-			int iconLoc_Y = 230;
+			int iconLoc_X = 50;
+			int iconLoc_Y = 17;
 			acc_Rectangle.setLocation(iconLoc_X, iconLoc_Y);
 			TexturePaint acc_Paint = new TexturePaint(acc_icon, acc_Rectangle);
 			gMatrix_Icons.setPaint(acc_Paint);
@@ -234,6 +235,18 @@ public class VirtualDisplaySurface extends JPanel {
 		int wheelMidPoint_Y = 128;
 		gMatrix_Icons.rotate(-Math.toRadians(steeringWheel_Angle), wheelMidPoint_X, wheelMidPoint_Y);
 		gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, steeringWheel.getWidth(), steeringWheel.getHeight());
+		//acc
+		iconLoc_X = 76;
+		iconLoc_Y = 56;
+		g.setFont(defaultFontBOLD);
+		g.setColor(Color.white);
+		g.drawString(String.valueOf(this.cruseControlSpeed), iconLoc_X, iconLoc_Y);
+		
+		iconLoc_X = 76;
+		iconLoc_Y = 71;
+		g.setFont(defaultFontBOLD);
+		g.setColor(Color.white);
+		g.drawString(String.valueOf(this.safeDistance), iconLoc_X, iconLoc_Y);
 		//
 		gMatrix_KMH.dispose();
 		gMatrix_RPM.dispose();
@@ -312,6 +325,14 @@ public class VirtualDisplaySurface extends JPanel {
 
 	public void set_TSR_Yield(boolean state) {
 		this.show_yield = state;
+	}
+	
+	public void set_CCS(int speed) {
+		this.cruseControlSpeed = speed;
+	}
+	
+	public void set_SD(int distance) {
+		this.safeDistance = distance;
 	}
 
 	private int truncateAngle(int angle, int max) {

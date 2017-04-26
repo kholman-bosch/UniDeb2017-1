@@ -20,12 +20,14 @@ public class InstrumentClusterLogic extends SystemComponent {
 	private int turn_signal_tick = 0;
 	private boolean turn_signal_left = false, turn_signal_right = false;
 	// tsr stuff:
-	private boolean tsr_on = true;
+	private boolean tsr_on = true, acc_on = true;
 	private int tsr_speedLimit = 0;
 	private boolean tsr_stopSing = false;
 	private boolean tsr_yieldSing = false;
 	private boolean tsr_citySixtySign = false;
 	private boolean tsr_noSpeedLimitSign = false;
+	private int ccsValue = 0;
+	private int sdValue = 0;
 
 	public InstrumentClusterLogic() {
 		super();
@@ -114,6 +116,19 @@ public class InstrumentClusterLogic extends SystemComponent {
 				this.tsr_on = true;
 			}
 			break;
+		case 29: // acc signal
+			if (actValue == 0) {
+				this.acc_on = false;
+			} else {
+				this.acc_on = true;
+			}
+			break;
+		case SignalDatabase.ACC_CURRENT_CRUISE_CONTROL_SPEED:
+			this.ccsValue = actValue;
+			break;
+		case SignalDatabase.ACC_CURRENT_SAFE_DISTANCE: // acc signal
+			this.sdValue = actValue;
+			break;
 		}
 	}
 
@@ -184,6 +199,14 @@ public class InstrumentClusterLogic extends SystemComponent {
 
 	public boolean get_TSR_Yield() {
 		return this.tsr_yieldSing;
+	}
+	
+	public int get_CruseControlSpeed() {
+		return this.ccsValue;
+	}
+	
+	public int get_SafeDistance() {
+		return this.sdValue;
 	}
 
 	// Blinking the Turn Signals on the Instrument Cluster and

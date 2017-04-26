@@ -98,4 +98,12 @@ public class VirtualDisplay extends JFrame {
 	public void set_TSR_Yield(boolean state) {
 		this.surface.set_TSR_Yield(state);
 	}
+
+	public void set_CCS(int speed) {
+		this.surface.set_CCS(speed);
+	}
+
+	public void set_SD(int distance) {
+		this.surface.set_SD(distance);
+	}
 }
