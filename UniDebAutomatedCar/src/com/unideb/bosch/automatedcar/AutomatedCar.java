@@ -63,8 +63,8 @@ public final class AutomatedCar {
 		this.frontViewCamera = new FrontViewCamera(this);
 		new DetectedRoadSignCatcher();
 		this.radarSensor = new RSensor(100, 500, 20, 85, 5);
-		this.tsr = new TSR_Logic();
 		this.accModule = new AdaptiveCruiseControlModule();
+		this.tsr = new TSR_Logic(this.accModule);
 	}
 
 	public void drawCar(Graphics g, float graphicsScale) {

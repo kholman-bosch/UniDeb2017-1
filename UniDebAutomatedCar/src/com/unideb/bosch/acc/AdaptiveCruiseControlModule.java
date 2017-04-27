@@ -267,4 +267,11 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 		this.accState = AdaptiveCruiseControlState.STOPANDGO;
 	}
 
+	public float getActualCruiseSpeed(){
+		return this.cruiseControlSpeed;
+	}
+	
+	public void overrideSetSpeedWithValueFromTSR(int newSpeed){
+		this.cruiseControlSpeed = newSpeed;
+	}
 }
