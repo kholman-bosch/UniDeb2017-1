@@ -151,14 +151,14 @@ public class HumanMachineInterface extends SystemComponent {
 				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.TSR_MODULE_STATUS, tsrEnabled ? 1 : 0));
 			} else if (character == 'a' || character == 'A') {
 				LOGGER.debug("A key pressed!");
-				LOGGER.debug("ACC status change " + (accEnabled ? "ENABLED" : "DISABLED") + " -> " + (!accEnabled ? "ENABLED" : "DISABLED") );
+				LOGGER.debug("ACC status change " + (accEnabled ? "ENABLED" : "DISABLED") + " -> " + (!accEnabled ? "ENABLED" : "DISABLED"));
 				accEnabled = !accEnabled;
 				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, accEnabled ? 1 : 0));
 			} else if (character == 's' || character == 'S') {
-				if( currentACCSetting == 0.0f ) {
+				if (currentACCSetting == 0.0f) {
 					currentACCSetting = 1.0f;
 				} else {
-					currentACCSetting = 0.0f;	
+					currentACCSetting = 0.0f;
 				}
 				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_SETTING_SWITCHED, currentACCSetting));
 			} else if (character == '+') {
@@ -197,6 +197,19 @@ public class HumanMachineInterface extends SystemComponent {
 			steeringWheelAngle += 4;
 		}
 
+		if (!left && !right) {
+			if (steeringWheelAngle < 0) {
+				steeringWheelAngle += 10;
+				if (steeringWheelAngle > 0) {
+					steeringWheelAngle = 0;
+				}
+			} else {
+				steeringWheelAngle -= 10;
+				if (steeringWheelAngle < 0) {
+					steeringWheelAngle = 0;
+				}
+			}
+		}
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GAS_PEDAL_POSITION, gasPedalPosition));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.BRAKE_PEDAL_POSITION, breakPedalPosition));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.STEERING_WHEEL_ANGLE, steeringWheelAngle));
@@ -204,12 +217,12 @@ public class HumanMachineInterface extends SystemComponent {
 
 	@Override
 	public void receiveSignal(Signal s) {
-		
-		if( s.getID() == SignalDatabase.ACC_STATUS_CHANGED ){
+
+		if (s.getID() == SignalDatabase.ACC_STATUS_CHANGED) {
 			LOGGER.debug("ACC_STATUS_CHANGED SIGNAL RECEIVED: " + s.getData());
-			
+
 			int actValue = new Float(s.getData()).intValue();
-			switch( actValue ){
+			switch (actValue) {
 			case 0: // DISABLED
 				this.accEnabled = false;
 				break;
@@ -221,8 +234,8 @@ public class HumanMachineInterface extends SystemComponent {
 			case 3: // STOPANDGO
 				break;
 			}
-			
-			LOGGER.debug("ACC IS NOW " + (accEnabled ? "ENABLED" : "DISABLED")  );
+
+			LOGGER.debug("ACC IS NOW " + (accEnabled ? "ENABLED" : "DISABLED"));
 		}
 	}
 
