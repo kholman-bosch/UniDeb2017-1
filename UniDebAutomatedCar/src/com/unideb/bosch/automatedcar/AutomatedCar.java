@@ -18,8 +18,7 @@ import com.unideb.bosch.automatedcar.vehicleparts.PowertrainSystem;
 import com.unideb.bosch.frontviewcamera.DetectedRoadSignCatcher;
 import com.unideb.bosch.frontviewcamera.FrontViewCamera;
 import com.unideb.bosch.humanmachineinterface.HumanMachineInterface;
-import com.unideb.bosch.instrumentclusterdisplay.InstrumentClusterLogic;
-import com.unideb.bosch.instrumentclusterdisplay.VirtualDisplay_Invoker;
+import com.unideb.bosch.instrumentclusterdisplay.VirtualDisplay;
 import com.unideb.bosch.radarsensor.RSensor;
 import com.unideb.bosch.traficsignrecognition.TSR_Logic;
 
@@ -45,6 +44,7 @@ public final class AutomatedCar {
 	private RSensor radarSensor;
 	private TSR_Logic tsr;
 	private AdaptiveCruiseControlModule accModule;
+	private VirtualDisplay vd;
 
 	public AutomatedCar() {
 		try {
@@ -58,13 +58,13 @@ public final class AutomatedCar {
 		this.powertrainSystem = new PowertrainSystem();
 		// The rest of the components use the VirtualFunctionBus to communicate,
 		// they do not communicate with the car itself
-		new VirtualDisplay_Invoker(this, new InstrumentClusterLogic());
 		new HumanMachineInterface(); // I don't know we need this. HMI branch has it so I just leave it here for now.
 		this.frontViewCamera = new FrontViewCamera(this);
 		new DetectedRoadSignCatcher();
 		this.radarSensor = new RSensor(100, 500, 20, 85, 5);
 		this.accModule = new AdaptiveCruiseControlModule();
 		this.tsr = new TSR_Logic(this.accModule);
+		this.vd = new VirtualDisplay(this);
 	}
 
 	public void drawCar(Graphics g, float graphicsScale) {
@@ -113,6 +113,7 @@ public final class AutomatedCar {
 		this.carSpeedInPixels = this.powertrainSystem.getCarSpeed_InPixels();
 		this.carPhysics();
 		this.teleportCarIntoBounds();
+		this.vd.update();
 		// TODO somehow need to send float value instead of long
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_POSITION_X, this.carPos_X));
 		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_POSITION_Y, this.carPos_Y));

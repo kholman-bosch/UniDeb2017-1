@@ -13,6 +13,7 @@ public class VirtualDisplay extends JFrame {
 
 	private static final long serialVersionUID = 1;
 	private VirtualDisplaySurface surface;
+	private InstrumentClusterLogic icl;
 	private Insets windowDecorationDims;
 
 	public VirtualDisplay(AutomatedCar car) {
@@ -23,11 +24,37 @@ public class VirtualDisplay extends JFrame {
 		} else {
 			this.setTitle("Instrument Cluster for car: " + car.hashCode());
 		}
+		this.icl = new InstrumentClusterLogic();
 		this.setLayout(new GridLayout());
 		this.add(this.surface);
 		this.setResizable(false);
 		this.pack();
 		this.setVisible(true);
+	}
+	
+	public void update(){
+		this.surface.set_Actual_KMH_Needle_Angle(this.icl.getVehicleSpeed());
+		this.surface.set_Actual_RPM_Needle_Angle(this.icl.getMotorRPM());
+		this.surface.set_Actual_N(this.icl.getGearPos_N_Status());
+		this.surface.set_Actual_R(this.icl.getGearPos_R_Status());
+		this.surface.set_Actual_D(this.icl.getGearPos_D_Status());
+		this.surface.set_Actual_P(this.icl.getGearPos_P_Status());
+		this.surface.set_Actual_RightIndex(this.icl.getRightTurnSignalStatus());
+		this.surface.set_Actual_LeftIndex(this.icl.getLeftTurnSignalStatus());
+		this.surface.set_Actual_Headlights(this.icl.getHeadlightStatus());
+		this.surface.set_Actual_SteeringWHeel_Angle(this.icl.getSteeringWheelAngle());
+		this.surface.set_TSR_Status(this.icl.is_TSR_Active());
+		this.surface.set_ACC_Status(this.icl.getAccState());
+		this.surface.set_TSR_ActualSpeedLimit(this.icl.get_TSR_ActualSpeedLimit());
+		this.surface.set_TSR_NoSpeedLimit(this.icl.get_TSR_NoSpeedLimit());
+		this.surface.set_TSR_SixtyInCity(this.icl.get_TSR_SixtyInCity());
+		this.surface.set_TSR_StopSign(this.icl.get_TSR_StopSign());
+		this.surface.set_TSR_Yield(this.icl.get_TSR_Yield());
+		this.surface.set_CCS(this.icl.get_CruseControlSpeed());
+		this.surface.set_SD(this.icl.get_SafeDistance());
+		this.surface.invalidate();
+		this.surface.validate();
+		this.surface.repaint();
 	}
 
 	@Override
