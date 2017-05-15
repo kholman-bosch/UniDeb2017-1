@@ -29,7 +29,6 @@ public class VirtualFunctionBus {
 	}
 
 	public void cyclic() {
-
 		// Once the virtual function bus has started components are called cyclically
 		for (ISystemComponent comp : components) {
 			// System.out.println("Calling cyclic function of " + comp.toString());

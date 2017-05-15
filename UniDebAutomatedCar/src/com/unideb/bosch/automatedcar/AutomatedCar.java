@@ -49,12 +49,14 @@ public final class AutomatedCar {
 	private VirtualFunctionBus virtualFunctionBus;
 	private WorldObject databaseReference;
 
-	public AutomatedCar() {
+	public AutomatedCar(int initialPosX, int initialPosY) {
 		try {
 			this.carImage = ImageIO.read(new File("./world/bosch1.png"));
 		} catch (IOException ex) {
 			System.err.println(ex.getMessage() + " ImageIO.read! AutomatedCar");
 		}
+		this.carPos_X = initialPosX;
+		this.carPos_Y = initialPosY;
 		this.databaseReference = new WorldObject((int) this.carPos_X, (int) this.carPos_Y, 0, "car", 14);
 		WorldObjectParser.addCarToTheDatabase(this.databaseReference);
 		this.carImageRectange = new Rectangle(0, 0, this.carImage.getWidth() * 2, this.carImage.getHeight() * 2);

@@ -24,8 +24,8 @@ public final class VirtualWorld {
 		// KeyListener.
 		WorldObjectParser.initWorld();
 		frame = new VirtualWorldJFrame();
-		cars.add(new AutomatedCar());
-		cars.add(new AutomatedCar());
+		cars.add(new AutomatedCar(200, 200));
+		cars.add(new AutomatedCar(300, 200));
 	}
 
 	private static void refreshFrame() {
