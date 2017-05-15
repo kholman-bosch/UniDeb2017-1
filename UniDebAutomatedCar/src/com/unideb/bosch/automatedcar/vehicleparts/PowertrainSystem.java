@@ -18,7 +18,6 @@ public class PowertrainSystem extends SystemComponent {
 	private int data_headlight = 0;
 	private int data_index = 0;
 	private int data_steering_wheel_angle = 0;
-	private int data_pre_steering_wheel_angle = 0;
 	private int data_gear_position = 3;
 	//
 	private float car_Speed_Pixels = 0f;
@@ -69,12 +68,13 @@ public class PowertrainSystem extends SystemComponent {
 			allPositivePowers = Math.abs(baseNegativePowers_GRAV_FRICT) + (maximumForwardPower * powerFromGasPedal);
 		}
 		//
-		float negativePowerFromSteering = 0;
-		if (powerFromGasPedal != 0 ) {
-			negativePowerFromSteering = (-Math.abs( this.data_steering_wheel_angle-this.data_pre_steering_wheel_angle))* powerFromGasPedal;
-			allNegativePowers+=negativePowerFromSteering;
+		float negativePowerFromSteering = (-Math.abs(this.data_steering_wheel_angle) / 10) * powerFromGasPedal * 5;
+		if (this.data_gas_pedal_position != 0 && this.car_Speed_Pixels > 20) {
+			if (negativePowerFromSteering < -13) {
+				negativePowerFromSteering = -13;
+			}
+			allNegativePowers += negativePowerFromSteering;
 		}
-		this.data_pre_steering_wheel_angle =  this.data_steering_wheel_angle;
 		//
 		float allPowers = (allPositivePowers + allNegativePowers);
 		// gear logic
@@ -275,9 +275,7 @@ public class PowertrainSystem extends SystemComponent {
 			break;
 		case SignalDatabase.STEERING_WHEEL_ANGLE:
 			// -720 720 1
-			this.data_pre_steering_wheel_angle = this.data_steering_wheel_angle;
 			this.data_steering_wheel_angle = SignalDatabase.limit(this.data_steering_wheel_angle, -actValue, -720, 720);
-			//this.data_steering_wheel_angle = this.data_steering_wheel_angle ;
 			break;
 		case SignalDatabase.RADAR_SENSOR_DANGER_DETECTED_EMERGENCY_BREAK:
 			// 0 100 1 % -
