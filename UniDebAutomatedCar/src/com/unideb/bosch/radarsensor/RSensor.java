@@ -40,6 +40,9 @@ public class RSensor extends SystemComponent { // radar sensor
 	private float carForwardVector_Y;
 	//
 	private final VirtualFunctionBus vfb;
+	private boolean detected_Car_Or_Pedestrian = false;
+	private int dangerPos_X = 0;
+	private int dangerPos_Y = 0;
 
 	public RSensor(int minDetectRange, int maxDetectRange, int minDetctAngle, int maxDetectAngle, int maxDetectableObjs_f, VirtualFunctionBus virtFuncBus) {
 		super(virtFuncBus);
@@ -130,12 +133,18 @@ public class RSensor extends SystemComponent { // radar sensor
 
 	public void update() {
 		this.detectedWorldObjects.clear();
+		this.detected_Car_Or_Pedestrian = false;
 		for (int i = 0; i < WorldObjectParser.getWorldObjects().size(); i++) {
 			WorldObject actual_WorldObjet = WorldObjectParser.getWorldObjects().get(i);
 			if (isValid_WorldObject(actual_WorldObjet.getType())) {
 				if (this.isWorldObject_Detected(actual_WorldObjet)) {
 					RSensorDetectedObjectAttributes detectedObjWithAttributes = new RSensorDetectedObjectAttributes(actual_WorldObjet);
 					this.detectedWorldObjects.add(detectedObjWithAttributes);
+					if (isDetectedObj_Car_or_Pedestrian(actual_WorldObjet)) {
+						this.detected_Car_Or_Pedestrian = true;
+						this.dangerPos_X = actual_WorldObjet.getX();
+						this.dangerPos_Y = actual_WorldObjet.getY();
+					}
 					this.previousWorldObjects.add(detectedObjWithAttributes);
 				}
 			}
@@ -145,6 +154,31 @@ public class RSensor extends SystemComponent { // radar sensor
 		}
 		this.previousWorldObjects.clear();
 		RSensorSignalSender.send_Radar_Sensor_Signals(this, this.vfb);
+		if (this.detected_Car_Or_Pedestrian) {
+			float radarSensorPos_X = this.radarPos_X;
+			float radarSensorPos_Y = this.radarPos_Y;
+			float dx = (radarSensorPos_X - this.dangerPos_X) * (radarSensorPos_X - this.dangerPos_X);
+			float dy = (radarSensorPos_Y - this.dangerPos_Y) * (radarSensorPos_Y - this.dangerPos_Y);
+			float distance = (float) Math.sqrt((double) (dx + dy));
+			distance /= 7f;
+			float brakeVal = 100f - distance;
+			if (brakeVal > 50f) {
+				brakeVal = 100f;
+			}
+			this.vfb.sendSignal(new Signal(SignalDatabase.RADAR_SENSOR_DANGER_DETECTED_EMERGENCY_BREAK, brakeVal));
+		} else {
+			this.vfb.sendSignal(new Signal(SignalDatabase.RADAR_SENSOR_DANGER_DETECTED_EMERGENCY_BREAK, 0));
+		}
+	}
+
+	private boolean isDetectedObj_Car_or_Pedestrian(WorldObject actual_WorldObjet) {
+		switch (actual_WorldObjet.getType()) {
+		case "car":
+		case "man":
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	private boolean isWorldObject_Detected(WorldObject object) {
@@ -153,8 +187,8 @@ public class RSensor extends SystemComponent { // radar sensor
 		this.carForwardVector_X = (float) Math.sin(this.carHeadingAngle);
 		this.carForwardVector_Y = (float) Math.cos(this.carHeadingAngle);
 		// the first point of our FOV triangle is the position of the radar
-		float radarSensorPos_X = (this.radarPos_X);
-		float radarSensorPos_Y = (this.radarPos_Y);
+		float radarSensorPos_X = this.radarPos_X;
+		float radarSensorPos_Y = this.radarPos_Y;
 		float dx = (radarSensorPos_X - object.getX()) * (radarSensorPos_X - object.getX());
 		float dy = (radarSensorPos_Y - object.getY()) * (radarSensorPos_Y - object.getY());
 		float distance = (float) Math.sqrt((double) (dx + dy));

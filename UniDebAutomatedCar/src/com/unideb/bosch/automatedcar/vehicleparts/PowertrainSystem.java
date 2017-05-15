@@ -27,6 +27,7 @@ public class PowertrainSystem extends SystemComponent {
 	private int keep_alive_rpm = 1100, maximum_rpm = 9000;
 	private float maxSpeedClampHelper = 0f;
 	private final VirtualFunctionBus vfb;
+	private int emergencyBrakeValue_From_Radar = 0;
 
 	public PowertrainSystem(VirtualFunctionBus virtFuncBus) {
 		super(virtFuncBus);
@@ -50,7 +51,11 @@ public class PowertrainSystem extends SystemComponent {
 		float maxForwardSpeed_InPixels = this.kmh_To_pixelsPerTick(120f); // when we clamp speeds we need to clamp pixel values so we need to convert kmh to pixels
 		float maxReverseSpeed_InPixels = this.kmh_To_pixelsPerTick(35f);
 		// negative powers
-		float powerFromBreakPedal = this.data_brake_pedal_position / 100f;
+		int bralePedalPosition = this.data_brake_pedal_position;
+		if (this.data_gear_position == 0 || this.data_gear_position == 1) {
+			bralePedalPosition = this.emergencyBrakeValue_From_Radar;
+		}
+		float powerFromBreakPedal = bralePedalPosition / 100f;
 		float maximumBrakingPower = -30f;
 		float negativePowerFromBraking = maximumBrakingPower * powerFromBreakPedal;
 		float baseNegativePowers_GRAV_FRICT = -4f;
@@ -273,6 +278,10 @@ public class PowertrainSystem extends SystemComponent {
 			this.data_pre_steering_wheel_angle = this.data_steering_wheel_angle;
 			this.data_steering_wheel_angle = SignalDatabase.limit(this.data_steering_wheel_angle, -actValue, -720, 720);
 			//this.data_steering_wheel_angle = this.data_steering_wheel_angle ;
+			break;
+		case SignalDatabase.RADAR_SENSOR_DANGER_DETECTED_EMERGENCY_BREAK:
+			// 0 100 1 % -
+			this.emergencyBrakeValue_From_Radar = actValue;
 			break;
 		}
 	}
