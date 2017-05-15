@@ -23,8 +23,11 @@ public class TSR_Logic extends SystemComponent {
 	private double yieldDetectedTimer = 0d;
 	// TO DO- remove reference of ACC and do communication via signals
 	private AdaptiveCruiseControlModule acc;
+	private final VirtualFunctionBus vfb;
 
-	public TSR_Logic(AdaptiveCruiseControlModule accf) {
+	public TSR_Logic(AdaptiveCruiseControlModule accf, VirtualFunctionBus virtFuncBus) {
+		super(virtFuncBus);
+		this.vfb = virtFuncBus;
 		this.acc = accf;
 	}
 
@@ -67,27 +70,27 @@ public class TSR_Logic extends SystemComponent {
 
 	public void sendSignals() {
 		if (this.stopSignDetected) {
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 1));
+			this.vfb.sendSignal(new Signal(SignalDatabase.SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 1));
 		} else {
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 1));
+			this.vfb.sendSignal(new Signal(SignalDatabase.DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 1));
 		}
 		if (this.noSpeedLimitSignDetected) {
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 0));
+			this.vfb.sendSignal(new Signal(SignalDatabase.SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 0));
 		} else {
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 0));
+			this.vfb.sendSignal(new Signal(SignalDatabase.DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 0));
 		}
 		if (this.sixtyInCitySignDetected) {
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 2));
+			this.vfb.sendSignal(new Signal(SignalDatabase.SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 2));
 		} else {
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 2));
+			this.vfb.sendSignal(new Signal(SignalDatabase.DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 2));
 		}
 		if (this.yieldSignDetected) {
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 3));
+			this.vfb.sendSignal(new Signal(SignalDatabase.SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 3));
 		} else {
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 3));
+			this.vfb.sendSignal(new Signal(SignalDatabase.DONT_SHOW_SUPPLEMENTAL_SIGNS_ON_IC, 3));
 		}
 		//
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.MOST_RELEVANT_SPEED_LIMIT, this.actualSpeedLimit));
+		this.vfb.sendSignal(new Signal(SignalDatabase.MOST_RELEVANT_SPEED_LIMIT, this.actualSpeedLimit));
 	}
 
 	@Override

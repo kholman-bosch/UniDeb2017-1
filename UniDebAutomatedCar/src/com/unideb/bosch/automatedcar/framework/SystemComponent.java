@@ -12,7 +12,7 @@ package com.unideb.bosch.automatedcar.framework;
 
 public abstract class SystemComponent implements ISystemComponent {
 	// Register components automatically during instantiation
-	protected SystemComponent() {
-		VirtualFunctionBus.registerComponent(this);
+	protected SystemComponent(VirtualFunctionBus virtFuncBus) {
+		virtFuncBus.registerComponent(this);
 	}
 }

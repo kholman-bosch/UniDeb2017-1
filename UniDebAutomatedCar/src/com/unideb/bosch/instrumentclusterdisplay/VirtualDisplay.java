@@ -3,11 +3,13 @@ package com.unideb.bosch.instrumentclusterdisplay;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
 import com.unideb.bosch.acc.AdaptiveCruiseControlState;
 import com.unideb.bosch.automatedcar.AutomatedCar;
+import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 
 public class VirtualDisplay extends JFrame {
 
@@ -16,7 +18,7 @@ public class VirtualDisplay extends JFrame {
 	private InstrumentClusterLogic icl;
 	private Insets windowDecorationDims;
 
-	public VirtualDisplay(AutomatedCar car) {
+	public VirtualDisplay(AutomatedCar car, VirtualFunctionBus virtFuncBus) {
 		this.surface = new VirtualDisplaySurface(car);
 		windowDecorationDims = getInsets();
 		if (car == null) {
@@ -24,15 +26,19 @@ public class VirtualDisplay extends JFrame {
 		} else {
 			this.setTitle("Instrument Cluster for car: " + car.hashCode());
 		}
-		this.icl = new InstrumentClusterLogic();
+		this.icl = new InstrumentClusterLogic(virtFuncBus);
 		this.setLayout(new GridLayout());
 		this.add(this.surface);
 		this.setResizable(false);
 		this.pack();
 		this.setVisible(true);
 	}
-	
-	public void update(){
+
+	public void addKeyListenerToFrame(KeyListener keyListener) {
+		this.addKeyListener(keyListener);
+	}
+
+	public void update() {
 		this.surface.set_Actual_KMH_Needle_Angle(this.icl.getVehicleSpeed());
 		this.surface.set_Actual_RPM_Needle_Angle(this.icl.getMotorRPM());
 		this.surface.set_Actual_N(this.icl.getGearPos_N_Status());
@@ -134,7 +140,7 @@ public class VirtualDisplay extends JFrame {
 	public void set_SD(float distance) {
 		this.surface.set_SD(distance);
 	}
-	
+
 	public void set_ACC_Status(AdaptiveCruiseControlState state) {
 		this.surface.set_ACC_Status(state);
 	}

@@ -43,24 +43,30 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 	
 	private boolean timePassed = false;
 	private TimerTask tt;
+	private final VirtualFunctionBus vfb;
 
+	public AdaptiveCruiseControlModule(VirtualFunctionBus virtFuncBus){
+		super(virtFuncBus);
+		this.vfb = virtFuncBus;
+	}
+	
 	@Override
 	public void cyclic() {
-		LOGGER.debug("Current ACC state: " + this.accState.value());
-		LOGGER.debug("Currently set cruise control speed: " + this.cruiseControlSpeed);
-		LOGGER.debug("Current setting value: " + (this.currentACCSetting == 0.0 ? "CRUISE CONTROL SPEED" : "SAFE DISTANCE"));
-		LOGGER.debug("Currently set safe distance: " + this.safeDistance);
-		LOGGER.debug("Currently set gas pedal position: " + this.cruiseControlGasPedalPosition);
-		LOGGER.debug("Vehicle speed: " + this.currentSpeed);
-		LOGGER.debug("Vehicle gas pedal position: " + this.currentGasPedalPosition);
-		LOGGER.debug("Vehicle brake pedal position: " + this.currentBrakePedalPosition);
+		//LOGGER.debug("Current ACC state: " + this.accState.value());
+		//LOGGER.debug("Currently set cruise control speed: " + this.cruiseControlSpeed);
+		//LOGGER.debug("Current setting value: " + (this.currentACCSetting == 0.0 ? "CRUISE CONTROL SPEED" : "SAFE DISTANCE"));
+		//LOGGER.debug("Currently set safe distance: " + this.safeDistance);
+		//LOGGER.debug("Currently set gas pedal position: " + this.cruiseControlGasPedalPosition);
+		//LOGGER.debug("Vehicle speed: " + this.currentSpeed);
+		//LOGGER.debug("Vehicle gas pedal position: " + this.currentGasPedalPosition);
+		//LOGGER.debug("Vehicle brake pedal position: " + this.currentBrakePedalPosition);
 		
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_CURRENT_SAFE_DISTANCE, this.safeDistance));
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_CURRENT_CRUISE_CONTROL_SPEED, this.cruiseControlSpeed));
+		this.vfb.sendSignal(new Signal(SignalDatabase.ACC_CURRENT_SAFE_DISTANCE, this.safeDistance));
+		this.vfb.sendSignal(new Signal(SignalDatabase.ACC_CURRENT_CRUISE_CONTROL_SPEED, this.cruiseControlSpeed));
 
 		if (this.accState.equals(AdaptiveCruiseControlState.ACTIVE)) {
 			System.out.println("SENDING GAS PEDAL POSITION: " + this.cruiseControlGasPedalPosition);
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GAS_PEDAL_POSITION, this.cruiseControlGasPedalPosition));
+			this.vfb.sendSignal(new Signal(SignalDatabase.GAS_PEDAL_POSITION, this.cruiseControlGasPedalPosition));
 			
 			// COMMENT / UNCOMMENT THIS
 			if (Math.abs(this.currentSpeed - this.cruiseControlSpeed) < 1.0) {
@@ -73,7 +79,7 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 			
 			if (this.currentSpeed == 0.0f) {
 				// stopandgo acc
-				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, 3.0f));
+				this.vfb.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, 3.0f));
 				tt = new TimerTask() {
 					
 					@Override
@@ -91,7 +97,7 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 			if( !this.timePassed && this.cruiseControlSpeed > 0.0f ) {
 				// TODO not speed but distance
 				this.tt.cancel();
-				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, 1.0f));
+				this.vfb.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, 1.0f));
 			}
 		}
 	}
@@ -150,7 +156,7 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 			} else {
 				LOGGER.debug("CANNOT ENABLE ACC DUE TO INAPPROPRIATE SPEED");
 				disableACC();
-				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, 0.0f));
+				this.vfb.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, 0.0f));
 			}
 			break;
 		case 2: // SUSPENDED
@@ -172,7 +178,7 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 		// ACC is enabled, right now cruise controling, but gas pedal pressed
 		if (this.accState == AdaptiveCruiseControlState.ACTIVE && s.getData() != this.cruiseControlGasPedalPosition
 				&& s.getData() != 0.0) {
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, 2.0f));
+			this.vfb.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, 2.0f));
 		}
 	}
 
@@ -180,7 +186,7 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 		this.currentBrakePedalPosition = s.getData();
 
 		if (this.accState == AdaptiveCruiseControlState.ACTIVE && s.getData() != 0.0) {
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, 2.0f));
+			this.vfb.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, 2.0f));
 		}
 	}
 

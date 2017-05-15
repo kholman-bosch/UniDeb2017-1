@@ -7,24 +7,25 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.unideb.bosch.SignalDatabase;
-import com.unideb.bosch.acc.AdaptiveCruiseControlState;
-import com.unideb.bosch.automatedcar.VirtualWorld;
 import com.unideb.bosch.automatedcar.VirtualWorldRenderer;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
+import com.unideb.bosch.instrumentclusterdisplay.VirtualDisplay;
 
 public class HumanMachineInterface extends SystemComponent {
 
 	private static final Logger LOGGER = LogManager.getLogger(HumanMachineInterface.class);
 
 	private KeyListener keyListener;
+	private final VirtualFunctionBus vfb;
 
-	public HumanMachineInterface() {
-		super();
+	public HumanMachineInterface(VirtualFunctionBus virtFuncBus, VirtualDisplay virtDisplay_IC) {
+		super(virtFuncBus);
 		// LOGGER.debug("HMI created!");
-		keyListener = this.new HMIKeyHandler();
-		VirtualWorld.addKeyListenerToFrame(keyListener);
+		this.vfb = virtFuncBus;
+		this.keyListener = this.new HMIKeyHandler(virtFuncBus);
+		virtDisplay_IC.addKeyListenerToFrame(this.keyListener);
 	}
 
 	int gasPedalPosition = 0;
@@ -41,6 +42,12 @@ public class HumanMachineInterface extends SystemComponent {
 	private float currentACCSetting = 0.0f; // the default is the cc speed
 
 	private class HMIKeyHandler implements KeyListener {
+
+		private final VirtualFunctionBus vfb_inKeyHandler;
+
+		public HMIKeyHandler(VirtualFunctionBus virtFuncBus) {
+			this.vfb_inKeyHandler = virtFuncBus;
+		}
 
 		@Override
 		public void keyPressed(KeyEvent keyEvent) {
@@ -102,69 +109,67 @@ public class HumanMachineInterface extends SystemComponent {
 
 		@Override
 		public void keyTyped(KeyEvent keyEvent) {
-
 			char character = keyEvent.getKeyChar();
 			System.out.println("character typed: " + character);
 			if (character == 'p' || character == 'P') {
-				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 3));
+				this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 3));
 			} else if (character == 'r' || character == 'R') {
-				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 2));
+				this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 2));
 			} else if (character == 'n' || character == 'N') {
-				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 1));
+				this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 1));
 			} else if (character == 'd' || character == 'D') {
-				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 0));
+				this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 0));
 			} else if (character == 'q' || character == 'Q') {
 				if (lastIndicatorSignal == 2) {
-					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.INDICATOR, 0));
+					this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.INDICATOR, 0));
 					lastIndicatorSignal = 0;
 				} else {
-					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.INDICATOR, 2));
+					this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.INDICATOR, 2));
 					lastIndicatorSignal = 2;
 				}
 			} else if (character == 'w' || character == 'W') {
 				if (lastIndicatorSignal == 3) {
-					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.INDICATOR, 0));
+					this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.INDICATOR, 0));
 					lastIndicatorSignal = 0;
 				} else {
-					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.INDICATOR, 3));
+					this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.INDICATOR, 3));
 					lastIndicatorSignal = 3;
 				}
 			} else if (character == 'e' || character == 'E') {
 				if (lastIndicatorSignal == 1) {
-					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.INDICATOR, 0));
+					this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.INDICATOR, 0));
 					lastIndicatorSignal = 0;
 				} else {
-					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.INDICATOR, 1));
+					this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.INDICATOR, 1));
 					lastIndicatorSignal = 1;
 				}
 			} else if (character == 'l' || character == 'L') {
 				if (isHeadLightOn) {
-					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.HEADLIGHT, 0));
+					this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.HEADLIGHT, 0));
 					isHeadLightOn = false;
 				} else {
-					VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.HEADLIGHT, 1));
+					this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.HEADLIGHT, 1));
 					isHeadLightOn = true;
-					;
 				}
 			} else if (character == 't' || character == 'T') {
 				tsrEnabled = !tsrEnabled;
-				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.TSR_MODULE_STATUS, tsrEnabled ? 1 : 0));
+				this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.TSR_MODULE_STATUS, tsrEnabled ? 1 : 0));
 			} else if (character == 'a' || character == 'A') {
 				LOGGER.debug("A key pressed!");
 				LOGGER.debug("ACC status change " + (accEnabled ? "ENABLED" : "DISABLED") + " -> " + (!accEnabled ? "ENABLED" : "DISABLED"));
 				accEnabled = !accEnabled;
-				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, accEnabled ? 1 : 0));
+				this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.ACC_STATUS_CHANGED, accEnabled ? 1 : 0));
 			} else if (character == 's' || character == 'S') {
 				if (currentACCSetting == 0.0f) {
 					currentACCSetting = 1.0f;
 				} else {
 					currentACCSetting = 0.0f;
 				}
-				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_SETTING_SWITCHED, currentACCSetting));
+				this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.ACC_SETTING_SWITCHED, currentACCSetting));
 			} else if (character == '+') {
-				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_CHANGE_VALUE, 1.0f));
+				this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.ACC_CHANGE_VALUE, 1.0f));
 			} else if (character == '-') {
-				VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.ACC_CHANGE_VALUE, 0.0f));
+				this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.ACC_CHANGE_VALUE, 0.0f));
 			}
 
 			// LOGGER.debug(keyEvent.getKeyCode() + " key were typed!");
@@ -210,9 +215,9 @@ public class HumanMachineInterface extends SystemComponent {
 				}
 			}
 		}
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.GAS_PEDAL_POSITION, gasPedalPosition));
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.BRAKE_PEDAL_POSITION, breakPedalPosition));
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.STEERING_WHEEL_ANGLE, steeringWheelAngle));
+		this.vfb.sendSignal(new Signal(SignalDatabase.GAS_PEDAL_POSITION, gasPedalPosition));
+		this.vfb.sendSignal(new Signal(SignalDatabase.BRAKE_PEDAL_POSITION, breakPedalPosition));
+		this.vfb.sendSignal(new Signal(SignalDatabase.STEERING_WHEEL_ANGLE, steeringWheelAngle));
 	}
 
 	@Override

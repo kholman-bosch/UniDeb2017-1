@@ -10,24 +10,17 @@ import java.util.ArrayList;
  */
 public class VirtualFunctionBus {
 
-	// Implement the singleton pattern
-	private static VirtualFunctionBus instance = new VirtualFunctionBus();
-
-	private VirtualFunctionBus() {
+	public VirtualFunctionBus() {
 	};
 
-	public static VirtualFunctionBus getInstance() {
-		return instance;
-	}
+	private ArrayList<ISystemComponent> components = new ArrayList<ISystemComponent>();
 
-	private static ArrayList<ISystemComponent> components = new ArrayList<ISystemComponent>();
-
-	public static void registerComponent(ISystemComponent comp) {
-		VirtualFunctionBus.components.add(comp);
+	public void registerComponent(ISystemComponent comp) {
+		this.components.add(comp);
 		// System.out.println("System component " + comp.toString() + " is registered on the virtual function bus");
 	}
 
-	public static void sendSignal(Signal s) {
+	public void sendSignal(Signal s) {
 		// System.out.println("Broadcast signal " + s.toString());
 		// Broadcast the signal to all system components
 		for (ISystemComponent comp : components) {
@@ -35,7 +28,7 @@ public class VirtualFunctionBus {
 		}
 	}
 
-	public static void cyclic() {
+	public void cyclic() {
 
 		// Once the virtual function bus has started components are called cyclically
 		for (ISystemComponent comp : components) {

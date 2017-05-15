@@ -42,8 +42,11 @@ public class FrontViewCamera extends SystemComponent {
 
 	private float carForwardVector_X;
 	private float carForwardVector_Y;
-
-	public FrontViewCamera(AutomatedCar car) {
+	private final VirtualFunctionBus vfb;
+	
+	public FrontViewCamera(AutomatedCar car, VirtualFunctionBus virtFuncBus) {
+		super(virtFuncBus);
+		this.vfb = virtFuncBus;
 		this.car = car;
 	}
 
@@ -313,9 +316,9 @@ public class FrontViewCamera extends SystemComponent {
 		Collections.sort(detectedRoadSigns);
 		int size = detectedRoadSigns.size() > 5 ? 5 : detectedRoadSigns.size();
 		for (int i = 0; i < size; i++) {
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.TRAFFIC_SIGN_MEANING, detectedRoadSigns.get(i).getTrafficSignMeaing()));
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.TRAFFIC_SIGN_LATERAL_DISTANCE_FROM_EGO, detectedRoadSigns.get(i).getLongitudinalEGO()));
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.TRAFFIC_SIGN_LONGITUDINAL_DISTANCE_FROM_EGO, detectedRoadSigns.get(i).getLateralEGO()));
+			this.vfb.sendSignal(new Signal(SignalDatabase.TRAFFIC_SIGN_MEANING, detectedRoadSigns.get(i).getTrafficSignMeaing()));
+			this.vfb.sendSignal(new Signal(SignalDatabase.TRAFFIC_SIGN_LATERAL_DISTANCE_FROM_EGO, detectedRoadSigns.get(i).getLongitudinalEGO()));
+			this.vfb.sendSignal(new Signal(SignalDatabase.TRAFFIC_SIGN_LONGITUDINAL_DISTANCE_FROM_EGO, detectedRoadSigns.get(i).getLateralEGO()));
 		}
 	}
 

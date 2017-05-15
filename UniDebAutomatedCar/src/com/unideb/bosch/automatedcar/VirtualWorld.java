@@ -24,6 +24,7 @@ public final class VirtualWorld {
 		// KeyListener.
 		frame = new VirtualWorldJFrame();
 		cars.add(new AutomatedCar());
+		cars.add(new AutomatedCar());
 	}
 
 	private static void refreshFrame() {

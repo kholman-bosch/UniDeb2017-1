@@ -4,6 +4,7 @@ import com.unideb.bosch.SignalDatabase;
 import com.unideb.bosch.acc.AdaptiveCruiseControlState;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
+import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 
 /**
  * This class implements the InstrumentClusterLogic System
@@ -29,12 +30,11 @@ public class InstrumentClusterLogic extends SystemComponent {
 	private boolean tsr_noSpeedLimitSign = false;
 	private int ccsValue = 0;
 	private float sdValue = 0;
-	
 	// acc
 	private AdaptiveCruiseControlState accState = AdaptiveCruiseControlState.DISABLED;
 
-	public InstrumentClusterLogic() {
-		super();
+	public InstrumentClusterLogic(VirtualFunctionBus virtFuncBus) {
+		super(virtFuncBus);
 	}
 
 	@Override

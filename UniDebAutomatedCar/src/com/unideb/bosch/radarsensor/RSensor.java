@@ -11,6 +11,7 @@ import com.unideb.bosch.automatedcar.VirtualWorld;
 import com.unideb.bosch.automatedcar.WorldObjectParser;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
+import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 import com.unideb.bosch.automatedcar.framework.WorldObject;
 
 public class RSensor extends SystemComponent { // radar sensor
@@ -37,8 +38,12 @@ public class RSensor extends SystemComponent { // radar sensor
 	//
 	private float carForwardVector_X;
 	private float carForwardVector_Y;
+	//
+	private final VirtualFunctionBus vfb;
 
-	public RSensor(int minDetectRange, int maxDetectRange, int minDetctAngle, int maxDetectAngle, int maxDetectableObjs_f) {
+	public RSensor(int minDetectRange, int maxDetectRange, int minDetctAngle, int maxDetectAngle, int maxDetectableObjs_f, VirtualFunctionBus virtFuncBus) {
+		super(virtFuncBus);
+		this.vfb = virtFuncBus;
 		this.minimumDetectRange = minDetectRange;
 		this.maximumDetectRange = maxDetectRange;
 		this.minimumDetectAngle = minDetctAngle;
@@ -139,7 +144,7 @@ public class RSensor extends SystemComponent { // radar sensor
 			this.calculate_DetectedWorldObject_Attributes(this.detectedWorldObjects.get(i));
 		}
 		this.previousWorldObjects.clear();
-		RSensorSignalSender.send_Radar_Sensor_Signals(this);
+		RSensorSignalSender.send_Radar_Sensor_Signals(this, this.vfb);
 	}
 
 	private boolean isWorldObject_Detected(WorldObject object) {

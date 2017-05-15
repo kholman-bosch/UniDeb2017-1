@@ -25,21 +25,23 @@ public class PowertrainSystem extends SystemComponent {
 	private int inner_gear_state_in_D = 1;
 	private int keep_alive_rpm = 1100, maximum_rpm = 9000;
 	private float maxSpeedClampHelper = 0f;
+	private final VirtualFunctionBus vfb;
 
-	public PowertrainSystem() {
-		super();
+	public PowertrainSystem(VirtualFunctionBus virtFuncBus) {
+		super(virtFuncBus);
+		this.vfb = virtFuncBus;
 	}
 
 	@Override
 	public void cyclic() {
 		this.calculatePowertrainPhysics();
 		this.calcMotorRPM();
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_HEADLIGHT, this.data_headlight));
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_INDEX_INDICATORS, this.data_index));
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_GEAR_POSITION, this.data_gear_position));
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.POWERTRAIN_STEERING_WHEEL_ANGLE, this.data_steering_wheel_angle));
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.pixels_To_mps_To_kmh(this.car_Speed_Pixels)));
-		VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.MOTOR_RPM, this.data_motor_rpm));
+		this.vfb.sendSignal(new Signal(SignalDatabase.POWERTRAIN_HEADLIGHT, this.data_headlight));
+		this.vfb.sendSignal(new Signal(SignalDatabase.POWERTRAIN_INDEX_INDICATORS, this.data_index));
+		this.vfb.sendSignal(new Signal(SignalDatabase.POWERTRAIN_GEAR_POSITION, this.data_gear_position));
+		this.vfb.sendSignal(new Signal(SignalDatabase.POWERTRAIN_STEERING_WHEEL_ANGLE, this.data_steering_wheel_angle));
+		this.vfb.sendSignal(new Signal(SignalDatabase.VEHICLE_SPEED, this.pixels_To_mps_To_kmh(this.car_Speed_Pixels)));
+		this.vfb.sendSignal(new Signal(SignalDatabase.MOTOR_RPM, this.data_motor_rpm));
 		// this.writeInTerminalInfos();
 	}
 

@@ -47,7 +47,9 @@ public class VirtualWorldRenderer extends JPanel {
 		TexturePaint backgroundPaint = new TexturePaint(scaledBackground, backgroundRectangle);
 		globalMatrix.setPaint(backgroundPaint);
 		globalMatrix.fillRect(0, 0, scaledBackground.getWidth(), scaledBackground.getHeight());
-		VirtualWorld.getCars().get(0).drawCar(globalMatrix, actualGraphics_Scale);
+		for (int i = 0; i < VirtualWorld.getCars().size(); i++) {
+			VirtualWorld.getCars().get(i).drawCar(globalMatrix, actualGraphics_Scale);
+		}
 		drawKeybindingsInfo(g);
 		if (showDebugWorldData) {
 			this.drawWorldObjectsDebugData(globalMatrix);

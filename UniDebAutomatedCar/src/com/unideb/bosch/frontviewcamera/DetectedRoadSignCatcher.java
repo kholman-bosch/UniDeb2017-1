@@ -2,6 +2,7 @@ package com.unideb.bosch.frontviewcamera;
 
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.SystemComponent;
+import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
 
 /**
  * Debug class for camera signals.
@@ -15,6 +16,10 @@ public class DetectedRoadSignCatcher extends SystemComponent {
 	private long latEGO;
 	private long lonEGO;
 	private long roadSignMeaning;
+	
+	public DetectedRoadSignCatcher(VirtualFunctionBus virtFuncBus){
+		super(virtFuncBus);
+	}
 	
 	@Override
 	public void cyclic() {

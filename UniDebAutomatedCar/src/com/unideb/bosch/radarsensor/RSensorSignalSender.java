@@ -58,17 +58,17 @@ public class RSensorSignalSender {
 		}
 	}
 
-	public static void send_Radar_Sensor_Signals(RSensor radar) {
+	public static void send_Radar_Sensor_Signals(RSensor radar, VirtualFunctionBus virtFuncBus) {
 		filterOut_LessDangerousObjects(radar);
 		RSensorDetectedObjectAttributes actRadarObject;
 		for (int i = 0; i < objectList.size(); i++) {
 			actRadarObject = objectList.get(i);
-			//System.out.println(i + " " + actRadarObject.parentWorldObject.getType() + " " + actRadarObject.dangerValue);
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.RADAR_LONGITUDINAL_RELATIVE_VELOCITY, (int) actRadarObject.longitudinalRelative_Velcity));
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.RADAR_LONGITUDINAL_DISTANCE_FROM_EGO, (int) actRadarObject.longitudinalDistance_From_EGO));
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.RADAR_LATERAL_RELATIVE_VELOCITY, (int) actRadarObject.longitudinalRelative_Velcity));
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.RADAR_LATERAL_DISTANCE_FROM_EGO, (int) actRadarObject.lateralDistance_From_EGO));
-			VirtualFunctionBus.sendSignal(new Signal(SignalDatabase.OBJECT_SIZE, actRadarObject.parentWorldObject.getRadius()));
+			// System.out.println(i + " " + actRadarObject.parentWorldObject.getType() + " " + actRadarObject.dangerValue);
+			virtFuncBus.sendSignal(new Signal(SignalDatabase.RADAR_LONGITUDINAL_RELATIVE_VELOCITY, (int) actRadarObject.longitudinalRelative_Velcity));
+			virtFuncBus.sendSignal(new Signal(SignalDatabase.RADAR_LONGITUDINAL_DISTANCE_FROM_EGO, (int) actRadarObject.longitudinalDistance_From_EGO));
+			virtFuncBus.sendSignal(new Signal(SignalDatabase.RADAR_LATERAL_RELATIVE_VELOCITY, (int) actRadarObject.longitudinalRelative_Velcity));
+			virtFuncBus.sendSignal(new Signal(SignalDatabase.RADAR_LATERAL_DISTANCE_FROM_EGO, (int) actRadarObject.lateralDistance_From_EGO));
+			virtFuncBus.sendSignal(new Signal(SignalDatabase.OBJECT_SIZE, actRadarObject.parentWorldObject.getRadius()));
 		}
 	}
 }
