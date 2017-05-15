@@ -105,9 +105,13 @@ public class VirtualWorldRenderer extends JPanel {
 			if (worldObj.getType().contains("lane")) {
 				continue;
 			}
-			g.setColor(Color.BLACK);
+			g.setColor(Color.DARK_GRAY);
 			int textX = (int) (worldObj.getX() * actualGraphics_Scale);
 			int textY = (int) (worldObj.getY() * actualGraphics_Scale);
+			int diameterHalf = (int) ((worldObj.getRadius() / 2) * actualGraphics_Scale) * 2;
+			int diameterScaled = (int) (worldObj.getRadius() * actualGraphics_Scale) * 2;
+			g.drawOval(textX - diameterHalf, textY - diameterHalf, diameterScaled, diameterScaled);
+			g.setColor(Color.BLACK);
 			g.drawString(worldObj.getType() + " ORI: " + Math.toDegrees(worldObj.getOrientation()), textX, textY);
 			// draw orientation redgreen lines:
 			float rotation = worldObj.getOrientation();

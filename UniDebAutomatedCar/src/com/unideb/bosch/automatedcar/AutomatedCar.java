@@ -57,7 +57,7 @@ public final class AutomatedCar {
 		}
 		this.carPos_X = initialPosX;
 		this.carPos_Y = initialPosY;
-		this.databaseReference = new WorldObject((int) this.carPos_X, (int) this.carPos_Y, 0, "car", 14);
+		this.databaseReference = new WorldObject((int) this.carPos_X, (int) this.carPos_Y, 0, "car", 80);
 		WorldObjectParser.addCarToTheDatabase(this.databaseReference);
 		this.carImageRectange = new Rectangle(0, 0, this.carImage.getWidth() * 2, this.carImage.getHeight() * 2);
 		this.virtualFunctionBus = new VirtualFunctionBus();
