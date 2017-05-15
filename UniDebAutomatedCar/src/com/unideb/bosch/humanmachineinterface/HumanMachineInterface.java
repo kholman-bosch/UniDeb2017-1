@@ -195,10 +195,10 @@ public class HumanMachineInterface extends SystemComponent {
 			breakPedalPosition = 0;
 		}
 
-		if (left && steeringWheelAngle > -720) {
+		if (left && steeringWheelAngle > -20) {
 			steeringWheelAngle -= 4;
 		}
-		if (right && steeringWheelAngle < 720) {
+		if (right && steeringWheelAngle < 20) {
 			steeringWheelAngle += 4;
 		}
 

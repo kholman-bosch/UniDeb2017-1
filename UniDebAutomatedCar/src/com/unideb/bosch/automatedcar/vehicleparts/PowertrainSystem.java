@@ -11,13 +11,14 @@ import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
  */
 public class PowertrainSystem extends SystemComponent {
 
-	private int data_gas_pedal_position = 0;
+	private float data_gas_pedal_position = 0;
 	private int data_brake_pedal_position = 0;
 	//
 	private int data_motor_rpm = 0;
 	private int data_headlight = 0;
 	private int data_index = 0;
 	private int data_steering_wheel_angle = 0;
+	private int data_pre_steering_wheel_angle = 0;
 	private int data_gear_position = 3;
 	//
 	private float car_Speed_Pixels = 0f;
@@ -62,6 +63,14 @@ public class PowertrainSystem extends SystemComponent {
 		if (powerFromGasPedal > 0f) {
 			allPositivePowers = Math.abs(baseNegativePowers_GRAV_FRICT) + (maximumForwardPower * powerFromGasPedal);
 		}
+		//
+		float negativePowerFromSteering = 0;
+		if (powerFromGasPedal != 0 ) {
+			negativePowerFromSteering = (-Math.abs( this.data_steering_wheel_angle-this.data_pre_steering_wheel_angle))* powerFromGasPedal;
+			allNegativePowers+=negativePowerFromSteering;
+		}
+		this.data_pre_steering_wheel_angle =  this.data_steering_wheel_angle;
+		//
 		float allPowers = (allPositivePowers + allNegativePowers);
 		// gear logic
 		switch (this.data_gear_position) {
@@ -234,7 +243,7 @@ public class PowertrainSystem extends SystemComponent {
 		switch (s.getID()) {
 		case SignalDatabase.GAS_PEDAL_POSITION:
 			// 0 100 1 % -
-			this.data_gas_pedal_position = actValue;
+			this.data_gas_pedal_position = s.getData();
 			break;
 		case SignalDatabase.BRAKE_PEDAL_POSITION:
 			// 0 100 1 % -
@@ -261,7 +270,9 @@ public class PowertrainSystem extends SystemComponent {
 			break;
 		case SignalDatabase.STEERING_WHEEL_ANGLE:
 			// -720 720 1
+			this.data_pre_steering_wheel_angle = this.data_steering_wheel_angle;
 			this.data_steering_wheel_angle = SignalDatabase.limit(this.data_steering_wheel_angle, -actValue, -720, 720);
+			//this.data_steering_wheel_angle = this.data_steering_wheel_angle ;
 			break;
 		}
 	}
