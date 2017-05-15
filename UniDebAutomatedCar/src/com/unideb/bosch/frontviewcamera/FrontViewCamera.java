@@ -310,7 +310,7 @@ public class FrontViewCamera extends SystemComponent {
 		this.carForwardVector_X = (float) Math.sin(this.car.carHeading_Angle);
 		this.carForwardVector_Y = (float) Math.cos(this.car.carHeading_Angle);
 
-		List<WorldObject> worldObjects = WorldObjectParser.getInstance().getWorldObjects();
+		List<WorldObject> worldObjects = WorldObjectParser.getWorldObjects();
 
 		detectRoadSigns(worldObjects);
 		Collections.sort(detectedRoadSigns);

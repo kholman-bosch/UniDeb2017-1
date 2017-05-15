@@ -24,6 +24,12 @@ public class WorldObject {
 		this.type = type;
 		this.radius = radi;
 	}
+	
+	public void setValues(int x, int y, float rot){
+		this.x = x;
+		this.y = y;
+		this.rotation = rot;
+	}
 
 	public int getX() {
 		return x;

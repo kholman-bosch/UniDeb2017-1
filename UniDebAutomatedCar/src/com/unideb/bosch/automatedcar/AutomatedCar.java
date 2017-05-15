@@ -14,6 +14,7 @@ import com.unideb.bosch.SignalDatabase;
 import com.unideb.bosch.acc.AdaptiveCruiseControlModule;
 import com.unideb.bosch.automatedcar.framework.Signal;
 import com.unideb.bosch.automatedcar.framework.VirtualFunctionBus;
+import com.unideb.bosch.automatedcar.framework.WorldObject;
 import com.unideb.bosch.automatedcar.vehicleparts.PowertrainSystem;
 import com.unideb.bosch.frontviewcamera.DetectedRoadSignCatcher;
 import com.unideb.bosch.frontviewcamera.FrontViewCamera;
@@ -46,6 +47,7 @@ public final class AutomatedCar {
 	private AdaptiveCruiseControlModule accModule;
 	private VirtualDisplay vd;
 	private VirtualFunctionBus virtualFunctionBus;
+	private WorldObject databaseReference;
 
 	public AutomatedCar() {
 		try {
@@ -53,6 +55,8 @@ public final class AutomatedCar {
 		} catch (IOException ex) {
 			System.err.println(ex.getMessage() + " ImageIO.read! AutomatedCar");
 		}
+		this.databaseReference = new WorldObject((int) this.carPos_X, (int) this.carPos_Y, 0, "car", 14);
+		WorldObjectParser.addCarToTheDatabase(this.databaseReference);
 		this.carImageRectange = new Rectangle(0, 0, this.carImage.getWidth() * 2, this.carImage.getHeight() * 2);
 		this.virtualFunctionBus = new VirtualFunctionBus();
 		this.powertrainSystem = new PowertrainSystem(this.virtualFunctionBus);
@@ -62,7 +66,7 @@ public final class AutomatedCar {
 		new DetectedRoadSignCatcher(this.virtualFunctionBus);
 		this.radarSensor = new RSensor(100, 500, 20, 85, 5, this.virtualFunctionBus);
 		this.accModule = new AdaptiveCruiseControlModule(this.virtualFunctionBus);
-		this.tsr = new TSR_Logic(this.accModule,this.virtualFunctionBus);
+		this.tsr = new TSR_Logic(this.accModule, this.virtualFunctionBus);
 	}
 
 	public void drawCar(Graphics g, float graphicsScale) {
@@ -113,6 +117,7 @@ public final class AutomatedCar {
 		this.teleportCarIntoBounds();
 		this.vd.update();
 		// TODO somehow need to send float value instead of long
+		this.databaseReference.setValues((int) this.carPos_X, (int) this.carPos_Y, this.carHeading_Angle);
 		this.virtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_POSITION_X, this.carPos_X));
 		this.virtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_POSITION_Y, this.carPos_Y));
 		this.virtualFunctionBus.sendSignal(new Signal(SignalDatabase.CAR_ANGLE, (float) Math.toDegrees(this.carHeading_Angle) + 180));

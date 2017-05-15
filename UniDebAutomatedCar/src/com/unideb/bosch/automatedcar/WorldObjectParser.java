@@ -15,19 +15,16 @@ import com.unideb.bosch.automatedcar.framework.WorldObject;
 public class WorldObjectParser {
 
 	private static final File world = new File("./world/road_1_simplified.xml");
-	private int width = 0;
-	private int height = 0;
-
+	private static int width = 0;
+	private static int height = 0;
 	private static final int XML_OFFSET_X = 100;
 	private static final int XML_OFFSET_Y = 100;
-
-	ArrayList<WorldObject> worldObjects = new ArrayList<WorldObject>();
-
-	// Implement the singleton pattern
-	private static WorldObjectParser instance = new WorldObjectParser();
+	private static ArrayList<WorldObject> worldObjects = new ArrayList<WorldObject>();
 
 	private WorldObjectParser() {
+	};
 
+	public static void initWorld() {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -56,25 +53,25 @@ public class WorldObjectParser {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	};
-
-	public static WorldObjectParser getInstance() {
-		return instance;
+	}
+	
+	public static void addCarToTheDatabase(WorldObject carsWorldObject_Reference){
+		worldObjects.add(carsWorldObject_Reference);
 	}
 
-	public int getWidth() {
+	public static int getWidth() {
 		return width;
 	}
 
-	public int getHeight() {
+	public static int getHeight() {
 		return height;
 	}
 
-	public ArrayList<WorldObject> getWorldObjects() {
+	public static ArrayList<WorldObject> getWorldObjects() {
 		return worldObjects;
 	}
 
-	private float getObjectRadius(String o_type) {
+	private static float getObjectRadius(String o_type) {
 		switch (o_type) {
 		case "tree":
 			return 150f / 2f;

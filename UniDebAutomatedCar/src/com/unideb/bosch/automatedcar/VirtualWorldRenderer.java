@@ -98,10 +98,10 @@ public class VirtualWorldRenderer extends JPanel {
 	private void drawWorldObjectsDebugData(Graphics2D g) {
 		g.setColor(Color.black);
 		g.setFont(defaultFontBOLD);
-		int size = WorldObjectParser.getInstance().getWorldObjects().size();
+		int size = WorldObjectParser.getWorldObjects().size();
 		g.setStroke(new BasicStroke(2));
 		for (int i = 0; i < size; i++) {
-			WorldObject worldObj = WorldObjectParser.getInstance().getWorldObjects().get(i);
+			WorldObject worldObj = WorldObjectParser.getWorldObjects().get(i);
 			if (worldObj.getType().contains("lane")) {
 				continue;
 			}

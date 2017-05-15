@@ -22,6 +22,7 @@ public final class VirtualWorld {
 	static {
 		// Order matters because the frame should exist when the HMI set the
 		// KeyListener.
+		WorldObjectParser.initWorld();
 		frame = new VirtualWorldJFrame();
 		cars.add(new AutomatedCar());
 		cars.add(new AutomatedCar());

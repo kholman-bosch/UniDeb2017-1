@@ -130,8 +130,8 @@ public class RSensor extends SystemComponent { // radar sensor
 
 	public void update() {
 		this.detectedWorldObjects.clear();
-		for (int i = 0; i < WorldObjectParser.getInstance().getWorldObjects().size(); i++) {
-			WorldObject actual_WorldObjet = WorldObjectParser.getInstance().getWorldObjects().get(i);
+		for (int i = 0; i < WorldObjectParser.getWorldObjects().size(); i++) {
+			WorldObject actual_WorldObjet = WorldObjectParser.getWorldObjects().get(i);
 			if (isValid_WorldObject(actual_WorldObjet.getType())) {
 				if (this.isWorldObject_Detected(actual_WorldObjet)) {
 					RSensorDetectedObjectAttributes detectedObjWithAttributes = new RSensorDetectedObjectAttributes(actual_WorldObjet);
@@ -221,6 +221,8 @@ public class RSensor extends SystemComponent { // radar sensor
 		}
 		switch (object_Type) {
 		case "tree":
+			return true;
+		case "car":
 			return true;
 		case "man":
 			return true;
