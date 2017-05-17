@@ -124,7 +124,7 @@ public class FrontViewCamera extends SystemComponent {
 
 		for (WorldObject worldObject : detectedWorldObjects) {
 
-			if (worldObject.getType().startsWith("road_sign")) {
+			if (worldObject.getType().startsWith("road_sign") || worldObject.getType().startsWith("roadsign")) {
 				float cameraForward_X_start = cameraPos_X + this.carForwardVector_X;
 				float cameraForward_Y_start = cameraPos_Y + this.carForwardVector_Y;
 
@@ -178,71 +178,85 @@ public class FrontViewCamera extends SystemComponent {
 
 			switch (worldObject.getType()) {
 			case "road_sign_speed_5":
+			case "roadsign_speed_5":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_5));
 				}
 				break;
 			case "road_sign_speed_10":
+			case "roadsign_speed_10":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_10));
 				}
 				break;
 			case "road_sign_speed_20":
+			case "roadsign_speed_20":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_20));
 				}
 				break;
 			case "road_sign_speed_30":
+			case "road_signspeed_30":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_30));
 				}
 				break;
 			case "road_sign_speed_40":
+			case "roadsign_speed_40":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_40));
 				}
 				break;
 			case "road_sign_speed_50":
+			case "roadsign_speed_50":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_50));
 				}
 				break;
 			case "road_sign_speed_60":
+			case "roadsign_speed_60":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_60));
 				}
 				break;
 			case "road_sign_speed_70":
+			case "roadsign_speed_70":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_70));
 				}
 				break;
 			case "road_sign_speed_80":
+			case "roadsign_speed_80":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_80));
 				}
 				break;
 			case "road_sign_speed_90":
+			case "roadsign_speed_90":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_90));
 				}
 				break;
 			case "road_sign_speed_100":
+			case "roadsign_speed_100":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_100));
 				}
 				break;
 			case "road_sign_speed_110":
+			case "roadsign_speed_110":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_110));
 				}
 				break;
 			case "road_sign_speed_120":
+			case "roadsign_speed_120":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_120));
 				}
 				break;
 			case "road_sign_speed_130":
+			case "roadsign_speed_130":
 				if (isRoadSignDetected(worldObject)) {
 					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_130));
 				}
