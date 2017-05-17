@@ -121,7 +121,7 @@ public class InstrumentClusterLogic extends SystemComponent {
 			}
 			break;
 		case SignalDatabase.ACC_STATUS_CHANGED:
-			switch( actValue ){
+			switch (actValue) {
 			case 0: // DISABLED
 				this.accState = AdaptiveCruiseControlState.DISABLED;
 				break;
@@ -213,15 +213,15 @@ public class InstrumentClusterLogic extends SystemComponent {
 	public boolean get_TSR_Yield() {
 		return this.tsr_yieldSing;
 	}
-	
+
 	public int get_CruseControlSpeed() {
 		return this.ccsValue;
 	}
-	
+
 	public float get_SafeDistance() {
 		return this.sdValue;
 	}
-	
+
 	public AdaptiveCruiseControlState getAccState() {
 		return this.accState;
 	}

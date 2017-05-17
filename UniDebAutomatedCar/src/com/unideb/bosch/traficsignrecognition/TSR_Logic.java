@@ -59,9 +59,9 @@ public class TSR_Logic extends SystemComponent {
 				this.noSpeedLimitSignDetected = false;
 			}
 		}
-		//to acc
-		if(this.actualSpeedLimit != 0){
-			if(this.acc.getActualCruiseSpeed() > this.actualSpeedLimit){
+		// to acc
+		if (this.actualSpeedLimit != 0) {
+			if (this.acc.getActualCruiseSpeed() > this.actualSpeedLimit) {
 				this.acc.overrideSetSpeedWithValueFromTSR(this.actualSpeedLimit);
 			}
 		}

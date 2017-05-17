@@ -54,8 +54,8 @@ public class WorldObjectParser {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void addCarToTheDatabase(WorldObject carsWorldObject_Reference){
+
+	public static void addCarToTheDatabase(WorldObject carsWorldObject_Reference) {
 		worldObjects.add(carsWorldObject_Reference);
 	}
 

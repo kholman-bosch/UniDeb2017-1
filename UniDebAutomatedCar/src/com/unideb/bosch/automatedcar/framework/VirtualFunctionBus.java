@@ -3,7 +3,8 @@ package com.unideb.bosch.automatedcar.framework;
 import java.util.ArrayList;
 
 /**
- * This is the singleton class for the Virtual Function Bus. Components are only allowed to collect sensory data exclusively using the VFB. The VFB stores the input and output signals, inputs only have setters, while outputs only have getters respectively.
+ * This is the singleton class for the Virtual Function Bus. Components are only allowed to collect sensory data exclusively using the VFB. The VFB stores the input and output signals, inputs only have setters, while outputs only have getters
+ * respectively.
  *
  * Students must not modify this class!
  *

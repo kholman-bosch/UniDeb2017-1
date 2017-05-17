@@ -2,9 +2,7 @@ package com.unideb.bosch.automatedcar.framework;
 
 /**
  * 
- * This class represents common features for system components
- * By extending this class, the component is registered towards
- * the virtual function bus automatically on instantiation.
+ * This class represents common features for system components By extending this class, the component is registered towards the virtual function bus automatically on instantiation.
  * 
  * Students must not modify this class!
  * 

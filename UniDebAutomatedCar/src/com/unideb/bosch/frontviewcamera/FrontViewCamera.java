@@ -43,7 +43,7 @@ public class FrontViewCamera extends SystemComponent {
 	private float carForwardVector_X;
 	private float carForwardVector_Y;
 	private final VirtualFunctionBus vfb;
-	
+
 	public FrontViewCamera(AutomatedCar car, VirtualFunctionBus virtFuncBus) {
 		super(virtFuncBus);
 		this.vfb = virtFuncBus;
@@ -63,9 +63,7 @@ public class FrontViewCamera extends SystemComponent {
 		// the road sign's distance from the camera
 		double distance = distanceFromCamera(worldObject);
 
-		double carHeadingAngle = Math.toDegrees(this.car.carHeading_Angle) < 0
-				? 360 + Math.toDegrees(this.car.carHeading_Angle) : Math.toDegrees(this.car.carHeading_Angle);
-
+		double carHeadingAngle = Math.toDegrees(this.car.carHeading_Angle) < 0 ? 360 + Math.toDegrees(this.car.carHeading_Angle) : Math.toDegrees(this.car.carHeading_Angle);
 
 		if (distance > ((double) VIEW_DISTANCE * graphicsScale)) {
 			// System.out.println(worldObject.getType() + " distance: " +
@@ -84,15 +82,13 @@ public class FrontViewCamera extends SystemComponent {
 		float cameraForward_X_end = cameraPos_X + (this.carForwardVector_X * maxDetectRangeScaled);
 		float cameraForward_Y_end = cameraPos_Y + (this.carForwardVector_Y * maxDetectRangeScaled);
 
-		Line2D camera_maxDist = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, cameraForward_X_end,
-				cameraForward_Y_end);
+		Line2D camera_maxDist = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, cameraForward_X_end, cameraForward_Y_end);
 
 		// world object position
 		float woldObjectPos_X = worldObject.getX() * graphicsScale;
 		float woldObjectPos_Y = worldObject.getY() * graphicsScale;
 
-		Line2D camera_worldObj = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, woldObjectPos_X,
-				woldObjectPos_Y);
+		Line2D camera_worldObj = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, woldObjectPos_X, woldObjectPos_Y);
 
 		double angleBetween2Lines = angleBetween2Lines(camera_maxDist, camera_worldObj);
 
@@ -103,8 +99,7 @@ public class FrontViewCamera extends SystemComponent {
 
 		double roadSignAngle = Math.toDegrees(worldObject.getOrientation());
 
-		if (Math.abs(roadSignAngle - carHeadingAngle) < (180 - MAX_TOLERANCE_OF_ROADSIGN_ANGLE)
-				|| Math.abs(roadSignAngle - carHeadingAngle) > (180 + MAX_TOLERANCE_OF_ROADSIGN_ANGLE)) {
+		if (Math.abs(roadSignAngle - carHeadingAngle) < (180 - MAX_TOLERANCE_OF_ROADSIGN_ANGLE) || Math.abs(roadSignAngle - carHeadingAngle) > (180 + MAX_TOLERANCE_OF_ROADSIGN_ANGLE)) {
 			// System.out.println(worldObject.getType() + " IS IN SIGHT BUT TOO
 			// MUCH ROTATION");
 			return false;
@@ -144,8 +139,7 @@ public class FrontViewCamera extends SystemComponent {
 					g2.setColor(Color.MAGENTA);
 				}
 
-				Line2D lin = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, worldObject_X,
-						worldObject_Y);
+				Line2D lin = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, worldObject_X, worldObject_Y);
 				g2.draw(lin);
 			}
 		}
@@ -185,116 +179,97 @@ public class FrontViewCamera extends SystemComponent {
 			switch (worldObject.getType()) {
 			case "road_sign_speed_5":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(
-							new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_5));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_5));
 				}
 				break;
 			case "road_sign_speed_10":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_SPEED_10));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_10));
 				}
 				break;
 			case "road_sign_speed_20":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_SPEED_20));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_20));
 				}
 				break;
 			case "road_sign_speed_30":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_SPEED_30));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_30));
 				}
 				break;
 			case "road_sign_speed_40":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_SPEED_40));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_40));
 				}
 				break;
 			case "road_sign_speed_50":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_SPEED_50));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_50));
 				}
 				break;
 			case "road_sign_speed_60":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_SPEED_60));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_60));
 				}
 				break;
 			case "road_sign_speed_70":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_SPEED_70));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_70));
 				}
 				break;
 			case "road_sign_speed_80":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_SPEED_80));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_80));
 				}
 				break;
 			case "road_sign_speed_90":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_SPEED_90));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_90));
 				}
 				break;
 			case "road_sign_speed_100":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_SPEED_100));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_100));
 				}
 				break;
 			case "road_sign_speed_110":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_SPEED_110));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_110));
 				}
 				break;
 			case "road_sign_speed_120":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_SPEED_120));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_120));
 				}
 				break;
 			case "road_sign_speed_130":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_SPEED_130));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_SPEED_130));
 				}
 				break;
 			case "road_sign_direction_leftonly":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_DIRECTION_LEFTONLY));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_DIRECTION_LEFTONLY));
 				}
 				break;
 			case "road_sign_direction_rightonly":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_DIRECTION_RIGHTONLY));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_DIRECTION_RIGHTONLY));
 				}
 				break;
 			case "road_sign_direction_roundabout":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_DIRECTION_ROUNDABOUT));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_DIRECTION_ROUNDABOUT));
 				}
 				break;
 			case "road_sign_priority_stop":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_PRIORITY_STOP));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_PRIORITY_STOP));
 				}
 				break;
 			case "road_sign_priority_mainroad":
 				if (isRoadSignDetected(worldObject)) {
-					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO,
-							RoadSign.ROAD_SIGN_PRIORITY_MAINROAD));
+					detectedRoadSigns.add(new RoadSign(distanceFromCamera(worldObject), longEGO, latEGO, RoadSign.ROAD_SIGN_PRIORITY_MAINROAD));
 				}
 				break;
 			default:
@@ -369,8 +344,7 @@ public class FrontViewCamera extends SystemComponent {
 		float cameraForward_X_end = cameraPos_X + (this.carForwardVector_X * maxDetectRangeScaled);
 		float cameraForward_Y_end = cameraPos_Y + (this.carForwardVector_Y * maxDetectRangeScaled);
 
-		Line2D lin = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, cameraForward_X_end,
-				cameraForward_Y_end);
+		Line2D lin = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, cameraForward_X_end, cameraForward_Y_end);
 		g2.draw(lin);
 	}
 
@@ -390,26 +364,16 @@ public class FrontViewCamera extends SystemComponent {
 		// maxfovline1
 		g2.setColor(Color.YELLOW);
 		float maxDetectAngleHalf = (float) Math.toRadians((180 - this.VIEW_ANGLE) / 2f);
-		float cameraFOV_endX_1 = (float) (cameraPos_X
-				+ (cameraForward_X_end - cameraPos_X) * Math.sin(maxDetectAngleHalf)
-				- (cameraForward_Y_end - cameraPos_Y) * Math.cos(maxDetectAngleHalf));
-		float cameraFOV_endY_1 = (float) (cameraPos_Y
-				+ (cameraForward_X_end - cameraPos_X) * Math.cos(maxDetectAngleHalf)
-				+ (cameraForward_Y_end - cameraPos_Y) * Math.sin(maxDetectAngleHalf));
-		Line2D fov_Line_1 = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, cameraFOV_endX_1,
-				cameraFOV_endY_1);
+		float cameraFOV_endX_1 = (float) (cameraPos_X + (cameraForward_X_end - cameraPos_X) * Math.sin(maxDetectAngleHalf) - (cameraForward_Y_end - cameraPos_Y) * Math.cos(maxDetectAngleHalf));
+		float cameraFOV_endY_1 = (float) (cameraPos_Y + (cameraForward_X_end - cameraPos_X) * Math.cos(maxDetectAngleHalf) + (cameraForward_Y_end - cameraPos_Y) * Math.sin(maxDetectAngleHalf));
+		Line2D fov_Line_1 = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, cameraFOV_endX_1, cameraFOV_endY_1);
 		g2.draw(fov_Line_1);
 
 		// maxfovline2
 		float maxDetectAngleHalf_inTheOtherDirection = (float) Math.toRadians((180 - (180 - this.VIEW_ANGLE) / 2f));
-		float radarFOV_endX_2 = (float) (cameraPos_X
-				+ (cameraForward_X_end - cameraPos_X) * Math.sin(maxDetectAngleHalf_inTheOtherDirection)
-				- (cameraForward_Y_end - cameraPos_Y) * Math.cos(maxDetectAngleHalf_inTheOtherDirection));
-		float radarFOV_endY_2 = (float) (cameraPos_Y
-				+ (cameraForward_X_end - cameraPos_X) * Math.cos(maxDetectAngleHalf_inTheOtherDirection)
-				+ (cameraForward_Y_end - cameraPos_Y) * Math.sin(maxDetectAngleHalf_inTheOtherDirection));
-		Line2D fov_Line_2 = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, radarFOV_endX_2,
-				radarFOV_endY_2);
+		float radarFOV_endX_2 = (float) (cameraPos_X + (cameraForward_X_end - cameraPos_X) * Math.sin(maxDetectAngleHalf_inTheOtherDirection) - (cameraForward_Y_end - cameraPos_Y) * Math.cos(maxDetectAngleHalf_inTheOtherDirection));
+		float radarFOV_endY_2 = (float) (cameraPos_Y + (cameraForward_X_end - cameraPos_X) * Math.cos(maxDetectAngleHalf_inTheOtherDirection) + (cameraForward_Y_end - cameraPos_Y) * Math.sin(maxDetectAngleHalf_inTheOtherDirection));
+		Line2D fov_Line_2 = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, radarFOV_endX_2, radarFOV_endY_2);
 		g2.draw(fov_Line_2);
 
 		float previousLineX = cameraFOV_endX_1;
@@ -419,10 +383,8 @@ public class FrontViewCamera extends SystemComponent {
 		double step = (maxDetectAngleHalf_inTheOtherDirection - maxDetectAngleHalf) / tessalationResolution;
 		for (int i = 0; i < tessalationResolution; i++) {
 			tessalatedAngle += step;
-			cameraFOV_endX_1 = (float) (cameraPos_X + (cameraForward_X_end - cameraPos_X) * Math.sin(tessalatedAngle)
-					- (cameraForward_Y_end - cameraPos_Y) * Math.cos(tessalatedAngle));
-			cameraFOV_endY_1 = (float) (cameraPos_Y + (cameraForward_X_end - cameraPos_X) * Math.cos(tessalatedAngle)
-					+ (cameraForward_Y_end - cameraPos_Y) * Math.sin(tessalatedAngle));
+			cameraFOV_endX_1 = (float) (cameraPos_X + (cameraForward_X_end - cameraPos_X) * Math.sin(tessalatedAngle) - (cameraForward_Y_end - cameraPos_Y) * Math.cos(tessalatedAngle));
+			cameraFOV_endY_1 = (float) (cameraPos_Y + (cameraForward_X_end - cameraPos_X) * Math.cos(tessalatedAngle) + (cameraForward_Y_end - cameraPos_Y) * Math.sin(tessalatedAngle));
 			Line2D line = new Line2D.Float(previousLineX, previousLineY, cameraFOV_endX_1, cameraFOV_endY_1);
 			g2.draw(line);
 			previousLineX = cameraFOV_endX_1;

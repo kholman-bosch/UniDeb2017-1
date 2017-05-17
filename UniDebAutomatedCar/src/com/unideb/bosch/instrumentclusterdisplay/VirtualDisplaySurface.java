@@ -57,7 +57,7 @@ public class VirtualDisplaySurface extends JPanel {
 			acc_active_icon = ImageIO.read(new File("./ic_res/accon_active.png"));
 			acc_suspended_icon = ImageIO.read(new File("./ic_res/accon_suspended.png"));
 			acc_stopandgo_icon = ImageIO.read(new File("./ic_res/accon_stopandgo.png"));
-			
+
 			tsr_icon = ImageIO.read(new File("./ic_res/tsron.png"));
 		} catch (IOException ex) {
 			System.err.println(ex.getMessage() + " Error in virtual display! ImageIO.read");
@@ -116,7 +116,7 @@ public class VirtualDisplaySurface extends JPanel {
 		gMatrix_RPM.rotate(Math.toRadians(actual_RPM_Needle_Angle), needleMidPoint_RPM_X, needleMidPoint_RPM_Y);
 		gMatrix_RPM.fillRect(needleLocationX_RPM, needleLocationY_RPM, needle.getWidth(), needle.getHeight());
 		//
-		switch( this.accState ){
+		switch (this.accState) {
 		case ACTIVE:
 			this.drawAccIcon(gMatrix_Icons, acc_active_icon);
 			break;
@@ -246,13 +246,13 @@ public class VirtualDisplaySurface extends JPanel {
 		int wheelMidPoint_Y = 128;
 		gMatrix_Icons.rotate(-Math.toRadians(steeringWheel_Angle), wheelMidPoint_X, wheelMidPoint_Y);
 		gMatrix_Icons.fillRect(iconLoc_X, iconLoc_Y, steeringWheel.getWidth(), steeringWheel.getHeight());
-		//acc
+		// acc
 		iconLoc_X = 76;
 		iconLoc_Y = 56;
 		g.setFont(defaultFontBOLD);
 		g.setColor(Color.white);
 		g.drawString(String.valueOf(this.cruseControlSpeed), iconLoc_X, iconLoc_Y);
-		
+
 		iconLoc_X = 76;
 		iconLoc_Y = 71;
 		g.setFont(defaultFontBOLD);
@@ -264,7 +264,7 @@ public class VirtualDisplaySurface extends JPanel {
 		gMatrix_Icons.dispose();
 		g.dispose();
 	}
-	
+
 	private void drawAccIcon(Graphics2D gMatrix_Icons, BufferedImage icon) {
 		int iconLoc_X = 50;
 		int iconLoc_Y = 15;
@@ -281,7 +281,7 @@ public class VirtualDisplaySurface extends JPanel {
 	}
 
 	public void set_Actual_KMH_Needle_Angle(int kmh) {
-		kmh -= 10; //the kmh graphics start at 10kmh
+		kmh -= 10; // the kmh graphics start at 10kmh
 		float actKMH_needleIndicator_Angle = (kmh / 120f) * 268;
 		this.actual_KMH_Needle_Angle = (int) actKMH_needleIndicator_Angle;
 	}
@@ -346,11 +346,11 @@ public class VirtualDisplaySurface extends JPanel {
 	public void set_TSR_Yield(boolean state) {
 		this.show_yield = state;
 	}
-	
+
 	public void set_CCS(int speed) {
 		this.cruseControlSpeed = speed;
 	}
-	
+
 	public void set_SD(float distance) {
 		this.safeDistance = distance;
 	}

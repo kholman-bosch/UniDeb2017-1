@@ -203,8 +203,10 @@ public class RSensor extends SystemComponent { // radar sensor
 			float radarFOV_endY_1 = (float) (radarSensorPos_Y + (sensorForward_X_end - radarSensorPos_X) * Math.cos(maxDetectAngleHalf) + (sensorForward_Y_end - radarSensorPos_Y) * Math.sin(maxDetectAngleHalf));
 			float maxDetectAngleHalf_inTheOtherDirection = (float) Math.toRadians((180 - (180 - this.maximumDetectAngle) / 2f));
 			// the third point of our FOV triangle is the endpoint of the fov's other side
-			float radarFOV_endX_2 = (float) (radarSensorPos_X + (sensorForward_X_end - radarSensorPos_X) * Math.sin(maxDetectAngleHalf_inTheOtherDirection) - (sensorForward_Y_end - radarSensorPos_Y) * Math.cos(maxDetectAngleHalf_inTheOtherDirection));
-			float radarFOV_endY_2 = (float) (radarSensorPos_Y + (sensorForward_X_end - radarSensorPos_X) * Math.cos(maxDetectAngleHalf_inTheOtherDirection) + (sensorForward_Y_end - radarSensorPos_Y) * Math.sin(maxDetectAngleHalf_inTheOtherDirection));
+			float radarFOV_endX_2 = (float) (radarSensorPos_X + (sensorForward_X_end - radarSensorPos_X) * Math.sin(maxDetectAngleHalf_inTheOtherDirection)
+					- (sensorForward_Y_end - radarSensorPos_Y) * Math.cos(maxDetectAngleHalf_inTheOtherDirection));
+			float radarFOV_endY_2 = (float) (radarSensorPos_Y + (sensorForward_X_end - radarSensorPos_X) * Math.cos(maxDetectAngleHalf_inTheOtherDirection)
+					+ (sensorForward_Y_end - radarSensorPos_Y) * Math.sin(maxDetectAngleHalf_inTheOtherDirection));
 			return pointInTriangle(object.getX(), object.getY(), radarSensorPos_X, radarSensorPos_Y, radarFOV_endX_1, radarFOV_endY_1, radarFOV_endX_2, radarFOV_endY_2);
 		}
 		return false;

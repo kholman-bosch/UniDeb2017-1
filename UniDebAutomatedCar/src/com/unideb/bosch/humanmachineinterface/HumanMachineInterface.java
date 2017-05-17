@@ -110,7 +110,7 @@ public class HumanMachineInterface extends SystemComponent {
 		@Override
 		public void keyTyped(KeyEvent keyEvent) {
 			char character = keyEvent.getKeyChar();
-			//System.out.println("character typed: " + character);
+			// System.out.println("character typed: " + character);
 			if (character == 'p' || character == 'P') {
 				this.vfb_inKeyHandler.sendSignal(new Signal(SignalDatabase.GEAR_POSITION, 3));
 			} else if (character == 'r' || character == 'R') {
