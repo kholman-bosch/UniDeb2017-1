@@ -121,26 +121,26 @@ public class FrontViewCamera extends SystemComponent {
 
 		// List<WorldObject> worldObjects =
 		// WorldObjectParser.getInstance().getWorldObjects();
+		if (detectedWorldObjects != null) {
+			for (WorldObject worldObject : detectedWorldObjects) {
+				if (worldObject.getType().startsWith("road_sign") || worldObject.getType().startsWith("roadsign")) {
+					float cameraForward_X_start = cameraPos_X + this.carForwardVector_X;
+					float cameraForward_Y_start = cameraPos_Y + this.carForwardVector_Y;
 
-		for (WorldObject worldObject : detectedWorldObjects) {
+					float worldObject_X = worldObject.getX() * graphicsScale;
+					float worldObject_Y = worldObject.getY() * graphicsScale;
 
-			if (worldObject.getType().startsWith("road_sign") || worldObject.getType().startsWith("roadsign")) {
-				float cameraForward_X_start = cameraPos_X + this.carForwardVector_X;
-				float cameraForward_Y_start = cameraPos_Y + this.carForwardVector_Y;
+					double distanceFromCamera = distanceFromCamera(worldObject);
 
-				float worldObject_X = worldObject.getX() * graphicsScale;
-				float worldObject_Y = worldObject.getY() * graphicsScale;
+					if (distanceFromCamera > ((double) VIEW_DISTANCE * VirtualWorld.getGraphicsScale())) {
+						g2.setColor(Color.RED);
+					} else {
+						g2.setColor(Color.MAGENTA);
+					}
 
-				double distanceFromCamera = distanceFromCamera(worldObject);
-
-				if (distanceFromCamera > ((double) VIEW_DISTANCE * VirtualWorld.getGraphicsScale())) {
-					g2.setColor(Color.RED);
-				} else {
-					g2.setColor(Color.MAGENTA);
+					Line2D lin = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, worldObject_X, worldObject_Y);
+					g2.draw(lin);
 				}
-
-				Line2D lin = new Line2D.Float(cameraForward_X_start, cameraForward_Y_start, worldObject_X, worldObject_Y);
-				g2.draw(lin);
 			}
 		}
 	}
