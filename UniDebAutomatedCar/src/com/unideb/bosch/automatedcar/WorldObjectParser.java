@@ -17,8 +17,8 @@ public class WorldObjectParser {
 	private static final File world = new File("./world/road_1_simplified.xml");
 	private static int width = 0;
 	private static int height = 0;
-	private static final int XML_OFFSET_X = 100;
-	private static final int XML_OFFSET_Y = 100;
+	private static final int XML_OFFSET_X = 0;
+	private static final int XML_OFFSET_Y = 0;
 	private static ArrayList<WorldObject> worldObjects = new ArrayList<WorldObject>();
 
 	private WorldObjectParser() {
