@@ -50,9 +50,9 @@ public class VirtualWorldRenderer extends JPanel {
 		for (int i = 0; i < VirtualWorld.getCars().size(); i++) {
 			VirtualWorld.getCars().get(i).drawCar(globalMatrix, actualGraphics_Scale);
 		}
-		drawKeybindingsInfo(g);
 		if (showDebugWorldData) {
 			this.drawWorldObjectsDebugData(globalMatrix);
+			drawKeybindingsInfo(g);
 		}
 		if (showRadarSensorDebugData) {
 			this.drawRadarSensorDebugData(globalMatrix);

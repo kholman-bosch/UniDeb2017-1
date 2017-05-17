@@ -64,7 +64,7 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 		this.vfb.sendSignal(new Signal(SignalDatabase.ACC_CURRENT_CRUISE_CONTROL_SPEED, this.cruiseControlSpeed));
 
 		if (this.accState.equals(AdaptiveCruiseControlState.ACTIVE)) {
-			System.out.println("SENDING GAS PEDAL POSITION: " + this.cruiseControlGasPedalPosition);
+			//System.out.println("SENDING GAS PEDAL POSITION: " + this.cruiseControlGasPedalPosition);
 			this.vfb.sendSignal(new Signal(SignalDatabase.GAS_PEDAL_POSITION, this.cruiseControlGasPedalPosition));
 			this.cruiseControlGasPedalPosition = (this.cruiseControlSpeed / 120.0f) * 100f;
 			if (this.currentSpeed == 0.0f) {
@@ -118,13 +118,13 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 
 	private void fineTuneCruiseControlGasPedalPosition() {
 		float diff = Math.abs(this.currentSpeed - this.cruiseControlSpeed);
-		System.out.println("CURRENT SPEED: " + this.currentSpeed + " CURRENT CRUISE CONROL SPEED: " + this.cruiseControlSpeed);
+		//System.out.println("CURRENT SPEED: " + this.currentSpeed + " CURRENT CRUISE CONROL SPEED: " + this.cruiseControlSpeed);
 		if (this.currentSpeed < this.cruiseControlSpeed) {
-			System.out.println("+++++++++++");
+			//System.out.println("+++++++++++");
 			this.cruiseControlGasPedalPosition += (diff * 0.5f);
 		}
 		if (this.currentSpeed > this.cruiseControlSpeed) {
-			System.out.println("-----------");
+			//System.out.println("-----------");
 			this.cruiseControlGasPedalPosition -= (diff * 0.5f);
 		}
 		this.cruiseControlGasPedalPosition = this.cruiseControlSpeed;
@@ -238,16 +238,16 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 
 	private void enableACC() {
 		// TODO refactor: separate
-		LOGGER.debug("ACC IS NOW ENABLED");
+		//LOGGER.debug("ACC IS NOW ENABLED");
 		this.accState = AdaptiveCruiseControlState.ACTIVE;
 		// start cruise controlling
 		this.cruiseControlSpeed = this.currentSpeed;
 		this.cruiseControlGasPedalPosition = (this.cruiseControlSpeed / 120.0f) * 100f;
-		System.out.println("########## STARTING CC GAS PEDAL POSITION: " + this.cruiseControlGasPedalPosition);
+		//System.out.println("########## STARTING CC GAS PEDAL POSITION: " + this.cruiseControlGasPedalPosition);
 	}
 
 	private void disableACC() {
-		LOGGER.debug("ACC IS NOW DISABLED");
+		//LOGGER.debug("ACC IS NOW DISABLED");
 		this.accState = AdaptiveCruiseControlState.DISABLED;
 		this.cruiseControlSpeed = 0.0f;
 		this.currentSafeDistanceIndex = 3;
@@ -255,12 +255,12 @@ public class AdaptiveCruiseControlModule extends SystemComponent {
 	}
 
 	private void suspendACC() {
-		LOGGER.debug("ACC IS NOW SUSPENDED");
+		//LOGGER.debug("ACC IS NOW SUSPENDED");
 		this.accState = AdaptiveCruiseControlState.SUSPENDED;
 	}
 
 	private void stopAndGoACC() {
-		LOGGER.debug("ACC IS NOW STOP AND GO");
+		//LOGGER.debug("ACC IS NOW STOP AND GO");
 		this.accState = AdaptiveCruiseControlState.STOPANDGO;
 	}
 

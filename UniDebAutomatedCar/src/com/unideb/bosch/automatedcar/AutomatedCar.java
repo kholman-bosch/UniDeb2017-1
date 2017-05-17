@@ -43,7 +43,6 @@ public final class AutomatedCar {
 
 	private FrontViewCamera frontViewCamera;
 	private RSensor radarSensor;
-	private TSR_Logic tsr;
 	private AdaptiveCruiseControlModule accModule;
 	private VirtualDisplay vd;
 	private VirtualFunctionBus virtualFunctionBus;
@@ -68,7 +67,7 @@ public final class AutomatedCar {
 		new DetectedRoadSignCatcher(this.virtualFunctionBus);
 		this.radarSensor = new RSensor(100, 500, 20, 85, 5, this.virtualFunctionBus);
 		this.accModule = new AdaptiveCruiseControlModule(this.virtualFunctionBus);
-		this.tsr = new TSR_Logic(this.accModule, this.virtualFunctionBus);
+		new TSR_Logic(this.accModule, this.virtualFunctionBus);
 	}
 
 	public void drawCar(Graphics g, float graphicsScale) {

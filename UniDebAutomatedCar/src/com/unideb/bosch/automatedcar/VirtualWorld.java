@@ -147,10 +147,10 @@ public final class VirtualWorld {
 	}
 
 	public static int getWorldWidth() {
-		return renderer.getWordlWidth();
+		return VirtualWorldRenderer.getWordlWidth();
 	}
 
 	public static int getWorldHeight() {
-		return renderer.getWordlHeight();
+		return VirtualWorldRenderer.getWordlHeight();
 	}
 }

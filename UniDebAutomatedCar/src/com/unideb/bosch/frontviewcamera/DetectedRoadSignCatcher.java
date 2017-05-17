@@ -33,7 +33,7 @@ public class DetectedRoadSignCatcher extends SystemComponent {
 			// getting the first signal of a detection.
 			switch( s.getID() ){
 			case 16:
-				System.out.println("ROAD SIGN DETECTED!");
+				//System.out.println("ROAD SIGN DETECTED!");
 				roadSignMeaning = (long)s.getData();
 				roadSignDetected = true;
 				break;
@@ -59,7 +59,7 @@ public class DetectedRoadSignCatcher extends SystemComponent {
 			lonArrived = false;
 			latArrived = false;
 			
-			System.out.println("Road sign detected correctly! Meaning: " + this.roadSignMeaning + " longitudinalEGO: " + lonEGO + " latitudinalEGO: " + latEGO);
+			//System.out.println("Road sign detected correctly! Meaning: " + this.roadSignMeaning + " longitudinalEGO: " + lonEGO + " latitudinalEGO: " + latEGO);
 		}
 		
 	}
