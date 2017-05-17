@@ -59,6 +59,15 @@ public class WorldObjectParser {
 		worldObjects.add(carsWorldObject_Reference);
 	}
 
+	public static void removeCarFromTheDatabase(WorldObject carsWorldObject_Reference) {
+		for (int i = 0; i < worldObjects.size(); i++) {
+			if (worldObjects.get(i).equals(carsWorldObject_Reference)) {
+				worldObjects.remove(i);
+				return;
+			}
+		}
+	}
+
 	public static int getWidth() {
 		return width;
 	}

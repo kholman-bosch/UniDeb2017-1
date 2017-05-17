@@ -95,6 +95,7 @@ public class VirtualWorldRenderer extends JPanel {
 		g.drawString("[F3] Camera debug info", 0, 50);
 		g.drawString("Click inside one of the ICs to control a car.", 200, 20);
 		g.drawString("Gear switch keys: D,N,R,P.  Car control keys: ↑,↓,→,←", 200, 35);
+		g.drawString("Left click to add car, right click to remove.", 200, 50);
 		g.drawString("Toggle ACC key: A.  ACC speed control keys: NUM+,NUM-", 550, 20);
 		g.drawString("(when hitting A don't give gas to the car or the ACC will suspend itself)", 550, 35);
 		g.drawString("Toggle TSR key: T", 550, 50);

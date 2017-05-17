@@ -18,7 +18,7 @@ public class VirtualDisplay extends JFrame {
 	private InstrumentClusterLogic icl;
 	private Insets windowDecorationDims;
 
-	public VirtualDisplay(AutomatedCar car, VirtualFunctionBus virtFuncBus) {
+	public VirtualDisplay(AutomatedCar car, VirtualFunctionBus virtFuncBus, int posY) {
 		this.surface = new VirtualDisplaySurface(car);
 		windowDecorationDims = getInsets();
 		if (car == null) {
@@ -31,7 +31,16 @@ public class VirtualDisplay extends JFrame {
 		this.add(this.surface);
 		this.setResizable(false);
 		this.pack();
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.setVisible(true);
+		this.setLocation(0, posY);
+	}
+
+	public void removeVirtualDisplay() {
+		this.surface.removeAll();
+		this.removeAll();
+		this.icl = null;
+		this.dispose();
 	}
 
 	public void addKeyListenerToFrame(KeyListener keyListener) {

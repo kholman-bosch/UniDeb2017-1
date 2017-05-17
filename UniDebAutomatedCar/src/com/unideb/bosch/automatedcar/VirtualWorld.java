@@ -2,6 +2,7 @@ package com.unideb.bosch.automatedcar;
 
 import java.awt.Color;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -18,6 +19,8 @@ public final class VirtualWorld {
 	// Render
 	private static float graphics_Interpolation = 0f;
 	private static int windowDecorationOffsetOn_Y = 0;
+	//
+	public static AutomatedCar carForRemove = null;
 
 	static {
 		// Order matters because the frame should exist when the HMI set the
@@ -26,6 +29,7 @@ public final class VirtualWorld {
 		frame = new VirtualWorldJFrame();
 		cars.add(new AutomatedCar(200, 350));
 		cars.add(new AutomatedCar(350, 350));
+		addMouseListenerToFrame(new VirtualWorldMouseListener());
 	}
 
 	private static void refreshFrame() {
@@ -58,6 +62,7 @@ public final class VirtualWorld {
 			currentTime = newTime;
 			time_Accumulator += frameTime;
 			while (time_Accumulator >= preferredTickRate) {
+				destroy_Marked_Car();
 				driveCars();
 				time_Accumulator -= preferredTickRate;
 			}
@@ -100,6 +105,10 @@ public final class VirtualWorld {
 
 	public static void addKeyListenerToFrame(KeyListener keyListener) {
 		frame.addKeyListener(keyListener);
+	}
+
+	public static void addMouseListenerToFrame(MouseListener mouseListener) {
+		frame.addMouseListener(mouseListener);
 	}
 
 	public static BufferedImage scale(BufferedImage imageToScale, int newWidth, int newHeight) {
@@ -152,5 +161,31 @@ public final class VirtualWorld {
 
 	public static int getWorldHeight() {
 		return VirtualWorldRenderer.getWordlHeight();
+	}
+
+	public static void addNewCar(int x, int y) {
+		cars.add(new AutomatedCar(x, y));
+	}
+
+	public static void destroy_Marked_Car() {
+		if (carForRemove != null) {
+			WorldObjectParser.removeCarFromTheDatabase(carForRemove.getWO_Reference());
+			carForRemove.destroyVirtualDisplay();
+			cars.remove(carForRemove);
+			carForRemove = null;
+		}
+	}
+
+	public static void markCar_ForRemove(int x, int y) {
+		for (int i = 0; i < cars.size(); i++) {
+			AutomatedCar actCar = cars.get(i);
+			float dx = (actCar.getX() - x) * (actCar.getX() - x);
+			float dy = (actCar.getY() - y) * (actCar.getY() - y);
+			float distance = (float) Math.sqrt((double) (dx + dy));
+			if (distance < 150) {
+				carForRemove = actCar;
+				return;
+			}
+		}
 	}
 }

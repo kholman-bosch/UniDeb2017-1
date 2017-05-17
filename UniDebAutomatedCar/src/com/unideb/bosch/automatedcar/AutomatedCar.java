@@ -47,6 +47,7 @@ public final class AutomatedCar {
 	private VirtualDisplay vd;
 	private VirtualFunctionBus virtualFunctionBus;
 	private WorldObject databaseReference;
+	public static int vdPosY = 0;
 
 	public AutomatedCar(int initialPosX, int initialPosY) {
 		try {
@@ -61,13 +62,18 @@ public final class AutomatedCar {
 		this.carImageRectange = new Rectangle(0, 0, this.carImage.getWidth() * 2, this.carImage.getHeight() * 2);
 		this.virtualFunctionBus = new VirtualFunctionBus();
 		this.powertrainSystem = new PowertrainSystem(this.virtualFunctionBus);
-		this.vd = new VirtualDisplay(this, this.virtualFunctionBus);
+		this.vd = new VirtualDisplay(this, this.virtualFunctionBus, vdPosY);
 		new HumanMachineInterface(this.virtualFunctionBus, this.vd);
 		this.frontViewCamera = new FrontViewCamera(this, this.virtualFunctionBus);
 		new DetectedRoadSignCatcher(this.virtualFunctionBus);
 		this.radarSensor = new RSensor(100, 500, 20, 85, 5, this.virtualFunctionBus);
 		this.accModule = new AdaptiveCruiseControlModule(this.virtualFunctionBus);
 		new TSR_Logic(this.accModule, this.virtualFunctionBus);
+		if (vdPosY < 120) {
+			vdPosY += 30;
+		} else {
+			vdPosY = 0;
+		}
 	}
 
 	public void drawCar(Graphics g, float graphicsScale) {
@@ -194,5 +200,13 @@ public final class AutomatedCar {
 
 	public float getAngle() {
 		return this.steerAngle;
+	}
+
+	public WorldObject getWO_Reference() {
+		return this.databaseReference;
+	}
+
+	public void destroyVirtualDisplay() {
+		this.vd.removeVirtualDisplay();
 	}
 }
